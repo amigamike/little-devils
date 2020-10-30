@@ -1,0 +1,107 @@
+<?php
+
+/**
+ * Commander, console command processor.
+ *
+ * @author      Mike Welsh (mike@amigamike.com)
+ * @copyright   2020 Mike Welsh
+ */
+
+/*
+ * Load the autoload map.
+ */
+require_once('vendor/autoload.php');
+
+$dotenv = Dotenv\Dotenv::createImmutable('config');
+$dotenv->load();
+
+use MikeWelsh\LittleDevils\Controllers\ConsoleController;
+
+/*
+ * Process the arguments.
+ *
+ * @param array $args
+ */
+function processArguments(array $args)
+{
+    $return = [];
+
+    foreach ($args as $key => $arg) {
+        if ($key == 0) {
+            continue;
+        }
+
+        $return[] = $arg;
+    }
+
+    return $return;
+}
+
+/*
+ * Get any arguments passed.
+ */
+$args = processArguments($argv);
+
+/*
+ * Define a new console.
+ */
+$console = new ConsoleController();
+
+$console->title("Commander 0.0.1\n");
+
+/*
+ * Define the commands.
+ */
+$commands = [
+    'create-key' => 'MikeWelsh\LittleDevils\Controllers\ApiController::createKey'
+];
+
+/*
+ * If the command is not found, throw an error.
+ */
+if (!isset($commands[$args[0]])) {
+    $console->error('Command not found');
+    die();
+}
+
+/*
+ * Split the command to get the class and method.
+ */
+$splits = explode('::', $commands[$args[0]]);
+
+/*
+ * Define the class.
+ */
+$class = new $splits[0];
+
+/*
+ * Check to see that the class has the method.
+ */
+if (!method_exists($class, $splits[1])) {
+    $console->error('Command method not found');
+    die();
+}
+
+/*
+ * Define the method.
+ */
+$method = $splits[1];
+
+try {
+    /**
+     * Run the command.
+     */
+    $console->output("Executing command: " . $args[0]);
+    $class->$method();
+} catch (Exception $err) {
+    $console->error($err->getMessage());
+    $data = $err->getData();
+    $console->error(json_encode($data->error));
+    $console->error($data->query);
+    $console->error(json_encode($data->params));
+}
+
+/*
+ * Notify the user the command is finished.
+ */
+$console->done("Execution complete");

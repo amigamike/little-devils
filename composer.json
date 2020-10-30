@@ -1,0 +1,26 @@
+{
+    "name": "mikewelsh/little-devils",
+    "type": "project",
+    "description": "Little Devil's Nursery Management System",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Mike Welsh",
+            "email": "mike@amigamike.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "vlucas/phpdotenv": "^4.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "MikeWelsh\\LittleDevils\\": "src/"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}
