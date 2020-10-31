@@ -32,6 +32,11 @@ class ConsoleController
         echo "\e[1;32;40m" . $message . "\e[0m\n";
     }
 
+    public function input(string $message)
+    {
+        echo "\e[1;36;40m" . $message . "\e[0m\n";
+    }
+
     public function output(string $message)
     {
         echo "\e[1;37;40m" . $message . "\e[0m\n";

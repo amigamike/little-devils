@@ -123,4 +123,26 @@ class DatabaseController
          */
         return $this->connection->lastInsertId();
     }
+
+    public function select(string $query, array $params)
+    {
+        /*
+         * Prepare the SQL statement.
+         */
+        $sql = $this->connection->prepare($query);
+
+        /*
+         * Execute the statement with any params that have been passed.
+         */
+        if (!$sql->execute($params)) {
+            $err = new \stdClass();
+            $err->error = $sql->errorInfo();
+            $err->query = $query;
+            $err->params = $params;
+            $msg = 'Database error';
+            throw new DatabaseException($msg, $err);
+        }
+
+        return $sql->fetchObject();
+    }
 }

@@ -27,3 +27,10 @@ label.styled {background: #ffe0ff;display: inline-block;border-radius: 5px 5px 0
 .childselect {background:#f2f2f2; padding:20px;}
 
 /* Custom Styling */
+form input.error {
+    border:3px solid #f80094 !important;
+}
+
+.required {
+    color: #f80094;
+}

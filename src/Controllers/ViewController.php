@@ -44,6 +44,30 @@ class ViewController
         }
     }
 
+     /**
+     * Redirect to a URL.
+     *
+     * @param string $url
+     * @return void;
+     */
+    public static function redirect(string $url)
+    {
+        /*
+         * Redirect the user.
+         */
+        if (!headers_sent()) {
+            header('Location: ' . $url);
+            exit;
+        }
+
+        /*
+         * Can't redirect by PHP as header already sent so use javascript instead.
+         */
+        echo '<script type="text/javascript">redirect("' . $url . '");</script>';
+        return;
+    }
+
+
     /**
      * Render the template, returning it's content.
      *

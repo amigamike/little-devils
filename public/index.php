@@ -22,13 +22,18 @@ putenv("TEMPLATES_ROOT=" . __DIR__ . "/../templates/");
  */
 require_once(getenv('ROOT') . '/vendor/autoload.php');
 
-/*
- * Load the routes config.
- */
-require_once(getenv('ROOT') . '/config/routes.php');
+use MikeWelsh\LittleDevils\Controllers\SessionController;
+
+$session = new SessionController();
+$session->init();
 
 /*
  * Load the dotenv library.
  */
 $dotenv = Dotenv\Dotenv::createImmutable(getenv('ROOT') . '/config');
 $dotenv->load();
+
+/*
+ * Load the routes config.
+ */
+require_once(getenv('ROOT') . '/config/routes.php');

@@ -17,6 +17,10 @@ try {
         return (new ViewController('index'))->render();
     });
 
+    $router->get('/login', function () {
+        return (new ViewController('login'))->render();
+    });
+
     $router->notFound();
 } catch (\Exception $err) {
     echo $err->getMessage();

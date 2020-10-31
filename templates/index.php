@@ -1,4 +1,15 @@
 <?php
+
+use MikeWelsh\LittleDevils\Controllers\AuthenticationController;
+use MikeWelsh\LittleDevils\Controllers\ViewController;
+
+/*
+ * Check to see if the user has a valid login session,
+ * if not redirect them to the login.
+ */
+if (!(new AuthenticationController())->valid()) {
+    (new ViewController())->redirect('/login');
+}
 include('common/header.php');
 ?>
 <div class="container">

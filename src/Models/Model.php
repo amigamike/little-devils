@@ -77,4 +77,17 @@ class Model
          */
         return $db->insert($this->table, $this);
     }
+
+    /**
+     * Trigger a select from the db.
+     *
+     * @param string $query
+     */
+    public function select(string $query, array $params)
+    {
+        /*
+         * Define the db controller and trigger the select.
+         */
+        return (new DatabaseController())->select($query, $params);
+    }
 }
