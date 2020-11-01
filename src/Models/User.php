@@ -11,6 +11,7 @@
 namespace MikeWelsh\LittleDevils\Models;
 
 use MikeWelsh\LittleDevils\Models\Model;
+use MikeWelsh\LittleDevils\Models\Site;
 
 class User extends Model
 {
@@ -22,6 +23,7 @@ class User extends Model
 
     public $id = 0;
     public $site_id = 0;
+    public $api_key = '';
     public $first_name = '';
     public $last_name = '';
     public $email = '';
@@ -30,6 +32,27 @@ class User extends Model
 
     public function getByApiKey($key)
     {
-        //
+        return $this->select(
+            'SELECT * FROM ' . $this->table . ' WHERE api_key=:api_key',
+            [
+                ':api_key' => $key
+            ]
+        );
+    }
+
+    public function login(Site $site, string $email, string $password)
+    {
+        return $this->select(
+            'SELECT * FROM ' . $this->table . ' 
+            WHERE 
+                email = :email AND
+                password = :password AND
+                site_id = :site_id',
+            [
+                ':email' => $email,
+                ':password' => $password,
+                ':site_id' => $site->id
+            ]
+        );
     }
 }

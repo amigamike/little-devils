@@ -26,22 +26,21 @@ class Site extends Model
 
     public function getByAddress()
     {
-        var_dump($_SERVER['SERVER_NAME']);
-        $data = $this->select(
+        return $this->select(
             'SELECT * FROM ' . $this->table . ' WHERE address=:address',
             [
                 ':address' => $_SERVER['SERVER_NAME']
             ]
         );
+    }
 
-        if (empty($data)) {
-            return null;
-        }
-
-        foreach ($data as $col => $value) {
-            $this->$col = $value;
-        }
-
-        return $this;
+    public function getById(int $id)
+    {
+        return $this->select(
+            'SELECT * FROM ' . $this->table . ' WHERE id=:id',
+            [
+                ':id' => $id
+            ]
+        );
     }
 }

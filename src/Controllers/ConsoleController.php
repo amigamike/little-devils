@@ -19,7 +19,7 @@ class ConsoleController
 
     public function done(string $message)
     {
-        echo "\e[0;34;40m" . $message . "\e[0m\n";
+        echo "\e[0;34m" . $message . "\e[0m\n";
     }
 
     public function error(string $message)
@@ -29,21 +29,21 @@ class ConsoleController
 
     public function info(string $message)
     {
-        echo "\e[1;32;40m" . $message . "\e[0m\n";
+        echo "\e[1;32m" . $message . "\e[0m\n";
     }
 
     public function input(string $message)
     {
-        echo "\e[1;36;40m" . $message . "\e[0m\n";
+        echo "\e[1;36m" . $message . "\e[0m\n";
     }
 
     public function output(string $message)
     {
-        echo "\e[1;37;40m" . $message . "\e[0m\n";
+        echo "\e[1;37m" . $message . "\e[0m\n";
     }
 
     public function title(string $message)
     {
-        echo "\e[1;33;40m" . $message . "\e[0m\n";
+        echo "\e[1;33m" . $message . "\e[0m\n";
     }
 }

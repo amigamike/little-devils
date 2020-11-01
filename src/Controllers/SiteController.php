@@ -26,32 +26,33 @@ class SiteController
         /*
          * Inform the user of the creation.
          */
-        $console->output('Creating a site');
+        $console->info('Creating a site');
 
         /*
-         * Define the Api key model.
+         * Define the site model.
          */
         $site = new Site();
 
-        /*
-         * Ask the user for the site's name.
-         */
-        $console->input('Please enter a name for the site:');
-        
-        /*
-         * Read their input.
-         */
-        $site->name = readline();
+        $inputs = [
+            'name' => 'Please enter a name for the site:',
+            'address' => 'Please enter the address for the site, i.e. test.com or 192.168.1.1:'
+        ];
 
-        /*
-         * Ask the user for the address.
-         */
-        $console->input('Please enter the address for the site, i.e. test.com or 192.168.1.1:');
-        
-        /*
-         * Read their input.
-         */
-        $site->address = readline();
+        foreach ($inputs as $var => $message) {
+            /*
+             * Read their input.
+             */
+            while (empty($site->$var)) {
+                /*
+                 * Ask the user for input.
+                 */
+                $console->input($message);
+                $site->$var = readline();
+                if (empty($site->$var)) {
+                    $console->error('You must input some data');
+                }
+            }
+        }
 
         /*
          * Save the site.
@@ -61,7 +62,7 @@ class SiteController
         /*
          * Output to the console for the user.
          */
-        $console->output('Site has been added to the system');
+        $console->done('Site has been added to the system');
     }
 
     /**

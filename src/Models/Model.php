@@ -45,6 +45,22 @@ class Model
     public $deleted_at = null;
 
     /**
+     * Return all the entries.
+     *
+     * @return array $return
+     */
+    public function all(): array
+    {
+        /*
+         * Define the db controller and trigger the select.
+         */
+        return (new DatabaseController())->selectArray(
+            get_class($this),
+            'SELECT * FROM ' . $this->table . ' WHERE deleted_at IS NULL'
+        );
+    }
+
+    /**
      * Return the primary key.
      *
      * @return string
@@ -88,6 +104,10 @@ class Model
         /*
          * Define the db controller and trigger the select.
          */
-        return (new DatabaseController())->select($query, $params);
+        return (new DatabaseController())->select(
+            get_class($this),
+            $query,
+            $params
+        );
     }
 }

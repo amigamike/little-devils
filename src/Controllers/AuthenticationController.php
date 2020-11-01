@@ -12,6 +12,7 @@ namespace MikeWelsh\LittleDevils\Controllers;
 
 use MikeWelsh\LittleDevils\Controllers\SessionController;
 use MikeWelsh\LittleDevils\Controllers\SiteController;
+use MikeWelsh\LittleDevils\Controllers\ViewController;
 use MikeWelsh\LittleDevils\Exceptions\AuthenticationException;
 use MikeWelsh\LittleDevils\Exceptions\SessionException;
 use MikeWelsh\LittleDevils\Helpers\PathHelper;
@@ -59,41 +60,6 @@ class AuthenticationController
     }
 
     /**
-     * Validate using the api key.
-     *
-     * @param string $key
-     */
-    public function validApi(string $key)
-    {
-        /*
-         * Get the user.
-         */
-        $user = (new User())->getByApiKey($key);
-            
-        /*
-         * If the user's details are invalid, throw an error.
-         */
-        if (empty($user)) {
-            throw new AuthenticationException('Invalid API Key');
-        }
-
-        /*
-         * If the user is disabled, throw an error.
-         */
-        if ($user->status == 'disabled') {
-            throw new AuthenticationException('Your account has been disabled');
-        }
-
-        $user->site = (new Site())->getById($user->site_id);
-
-        if ($_SERVER['SERVER_NAME'] != $user->site->address) {
-            throw new AuthenticationException('Invalid site');
-        }
-
-        $_REQUEST[self::SESSION_NAME] = $user;
-    }
-
-    /**
      * Trigger a login.
      *
      * @param array $data
@@ -118,16 +84,13 @@ class AuthenticationController
          */
         $site = (new SiteController())->getSite();
 
-        var_dump($site);
-        die();
-
         /*
          * Get the user.
          */
         $user = (new User())->login(
             $site,
             $data['email'],
-            Security::encrypt($data['password'])
+            SecurityHelper::encrypt($data['password'])
         );
 
         /*
@@ -148,6 +111,11 @@ class AuthenticationController
          * All good, save the user to the session.
          */
         (new SessionController())->set(self::SESSION_NAME, $user);
+
+        /*
+         * Redirect to index.
+         */
+        ViewController::redirect('/');
     }
 
     /**
@@ -161,6 +129,11 @@ class AuthenticationController
          * Clear the session.
          */
         (new SessionController())->clear();
+
+        /*
+         * Redirect to login.
+         */
+        ViewController::redirect('/login');
     }
 
     /**
@@ -190,5 +163,52 @@ class AuthenticationController
          * The session is not valid, return false.
          */
         return false;
+    }
+
+    /**
+     * Validate using the api key.
+     */
+    public function validApi()
+    {
+        /*
+         * Mark it as an api request.
+         */
+        $_REQUEST['api'] = true;
+
+        /*
+         * Get the user by the api key.
+         */
+        $user = (new User())->getByApiKey((getallheaders())['X-Api-Key']);
+            
+        /*
+         * If the user's details are invalid, throw an error.
+         */
+        if (empty($user)) {
+            throw new AuthenticationException('Invalid API Key');
+        }
+
+        /*
+         * If the user is disabled, throw an error.
+         */
+        if ($user->status == 'disabled') {
+            throw new AuthenticationException('Your account has been disabled');
+        }
+
+        /*
+         * Get the site.
+         */
+        $user->site = (new Site())->getById($user->site_id);
+
+        /*
+         * Check the user's site matches that of the api call.
+         */
+        if ($_SERVER['SERVER_NAME'] != $user->site->address) {
+            throw new AuthenticationException('Invalid site');
+        }
+
+        /*
+         * Valid user.
+         */
+        $_REQUEST[self::SESSION_NAME] = $user;
     }
 }

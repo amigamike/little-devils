@@ -53,8 +53,8 @@ $console->title("Commander 0.0.1\n");
  * Define the commands.
  */
 $commands = [
-    'create-key' => 'MikeWelsh\LittleDevils\Controllers\ApiController::createKey',
-    'create-site' => 'MikeWelsh\LittleDevils\Controllers\SiteController::createSite'
+    'create-site' => 'MikeWelsh\LittleDevils\Controllers\SiteController::createSite',
+    'create-user' => 'MikeWelsh\LittleDevils\Controllers\UserController::createUser'
 ];
 
 /*

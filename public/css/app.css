@@ -1,25 +1,27 @@
 /* Standard Styling */
 body {font-family:'Lato',sans-serif;}
 .title {padding:30px;}
-h2 {font-weight:900;color:#f80094; margin-bottom:0; text-align: center;}
-h6 {font-weight:400; color:#666; text-align: center;}
+h1 {font-weight:900;color:#f80094; margin-bottom:0; text-align: left; font-size: 22px;}
+h2 {font-weight:400; color:#515151; text-align: left; font-size: 16px;}
+h6 {font-weight:400; color:#515151; text-align: center;}
 .text-bold {font-weight:700;}
 .tab-pane {padding:15px 20px; border:1px solid #dee2e6; border-top:0; border-radius:0 0 8px 8px;}
 .nav-tabs {background:#f2f2f2;}
 .nav-tabs .nav-link {border-radius:0; color:#666;border-top:3px solid #dee2e6; border-right:1px solid #dee2e6; text-transform: uppercase; text-align: center; padding:20px 30px; font-size:13px; transition:all 0.4s ease-in-out;}
 .nav-tabs .nav-link:hover {border-top:3px solid #dee2e6; border-right:1px solid #dee2e6;}
-.nav-tabs .nav-link .fa {color:#8F8F8F; margin-bottom:10px; transition:all 0.4s ease-in-out;}
-.nav-tabs .nav-link:hover .fa {color:#f80094;}
+.nav-tabs .nav-link .fa, .nav-tabs .nav-link .fas {color:#515151; margin-bottom:10px; transition:all 0.4s ease-in-out;}
+.nav-tabs .nav-link:hover .fa, .nav-tabs .nav-link:hover .fas {color:#f80094;}
 .nav-tabs .nav-link.active {border-top:3px solid #f80094; color:#666;}
-.nav-tabs .nav-link.active .fa {color:#f80094;}
+.nav-tabs .nav-link.active .fa, .nav-tabs .nav-link.active .fas {color:#f80094;}
 .mark {color:#f80094; background: none; border-bottom:1px solid #dee2e6; margin:0 0 20px 0; padding:10px 0 25px 0;}
 .form-control {border-top-left-radius: 0;}
 label {margin-bottom: 0;padding: 2px 11px;font-size: 12px;}
 label.styled {background: #ffe0ff;display: inline-block;border-radius: 5px 5px 0 0; text-transform: uppercase;}
 .btn-primary {background:#f80094; border-color:#f80094;}
+.btn-secondary, .btn-secondary:hover {color: #fff !important;}
 .btn-primary:active,
 .btn-primary:focus,
-.btn-primary:hover {background:#d80074 !important; border-color:#f80094 !important;}
+.btn-primary:hover {color: #fff !important; background:#d80074 !important; border-color:#f80094 !important;}
 .btn-primary:active,
 .btn-primary:focus {box-shadow:0 0 0 .2rem rgba(255,0,140,.5);}
 .table {border-bottom: 1px solid #dee2e6;}
@@ -33,4 +35,30 @@ form input.error {
 
 .required {
     color: #f80094;
+}
+
+.toolbar-tab {
+    margin-bottom: 20px;
+}
+
+#toolbar {
+    padding-top: 5px;
+    border-bottom: 1px solid #DFDFDF;
+    margin-bottom: 40px;
+}
+
+#toolbar .btn:hover {
+    color:#d80074;
+}
+
+#toolbar h1 {
+    padding-left: 0;
+}
+
+#toolbar button {
+    color:#515151;
+}
+#toolbar button i {
+    margin-top: 5px;
+    font-size: 24px;
 }

@@ -1,5 +1,12 @@
 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
     <h5 class="mark">Child Details</h5>
+    <div class="toolbar-tab row">
+        <div class="col-12">
+            <a href="/" class="btn btn-info float-right">
+                <i class="fas fa-plus"></i>&nbsp;New
+            </a>
+        </div>
+    </div>
     <div class="row">
         <div class="col">
             <div class="form-group">
@@ -36,6 +43,13 @@
                 <label class="styled" for="">Postcode</label>
                 <input type="text" class="form-control">
             </div>
+        </div>
+    </div>
+    <div class="toolbar-tab row">
+        <div class="col-12">
+            <button class="btn btn-primary float-right">
+                <i class="fas fa-save"></i>&nbsp;Save
+            </button>
         </div>
     </div>
 </div>

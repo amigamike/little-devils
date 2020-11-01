@@ -1,3 +1,15 @@
+<?php
+
+/**
+ * Header template.
+ *
+ * @author      Mike Welsh (mike@amigamike.com)
+ * @copyright   2020 Mike Welsh
+ */
+
+use MikeWelsh\LittleDevils\Controllers\AuthenticationController;
+
+?>
 <!doctype html>
 <html>
     <header>
@@ -12,9 +24,48 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
         <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
+        <link href="/css/fontawesome/css/all.min.css" rel="stylesheet">
         <link href="/css/app.css?<?= time(); ?>" rel="stylesheet">
     </header>
     <body>
+        <div class="container-fluid">
+            <?php
+            if ((new AuthenticationController())->valid()) {
+                ?>
+            <div id="toolbar" class="row">
+                <div class="col-12">
+                    <div class="float-left">
+                        <h1>Little Devils</h1>
+                        <h2>Nursery Management System</h2>
+                    </div>
+                    <div class="float-right">
+                        <button class="btn" data-toggle="modal" data-target="#logoutModal">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="logoutModal" class="modal fade" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 id="logoutModalLabel" class="modal-title">Logout?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to logout?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                <a href="/logout" class="btn btn-primary">Yes</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <?php
+            }
+            ?>        
