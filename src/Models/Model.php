@@ -60,6 +60,16 @@ class Model
         );
     }
 
+    public function getById(int $id)
+    {
+        return $this->select(
+            'SELECT * FROM ' . $this->table . ' WHERE id=:id',
+            [
+                ':id' => $id
+            ]
+        );
+    }
+
     /**
      * Return the primary key.
      *
@@ -105,6 +115,24 @@ class Model
          * Define the db controller and trigger the select.
          */
         return (new DatabaseController())->select(
+            get_class($this),
+            $query,
+            $params
+        );
+    }
+
+    /**
+     * Return all the entries.
+     *
+     * @param string $query
+     * @return array $return
+     */
+    public function selectArray(string $query, array $params = []): array
+    {
+        /*
+         * Define the db controller and trigger the select.
+         */
+        return (new DatabaseController())->selectArray(
             get_class($this),
             $query,
             $params

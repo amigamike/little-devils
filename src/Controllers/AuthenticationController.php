@@ -176,6 +176,13 @@ class AuthenticationController
         $_REQUEST['api'] = true;
 
         /*
+         * No api key in the header, throw an error.
+         */
+        if (!isset((getallheaders())['X-Api-Key'])) {
+            throw new AuthenticationException('X-Api-Key not present in header');
+        }
+
+        /*
          * Get the user by the api key.
          */
         $user = (new User())->getByApiKey((getallheaders())['X-Api-Key']);

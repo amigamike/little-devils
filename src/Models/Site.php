@@ -33,14 +33,4 @@ class Site extends Model
             ]
         );
     }
-
-    public function getById(int $id)
-    {
-        return $this->select(
-            'SELECT * FROM ' . $this->table . ' WHERE id=:id',
-            [
-                ':id' => $id
-            ]
-        );
-    }
 }

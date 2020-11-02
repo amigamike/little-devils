@@ -14,6 +14,17 @@ class Api {
      * @param {*} success
      * @param {*} failed
      */
+    get(url, success, failed) {
+        return this.call('GET', url, null, success, failed);
+    }
+
+    /**
+     * Peform a POST api call.
+     * @param {*} url
+     * @param {*} data
+     * @param {*} success
+     * @param {*} failed
+     */
     post(url, data, success, failed) {
         return this.call('POST', url, data, success, failed);
     }
@@ -52,7 +63,7 @@ class Api {
         $.ajax({
             method: method,
             contentType: 'application/json',
-            headers: {"API-KEY": API_KEY},
+            headers: {"X-API-KEY": API_KEY},
             dataType: 'json',
             url: API_URL + url,
             data: JSON.stringify(data)
@@ -78,21 +89,27 @@ class Api {
         })
         .fail(function(response) {
             response = response.responseJSON;
-
-            var message = 'Oh uh, something has gone wrong'
+            
             if (!response.message) {
-                message = response.message;
+                response.message = 'Oh uh, something has gone wrong';
             }
 
-            $.notify(
-                message,
-                {
-                    allow_dismiss: true,
-                    type: 'danger'
-                }
-            );
+            apiFailed(response);
         });
     }
 }
 
 var api = new Api();
+
+function apiFailed(data)
+{
+    $.toast({
+        heading: 'Error',
+        text: data.message,
+        icon: 'error',
+        loader: true,
+        loaderBg: '#f97272',
+        bgColor: '#e83c3c',
+        position: 'bottom-right'
+    })
+}

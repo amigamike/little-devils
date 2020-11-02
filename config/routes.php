@@ -16,20 +16,11 @@ use MikeWelsh\LittleDevils\Responses\JsonResponse;
 try {
     $router = new RouterController();
 
+    $router->get('/api/people/list', 'MikeWelsh\LittleDevils\Controllers\PeopleController::list');
+    $router->get('/api/people/{id}', 'MikeWelsh\LittleDevils\Controllers\PeopleController::get');
+
     $router->get('/', function () {
         return (new ViewController('index'))->render();
-    });
-
-    $router->get('/api/people/list', function () {
-        /*
-         * Validate the api key.
-         */
-        (new AuthenticationController())->validApi();
-
-        /*
-         * Get the people response.
-         */
-        return (new PeopleController())->list();
     });
 
     $router->get('/login', function () {

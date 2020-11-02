@@ -22,6 +22,7 @@ class People extends Model
 
     public $id = 0;
     public $type = '';
+    public $title = '';
     public $first_name = '';
     public $last_name = '';
     public $dob = '';
@@ -33,4 +34,32 @@ class People extends Model
     public $phone_no = '';
     public $email = '';
     public $status = 'active';
+
+    public function getById($id)
+    {
+        $data = $this->select(
+            'SELECT 
+                *,
+                DATE_FORMAT(dob, "%d/%m/%Y") AS dob
+            FROM ' . $this->table . ' 
+            WHERE id=:id',
+            [
+                ':id' => $id
+            ]
+        );
+
+        $data->parents = $this->selectArray(
+            'SELECT 
+                people.*,
+                DATE_FORMAT(dob, "%d/%m/%Y") AS dob
+            FROM parents 
+            JOIN ' . $this->table . ' people ON people.id = parents.parent_id AND people.deleted_at IS NULL 
+            WHERE parents.deleted_at IS NULL AND child_id=:id',
+            [
+                ':id' => $id
+            ]
+        );
+
+        return $data;
+    }
 }

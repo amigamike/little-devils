@@ -67,12 +67,25 @@ class RouterController
             throw new MethodNotAllowed('Route method is not supported');
         }
 
+        $path = PathHelper::getPath();
+
+        $routeArguments = [];
+
+        /*
+         * Check to see if the route has any parameters.
+         */
+        if (strpos($route, '{') !== false) {
+            $routeArguments = $this->routeArguments($route, $path);
+            $route = $routeArguments[0];
+            $routeArguments = $routeArguments[1];
+        }
+
         /*
          * Check to see if the route matches the requested URI.
          */
-        if (rtrim($route, '/') == PathHelper::getPath()) {
+        if (rtrim($route, '/') == $path) {
             $this->found = true;
-            call_user_func_array($func, []);
+            call_user_func_array($func, [$routeArguments]);
         }
         
         return null;
@@ -94,5 +107,63 @@ class RouterController
         }
 
         return null;
+    }
+
+    /**
+     * Clean the route and replace the arguments with that of those in the path.
+     *
+     * @param string $route
+     * @param string $path
+     * @return array
+     */
+    private function routeArguments(string $route, string $path)
+    {
+        /*
+         * Define the arguments.
+         */
+        $arguments = [];
+
+        /*
+         * Get the arguements of the route.
+         */
+        preg_match_all('/{(.*?)}/', $route, $matched);
+
+        /*
+         * If there are arguments, process them.
+         */
+        if (!empty($matched[1])) {
+            /*
+             * Strip the non arguments part from the path.
+             */
+            $stripped = str_replace(
+                rtrim(str_replace(implode('/', $matched[0]), '', $route), '/'),
+                '',
+                $path
+            );
+
+            /*
+             * Get the values for the arguments.
+             */
+            if ($replacements = explode('/', ltrim($stripped, '/'))) {
+                /*
+                 * Loop through the replacement values and replace the
+                 * argument in the route string with the correct value.
+                 */
+                foreach ($replacements as $key => $value) {
+                    /*
+                     * If there is an actual argument that matches the replacement.
+                     */
+                    if (!empty($matched[1][$key])) {
+                        $arguments[$matched[1][$key]] = $value;
+                        $route = preg_replace('/' . $matched[0][$key] . '/', $value, $route);
+                    }
+                }
+            }
+        }
+
+        /*
+         * Return the data.
+         */
+        return [$route, $arguments];
     }
 }

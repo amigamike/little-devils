@@ -11,39 +11,40 @@
         <div class="col">
             <div class="form-group">
                 <label class="styled" for="">First Name</label>
-                <input type="text" class="form-control">
+                <input name="child_first_name" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label class="styled" for="">Last Name</label>
-                <input type="text" class="form-control">
+                <input name="child_last_name" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label class="styled" for="">DOB</label>
-                <input type="text" class="form-control datepicker" placeholder="dd/mm/yyyy">
+                <input name="child_dob" type="text" class="form-control datepicker" placeholder="dd/mm/yyyy">
             </div>
         </div>
         <div class="col">
             <div class="form-group">
                 <label class="styled" for="">Address 1</label>
-                <input type="text" class="form-control">
+                <input name="child_address_line_1" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label class="styled" for="">Address 2</label>
-                <input type="text" class="form-control">
+                <input name="child_address_line_2" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label class="styled" for="">Town</label>
-                <input type="text" class="form-control">
+                <input name="child_city" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label class="styled" for="">County</label>
-                <input type="text" class="form-control">
+                <input name="child_county" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label class="styled" for="">Postcode</label>
-                <input type="text" class="form-control">
+                <input name="child_postcode" type="text" class="form-control">
             </div>
         </div>
+        <input name="child_id" type="hidden">
     </div>
     <div class="toolbar-tab row">
         <div class="col-12">
