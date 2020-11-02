@@ -16,8 +16,20 @@ use MikeWelsh\LittleDevils\Responses\JsonResponse;
 try {
     $router = new RouterController();
 
-    $router->get('/api/people/list', 'MikeWelsh\LittleDevils\Controllers\PeopleController::list');
-    $router->get('/api/people/{id}', 'MikeWelsh\LittleDevils\Controllers\PeopleController::get');
+    $router->get(
+        '/api/people/list',
+        'MikeWelsh\LittleDevils\Controllers\PeopleController::list'
+    );
+
+    $router->get(
+        '/api/people/{id}',
+        'MikeWelsh\LittleDevils\Controllers\PeopleController::get'
+    );
+
+    $router->post(
+        '/api/people/{id}',
+        'MikeWelsh\LittleDevils\Controllers\PeopleController::post'
+    );
 
     $router->get('/', function () {
         return (new ViewController('index'))->render();
@@ -25,6 +37,10 @@ try {
 
     $router->get('/login', function () {
         return (new ViewController('login'))->render();
+    });
+
+    $router->post('/login', function () {
+        (new AuthenticationController())->login($_POST);
     });
 
     $router->get('/logout', function () {

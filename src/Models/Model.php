@@ -138,4 +138,27 @@ class Model
             $params
         );
     }
+
+    /**
+     * Update the data in the database.
+     *
+     * @return int
+     */
+    public function update()
+    {
+        /*
+         * Define the db controller.
+         */
+        $db = new DatabaseController();
+
+        /*
+         * Set the updated at date.
+         */
+        $this->updated_at = date('Y-m-d H:i:s');
+
+        /*
+         * Update the data into the table in the db.
+         */
+        return $db->update($this->table, $this);
+    }
 }

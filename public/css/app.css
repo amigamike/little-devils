@@ -37,7 +37,8 @@ form input.error {
     color: #f80094;
 }
 
-.toolbar-tab {
+.toolbar-action {
+    margin-top: 20px;
     margin-bottom: 20px;
 }
 

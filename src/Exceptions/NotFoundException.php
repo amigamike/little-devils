@@ -34,9 +34,6 @@ class NotFoundException extends Exception
 
     public function __construct(string $message = 'Page Not found', $data = null)
     {
-        $this->message = $message;
-        $this->data = $data;
-
-        parent::__construct($this->message, $this->code, $this->data);
+        parent::__construct($message, $this->code, $data);
     }
 }

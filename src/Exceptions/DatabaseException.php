@@ -40,9 +40,6 @@ class DatabaseException extends Exception
 
     public function __construct(string $message = 'Database error', $data = null)
     {
-        $this->message = $message;
-        $this->data = $data;
-
-        parent::__construct($this->message, $this->code, $this->data);
+        parent::__construct($message, $this->code, $data);
     }
 }

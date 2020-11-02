@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Site exception.
+ * Person exception.
  *
- * @package     MikeWelsh\LittleDevils\Exceptions\SiteException
+ * @package     MikeWelsh\LittleDevils\Exceptions\PersonException
  * @author      Mike Welsh (mike@amigamike.com)
  * @copyright   2020 Mike Welsh
  */
@@ -12,19 +12,19 @@ namespace MikeWelsh\LittleDevils\Exceptions;
 
 use MikeWelsh\LittleDevils\Exceptions\Exception;
 
-class SiteException extends Exception
+class PersonException extends Exception
 {
     /**
      * Message.
      * @var string
      */
-    protected $message = 'Site exception';
+    protected $message = 'Person exception';
 
     /**
      * Code.
      * @var int
      */
-    protected $code = 404;
+    protected $code = 400;
 
     /**
      * Status.
@@ -32,8 +32,8 @@ class SiteException extends Exception
      */
     protected $status = 'error';
 
-    public function __construct(string $message = 'Site exception')
+    public function __construct(string $message = 'Person exception', $data = [])
     {
-        parent::__construct($message, $this->code);
+        parent::__construct($message, $this->code, $data);
     }
 }

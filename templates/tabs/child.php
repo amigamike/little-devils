@@ -7,50 +7,44 @@
             </a>
         </div>
     </div>
-    <div class="row">
+    <div id="child-data" class="row">
         <div class="col">
             <div class="form-group">
                 <label class="styled" for="">First Name</label>
-                <input name="child_first_name" type="text" class="form-control">
+                <input name="first_name" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label class="styled" for="">Last Name</label>
-                <input name="child_last_name" type="text" class="form-control">
+                <input name="last_name" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label class="styled" for="">DOB</label>
-                <input name="child_dob" type="text" class="form-control datepicker" placeholder="dd/mm/yyyy">
+                <input name="dob" type="text" class="form-control datepicker" placeholder="dd/mm/yyyy">
             </div>
         </div>
         <div class="col">
             <div class="form-group">
                 <label class="styled" for="">Address 1</label>
-                <input name="child_address_line_1" type="text" class="form-control">
+                <input name="address_line_1" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label class="styled" for="">Address 2</label>
-                <input name="child_address_line_2" type="text" class="form-control">
+                <input name="address_line_2" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label class="styled" for="">Town</label>
-                <input name="child_city" type="text" class="form-control">
+                <input name="city" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label class="styled" for="">County</label>
-                <input name="child_county" type="text" class="form-control">
+                <input name="county" type="text" class="form-control">
             </div>
             <div class="form-group">
                 <label class="styled" for="">Postcode</label>
-                <input name="child_postcode" type="text" class="form-control">
+                <input name="postcode" type="text" class="form-control">
             </div>
         </div>
-        <input name="child_id" type="hidden">
-    </div>
-    <div class="toolbar-tab row">
-        <div class="col-12">
-            <button class="btn btn-primary float-right">
-                <i class="fas fa-save"></i>&nbsp;Save
-            </button>
-        </div>
+        <input name="id" type="hidden">
+        <input name="type" type="hidden" value="child">
     </div>
 </div>

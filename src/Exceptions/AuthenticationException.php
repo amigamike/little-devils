@@ -34,8 +34,6 @@ class AuthenticationException extends Exception
 
     public function __construct(string $message = 'Access denied')
     {
-        $this->message = $message;
-
-        parent::__construct($this->message, $this->code);
+        parent::__construct($message, $this->code);
     }
 }

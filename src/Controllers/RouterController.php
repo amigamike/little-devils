@@ -10,6 +10,7 @@
 
 namespace MikeWelsh\LittleDevils\Controllers;
 
+use MikeWelsh\LittleDevils\Controllers\AuthenticationController;
 use MikeWelsh\LittleDevils\Exceptions\MethodNotAllowedException;
 use MikeWelsh\LittleDevils\Helpers\PathHelper;
 
@@ -67,25 +68,50 @@ class RouterController
             throw new MethodNotAllowed('Route method is not supported');
         }
 
+        /*
+         * Get the path.
+         */
         $path = PathHelper::getPath();
 
-        $routeArguments = [];
+        /*
+         * Check to see if its an api call.
+         */
+        if (strpos($path, '/api') !== false) {
+            $_REQUEST['api'] = true;
+        }
+
+        /*
+         * Define the route parameters.
+         */
+        $routeParams = [];
 
         /*
          * Check to see if the route has any parameters.
          */
         if (strpos($route, '{') !== false) {
-            $routeArguments = $this->routeArguments($route, $path);
-            $route = $routeArguments[0];
-            $routeArguments = $routeArguments[1];
+            $routeParams = $this->routeArguments($route, $path);
+            $route = $routeParams[0];
+            $routeParams = $routeParams[1];
+
+            if ($_SERVER['CONTENT_TYPE'] == 'application/json') {
+                $request = file_get_contents("php://input");
+                if ($request) {
+                    $request = json_decode($request);
+                    if (is_object($request)) {
+                        $request = (array) $request;
+                    }
+                    $routeParams = array_merge($routeParams, $request);
+                }
+            }
         }
 
         /*
          * Check to see if the route matches the requested URI.
          */
-        if (rtrim($route, '/') == $path) {
+        if (rtrim($route, '/') == $path && $requestMethod == $method) {
             $this->found = true;
-            call_user_func_array($func, [$routeArguments]);
+            
+            call_user_func_array($func, [$routeParams]);
         }
         
         return null;

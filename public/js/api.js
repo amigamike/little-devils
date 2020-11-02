@@ -88,6 +88,7 @@ class Api {
             }
         })
         .fail(function(response) {
+            console.log(response);
             response = response.responseJSON;
             
             if (!response.message) {
@@ -111,5 +112,5 @@ function apiFailed(data)
         loaderBg: '#f97272',
         bgColor: '#e83c3c',
         position: 'bottom-right'
-    })
+    });
 }

@@ -26,7 +26,7 @@ class AuthenticationController
      * The name of the session.
      * @var string $session
      */
-    private const SESSION_NAME = 'little_devils_auth';
+    public const SESSION_NAME = 'little_devils_auth';
 
     /**
      * Get the auth session.
@@ -112,6 +112,7 @@ class AuthenticationController
          */
         (new SessionController())->set(self::SESSION_NAME, $user);
 
+
         /*
          * Redirect to index.
          */
@@ -170,11 +171,6 @@ class AuthenticationController
      */
     public function validApi()
     {
-        /*
-         * Mark it as an api request.
-         */
-        $_REQUEST['api'] = true;
-
         /*
          * No api key in the header, throw an error.
          */

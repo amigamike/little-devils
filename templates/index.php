@@ -24,62 +24,71 @@ include('common/header.php');
         <?php
             include('widgets/selectChild.php');
         ?>
-        <div id="myTabs" class="tab-container">
-            <ul id="myTab" class="nav nav-tabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <a  id="home-tab" 
-                        href="#home"
-                        class="nav-link active" 
-                        data-toggle="tab"
-                        role="tab" 
-                        aria-controls="home" 
-                        aria-selected="true">
-                        <i class="fa fa-2x fa-child"></i><br>Child Details
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a  id="parent-tab"
-                        href="#parent"
-                        class="nav-link"
-                        data-toggle="tab"
-                        role="tab"
-                        aria-controls="parent"
-                        aria-selected="false">
-                        <i class="fa fa-2x fa-male"></i><i class="fa fa-2x fa-female"></i><br>Parent Details
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a  id="profile-tab"
-                        href="#profile"
-                        class="nav-link"
-                        data-toggle="tab"
-                        role="tab"
-                        aria-controls="profile"
-                        aria-selected="false">
-                        <i class="fa fa-2x fa-phone"></i><br>Emergency Contacts
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a  id="contact-tab"
-                        href="#contact" 
-                        class="nav-link"
-                        data-toggle="tab"
-                        role="tab" 
-                        aria-controls="contact" 
-                        aria-selected="false">
-                        <i class="fas fa-2x fa-book"></i><br>Child Logs
-                    </a>
-                </li>
-            </ul>
-            <div id="myTabContent" class="tab-content">
-                <?php
-                    include('tabs/child.php');
-                    include('tabs/parent.php');
-                    include('tabs/emergency.php');
-                    include('tabs/logs.php');
-                ?>
+        <form id="form-data">
+            <div id="myTabs" class="tab-container">
+                <ul id="myTab" class="nav nav-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a  id="home-tab" 
+                            href="#home"
+                            class="nav-link active" 
+                            data-toggle="tab"
+                            role="tab" 
+                            aria-controls="home" 
+                            aria-selected="true">
+                            <i class="fa fa-2x fa-child"></i><br>Child Details
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a  id="parent-tab"
+                            href="#parent"
+                            class="nav-link"
+                            data-toggle="tab"
+                            role="tab"
+                            aria-controls="parent"
+                            aria-selected="false">
+                            <i class="fa fa-2x fa-male"></i><i class="fa fa-2x fa-female"></i><br>Parent Details
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a  id="profile-tab"
+                            href="#profile"
+                            class="nav-link"
+                            data-toggle="tab"
+                            role="tab"
+                            aria-controls="profile"
+                            aria-selected="false">
+                            <i class="fa fa-2x fa-phone"></i><br>Emergency Contacts
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a  id="contact-tab"
+                            href="#contact" 
+                            class="nav-link"
+                            data-toggle="tab"
+                            role="tab" 
+                            aria-controls="contact" 
+                            aria-selected="false">
+                            <i class="fas fa-2x fa-book"></i><br>Child Logs
+                        </a>
+                    </li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <?php
+                        include('tabs/child.php');
+                        include('tabs/parent.php');
+                        include('tabs/emergency.php');
+                        include('tabs/logs.php');
+                    ?>
+                </div>
+                <div class="toolbar-action row">
+                    <div class="col-12">
+                        <button id="form-save" type="button" class="btn btn-primary float-right">
+                            <i class="fas fa-save"></i>&nbsp;Save
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 <?php

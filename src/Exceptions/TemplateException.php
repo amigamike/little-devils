@@ -34,8 +34,6 @@ class TemplateException extends Exception
 
     public function __construct(string $message = 'Template exception')
     {
-        $this->message = $message;
-
-        parent::__construct($this->message, $this->code);
+        parent::__construct($message, $this->code);
     }
 }

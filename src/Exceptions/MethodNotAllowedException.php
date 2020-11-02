@@ -34,10 +34,8 @@ class MethodNotAllowedException extends Exception
 
     public function __construct(string $message = 'Unsupported method')
     {
-        $this->message = $message;
-
         header("405 Method Not Allowed", true, $this->code);
 
-        parent::__construct($this->message, $this->code);
+        parent::__construct($message, $this->code);
     }
 }

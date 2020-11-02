@@ -18,17 +18,10 @@ if ((new AuthenticationController())->valid()) {
     ViewController::redirect('/');
 }
 
-/*
- * Login data summitted, go through the login process.
- */
-if (!empty($_POST)) {
-    (new AuthenticationController())->login($_POST);
-}
-
 include('common/header.php');
 ?>
 <div id="content" class="row justify-content-center">
-    <div class="col-4">
+    <div class="col-4 mt-5">
         <div class="card">
             <div class="card-header">
                 Please login

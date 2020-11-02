@@ -167,4 +167,68 @@ class DatabaseController
 
         return $sql->fetchAll(PDO::FETCH_CLASS, $class);
     }
+
+    /**
+     * Update in the database.
+     *
+     * @param string $table
+     * @param mixed $model
+     */
+    public function update(string $table, $model)
+    {
+        /*
+         * Get the model's public vars.
+         */
+        $vars = get_class_vars(get_class($model));
+
+        /*
+         * Drop the primary key.
+         */
+        unset($vars[$model->getPrimary()]);
+
+        /*
+         * Kick the query off.
+         */
+        $query = 'UPDATE ' . $table . ' SET ';
+
+        /*
+         * Define the data arrays.
+         */
+        $params = [];
+
+        /*
+         * Loop through the model's vars,
+         * build the vars for the query and its params.
+         */
+        foreach ($vars as $var => $value) {
+            $query .= "`" . $var . "`=:" . $var . ",";
+            $params[':' . $var] = $model->$var;
+        }
+
+        /*
+         * Finish building the query.
+         */
+        $query = trim($query, ',');
+
+        $primary = $model->getPrimary();
+        $query .= ' WHERE `' . $primary . '`=:id';
+        $params[':id'] = $model->$primary;
+
+        /*
+         * Prepare the SQL statement.
+         */
+        $sql = $this->connection->prepare($query);
+
+        /*
+         * Execute the statement with any params that have been passed.
+         */
+        if (!$sql->execute($params)) {
+            $err = new \stdClass();
+            $err->error = $sql->errorInfo();
+            $err->query = $query;
+            $err->params = $params;
+            $msg = 'Database error';
+            throw new DatabaseException($msg, $err);
+        }
+    }
 }
