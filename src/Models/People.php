@@ -65,9 +65,11 @@ class People extends Model
         $data->contacts = $this->selectArray(
             'SELECT 
                 contacts.id,
+                people.title,
                 people.first_name,
                 people.last_name,
                 people.phone_no,
+                people.relationship,
                 people.created_at
             FROM contacts 
             JOIN ' . $this->table . ' people ON people.id = contacts.person_id AND people.deleted_at IS NULL 

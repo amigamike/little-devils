@@ -107,6 +107,18 @@ function loadRoomsSelect() {
     );
 }
 
+function missingRequired(message = 'Please double check each of the forms') {
+    $.toast({
+        heading: 'Missing required fields',
+        text: message,
+        icon: 'error',
+        loader: true,
+        loaderBg: '#f97272',
+        bgColor: '#e83c3c',
+        position: 'bottom-right'
+    });
+}
+
 function removeContact(data) {
     $('#contact-' + data.id).remove();
 
@@ -121,8 +133,9 @@ function removeContact(data) {
 
 function renderContact(data) {
     var html = '<tr id="contact-' + data.id + '"><td>' + dateUk(data.created_at) + '</td>';
-    html += '<td>' + data.first_name + ' ' + data.last_name + '</td>';
+    html += '<td>' + data.title + ' ' + data.first_name + ' ' + data.last_name + '</td>';
     html += '<td>' + data.phone_no + '</td>';
+    html += '<td>' + data.relationship + '</td>';
     html += '<td class="text-center">';
     html += '<button data-id="' + data.id + '" type="button" class="btn btn-danger btn-sm btn-delete-contact"><i class="fa fa-trash"></i></button>';
     html += '</td></tr>';
@@ -133,6 +146,7 @@ function saveContact(data) {
     $('#contact input[name=first_name]').val('');
     $('#contact input[name=last_name]').val('');
     $('#contact input[name=phone_no]').val('');
+    $('#contact input[name=relationship]').val('');
     $('#contacts').append(renderContact(data));
 
     $('.btn-delete-contact').unbind('click');
@@ -173,9 +187,41 @@ $(function() {
 
     $('#add-contact').click(function () {
         var data = {};
+        var missing = false;
+        data.title = $('#contact select[name=title]').val();
+
         data.first_name = $('#contact input[name=first_name]').val();
+        $('#contact input[name=first_name]').removeClass('error');
+        if (!data.first_name) {
+            $('#contact input[name=first_name]').addClass('error');
+            missing = true;
+        }
+
         data.last_name = $('#contact input[name=last_name]').val();
+        $('#contact input[name=last_name]').removeClass('error');
+        if (!data.last_name) {
+            $('#contact input[name=last_name]').addClass('error');
+            missing = true;
+        }
+
         data.phone_no = $('#contact input[name=phone_no]').val();
+        $('#contact input[name=phone_no]').removeClass('error');
+        if (!data.phone_no) {
+            $('#contact input[name=phone_no]').addClass('error');
+            missing = true;
+        }
+
+        data.relationship = $('#contact input[name=relationship]').val();
+        $('#contact input[name=relationship]').removeClass('error');
+        if (!data.relationship) {
+            $('#contact input[name=relationship]').addClass('error');
+            missing = true;
+        }
+
+        if (missing) {
+            missingRequired();
+            return;
+        }
 
         api.post(
             '/contacts/' + $('#child-data input[name=id]').val(),
@@ -188,15 +234,7 @@ $(function() {
     $('#form-save').click(function() {
         var validator = $("#form-data").validate();
         if (!validator.form()) {
-            $.toast({
-                heading: 'Missing required fields',
-                text: 'Please double check each of the forms',
-                icon: 'error',
-                loader: true,
-                loaderBg: '#f97272',
-                bgColor: '#e83c3c',
-                position: 'bottom-right'
-            });
+            missingRequired();
             return;
         }
 

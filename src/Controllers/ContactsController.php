@@ -55,9 +55,11 @@ class ContactsController
         }
 
         $required = [
+            "title",
             "first_name",
             "last_name",
-            "phone_no"
+            "phone_no",
+            "relationship"
         ];
 
         $missing = [];
