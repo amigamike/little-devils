@@ -60,6 +60,24 @@ class Model
         );
     }
 
+    public function delete()
+    {
+        /*
+         * Define the db controller.
+         */
+        $db = new DatabaseController();
+
+        /*
+         * Set the deleted at date.
+         */
+        $this->deleted_at = date('Y-m-d H:i:s');
+
+        /*
+         * Update the data into the table in the db.
+         */
+        return $db->update($this);
+    }
+
     public function getById(int $id)
     {
         return $this->select(
@@ -81,6 +99,16 @@ class Model
     }
 
     /**
+     * Return the table.
+     *
+     * @return string
+     */
+    public function getTable()
+    {
+        return $this->table;
+    }
+
+    /**
      * Save the data into the database.
      *
      * @return int
@@ -99,9 +127,14 @@ class Model
 
         /*
          * Insert the data into the table in the db,
-         * and return the inserted ID.
+         * and set the id.
          */
-        return $db->insert($this->table, $this);
+        $this->id = $db->insert($this);
+
+        /*
+         * Return the inserted ID.
+         */
+        return $this->id;
     }
 
     /**
@@ -159,6 +192,6 @@ class Model
         /*
          * Update the data into the table in the db.
          */
-        return $db->update($this->table, $this);
+        return $db->update($this);
     }
 }

@@ -40,6 +40,7 @@
             </div>
             <input name="id" type="hidden">
             <input name="type" type="hidden" value="parent">
+            <input name="child_id" type="hidden">
         </div>
         <div id="parent-data-2" class="col">
             <h5 class="mark">Parent 2 Details</h5>
@@ -81,6 +82,7 @@
             </div>
             <input name="id" type="hidden">
             <input name="type" type="hidden" value="parent">
+            <input name="child_id" type="hidden">
         </div>
     </div>
 </div>

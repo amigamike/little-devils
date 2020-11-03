@@ -8,9 +8,18 @@
 
 class Api {
     /**
-     * Peform a POST api call.
+     * Peform a DELETE api call.
      * @param {*} url
-     * @param {*} data
+     * @param {*} success
+     * @param {*} failed
+     */
+    delete(url, success, failed) {
+        return this.call('DELETE', url, null, success, failed);
+    }
+
+    /**
+     * Peform a GET api call.
+     * @param {*} url
      * @param {*} success
      * @param {*} failed
      */
@@ -88,8 +97,12 @@ class Api {
             }
         })
         .fail(function(response) {
-            console.log(response);
             response = response.responseJSON;
+
+            if (!response) {
+                response = {};
+                response.message = '';
+            }
             
             if (!response.message) {
                 response.message = 'Oh uh, something has gone wrong';

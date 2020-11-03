@@ -100,7 +100,9 @@ class RouterController
                     if (is_object($request)) {
                         $request = (array) $request;
                     }
-                    $routeParams = array_merge($routeParams, $request);
+                    if ($request) {
+                        $routeParams = array_merge($routeParams, $request);
+                    }
                 }
             }
         }

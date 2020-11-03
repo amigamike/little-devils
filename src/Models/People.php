@@ -22,10 +22,11 @@ class People extends Model
 
     public $id = 0;
     public $type = '';
+    public $room = 0;
     public $title = '';
     public $first_name = '';
     public $last_name = '';
-    public $dob = '';
+    public $dob = null;
     public $address_line_1 = '';
     public $address_line_2 = '';
     public $city = '';
@@ -54,7 +55,22 @@ class People extends Model
                 DATE_FORMAT(dob, "%d/%m/%Y") AS dob
             FROM parents 
             JOIN ' . $this->table . ' people ON people.id = parents.parent_id AND people.deleted_at IS NULL 
-            WHERE parents.deleted_at IS NULL AND child_id=:id',
+            WHERE parents.deleted_at IS NULL AND type="parent" AND child_id=:id',
+            [
+                ':id' => $id
+            ]
+        );
+
+        $data->contacts = $this->selectArray(
+            'SELECT 
+                contacts.id,
+                people.first_name,
+                people.last_name,
+                people.phone_no,
+                people.created_at
+            FROM contacts 
+            JOIN ' . $this->table . ' people ON people.id = contacts.person_id AND people.deleted_at IS NULL 
+            WHERE contacts.deleted_at IS NULL AND type="contact" AND child_id=:id',
             [
                 ':id' => $id
             ]

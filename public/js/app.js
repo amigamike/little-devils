@@ -27,8 +27,30 @@ function buildPeopleEdit(data) {
             $('#parent-data-' + (i + 1) + ' input[name=city]').val(parent.city);
             $('#parent-data-' + (i + 1) + ' input[name=county]').val(parent.county);
             $('#parent-data-' + (i + 1) + ' input[name=postcode]').val(parent.postcode);
+            $('#parent-data-' + (i + 1) + ' input[name=child_id]').val(data.id);
         });
     }
+
+    $('#contacts').html('');
+
+    if (data.contacts) {
+        $.each(data.contacts, function (i, contact) {
+            $('#contacts').append(renderContact(contact));
+        });
+
+        $('.btn-delete-contact').unbind('click');
+        $('.btn-delete-contact').bind('click', function () {
+            deleteContact(this);
+        });
+    }
+
+    $.toast({
+        heading: 'Load complete',
+        text: data.message,
+        icon: 'success',
+        loader: true,
+        position: 'bottom-right'
+    });
 }
 
 function buildPeopleSelect(data) {
@@ -40,12 +62,67 @@ function buildPeopleSelect(data) {
     }
 }
 
+function dateUk(date) {
+    date = new Date(date);
+    return ((date.getDate() < 10) ? '0' + date.getDate() : date.getDate())  + '/' + date.getMonth() + '/' + date.getFullYear();
+}
+
+function deleteContact(entry) {
+    api.delete(
+        '/contacts/' + $(entry).attr('data-id'),
+        'removeContact',
+        'apiFailed'
+    );
+}
+
 function loadPeopleSelect() {
     api.get(
         '/people/list',
         'buildPeopleSelect',
         'apiFailed'
     );
+}
+
+function removeContact(data) {
+    $('#contact-' + data.id).remove();
+
+    $.toast({
+        heading: 'Contact removed',
+        text: data.message,
+        icon: 'success',
+        loader: true,
+        position: 'bottom-right'
+    });
+}
+
+function renderContact(data) {
+    var html = '<tr id="contact-' + data.id + '"><td>' + dateUk(data.created_at) + '</td>';
+    html += '<td>' + data.first_name + ' ' + data.last_name + '</td>';
+    html += '<td>' + data.phone_no + '</td>';
+    html += '<td class="text-center">';
+    html += '<button data-id="' + data.id + '" type="button" class="btn btn-danger btn-sm btn-delete-contact"><i class="fa fa-trash"></i></button>';
+    html += '</td></tr>';
+    return html;
+}
+
+function saveContact(data) {
+    $('#contact input[name=first_name]').val('');
+    $('#contact input[name=last_name]').val('');
+    $('#contact input[name=phone_no]').val('');
+    $('#contacts').append(renderContact(data));
+
+    $('.btn-delete-contact').unbind('click');
+    $('.btn-delete-contact').bind('click', function () {
+        deleteContact(this);
+    });
+
+    $.toast({
+        heading: 'Contact added',
+        text: data.message,
+        icon: 'success',
+        loader: true,
+        position: 'bottom-right'
+    });
 }
 
 function saveData(data) {
@@ -67,6 +144,20 @@ $(function() {
         loadPeopleSelect();
     }
 
+    $('#add-contact').click(function () {
+        var data = {};
+        data.first_name = $('#contact input[name=first_name]').val();
+        data.last_name = $('#contact input[name=last_name]').val();
+        data.phone_no = $('#contact input[name=phone_no]').val();
+
+        api.post(
+            '/contacts/' + $('#child-data input[name=id]').val(),
+            data,
+            'saveContact',
+            'apiFailed'
+        );
+    });
+
     $('#form-save').click(function() {
         saveCount = 0;
 
@@ -82,6 +173,10 @@ $(function() {
             data.county = $('#' + source + ' input[name=county]').val();
             data.postcode = $('#' + source + ' input[name=postcode]').val();
             data.type = $('#' + source + ' input[name=type]').val();
+
+            if (data.type == 'parent') {
+                data.child_id = $('#' + source + ' input[name=child_id]').val();
+            }
 
             api.post(
                 '/people/' + $('#' + source + ' input[name=id]').val(),

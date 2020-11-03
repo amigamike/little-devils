@@ -1,9 +1,9 @@
 <?php
 
 /**
- * People controller.
+ * Contacts controller.
  *
- * @package     MikeWelsh\LittleDevils\Controllers\PeopleController
+ * @package     MikeWelsh\LittleDevils\Controllers\ContactsController
  * @author      Mike Welsh (mike@amigamike.com)
  * @copyright   2020 Mike Welsh
  */
@@ -14,43 +14,29 @@ use MikeWelsh\LittleDevils\Controllers\AuthenticationController;
 use MikeWelsh\LittleDevils\Controllers\ConsoleController;
 use MikeWelsh\LittleDevils\Exceptions\NotFoundException;
 use MikeWelsh\LittleDevils\Exceptions\PersonException;
-use MikeWelsh\LittleDevils\Helpers\RequestHelper;
-use MikeWelsh\LittleDevils\Models\Parents;
+use MikeWelsh\LittleDevils\Models\Contact;
 use MikeWelsh\LittleDevils\Models\People;
 use MikeWelsh\LittleDevils\Responses\JsonResponse;
 
-class PeopleController
+class ContactsController
 {
-    public static function get($params)
+    public static function delete($params)
     {
         /*
          * Validate the api key.
          */
         (new AuthenticationController())->validApi();
 
-        $data = (new People())->getById($params['id']);
+        $data = (new Contact())->getById($params['id']);
 
         if (empty($data)) {
-            throw new NotFoundException('Person not found');
+            throw new NotFoundException('Contact not found');
         }
 
-        return new JsonResponse(
-            'Found the person',
-            $data
-        );
-    }
-
-    public static function list()
-    {
-        /*
-         * Validate the api key.
-         */
-        (new AuthenticationController())->validApi();
-
-        $data = (new People())->all();
+        $data->delete();
 
         return new JsonResponse(
-            'People list',
+            'Contact deleted',
             $data
         );
     }
@@ -62,21 +48,16 @@ class PeopleController
          */
         (new AuthenticationController())->validApi();
 
-        $data = (new People())->getById($params['id']);
+        $child = (new People())->getById($params['id']);
 
-        if (empty($data)) {
+        if (empty($child)) {
             throw new NotFoundException('Person not found');
         }
 
         $required = [
             "first_name",
             "last_name",
-            "dob",
-            "address_line_1",
-            "city",
-            "county",
-            "postcode",
-            "type"
+            "phone_no"
         ];
 
         $missing = [];
@@ -90,30 +71,21 @@ class PeopleController
             throw new PersonException('Missing required data', $missing);
         }
 
+        $data = new People();
+        $data->type = 'contact';
+
         foreach ($data as $key => $value) {
             if (isset($params[$key])) {
                 $data->$key = $params[$key];
             }
         }
 
-        if ($data->dob) {
-            $data->dob = date('Y-m-d', strtotime($data->dob));
-        }
+        $data->save();
 
-        $data->update();
-
-        if ($data->type == 'parent' && !empty($params['child_id'])) {
-            $parent = (new Parents())->getByIds($data->id, $params['child_id']);
-            if (empty($parent)) {
-                $parent = new Parents();
-                $parent->parent_id = $data->id;
-                $parent->child_id = $params['child_id'];
-                $parent->save();
-            } else {
-                $parent->deleted_at = null;
-                $parent->update();
-            }
-        }
+        $contact = new Contact();
+        $contact->child_id = $child->id;
+        $contact->person_id = $data->id;
+        $contact->save();
 
         return new JsonResponse(
             'Person updated',

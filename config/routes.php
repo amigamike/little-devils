@@ -28,7 +28,17 @@ try {
 
     $router->post(
         '/api/people/{id}',
-        'MikeWelsh\LittleDevils\Controllers\PeopleController::post'
+        'MikeWelsh\LittleDevils\Controllers\PeopleController::save'
+    );
+
+    $router->post(
+        '/api/contacts/{id}',
+        'MikeWelsh\LittleDevils\Controllers\ContactsController::save'
+    );
+
+    $router->delete(
+        '/api/contacts/{id}',
+        'MikeWelsh\LittleDevils\Controllers\ContactsController::delete'
     );
 
     $router->get('/', function () {
@@ -57,6 +67,8 @@ try {
             $err->getCode()
         );
     } else {
-        echo $err->getMessage();
+        echo $err->getMessage() . '<br/><pre>';
+        var_dump($err);
+        echo '</pre>';
     }
 }

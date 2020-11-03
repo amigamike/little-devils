@@ -55,11 +55,10 @@ class DatabaseController
     /**
      * Insert into the database.
      *
-     * @param string $table
      * @param mixed $model
      * @return int $lastInsertId
      */
-    public function insert(string $table, $model)
+    public function insert($model)
     {
         /*
          * Get the model's public vars.
@@ -74,7 +73,7 @@ class DatabaseController
         /*
          * Kick the query off.
          */
-        $query = 'INSERT INTO ' . $table . ' (';
+        $query = 'INSERT INTO ' . $model->getTable() . ' (';
 
         /*
          * Define the data arrays.
@@ -102,21 +101,9 @@ class DatabaseController
         $query .= ')';
 
         /*
-         * Prepare the SQL statement.
+         * Trigger the query execution.
          */
-        $sql = $this->connection->prepare($query);
-
-        /*
-         * Execute the statement with any params that have been passed.
-         */
-        if (!$sql->execute($params)) {
-            $err = new \stdClass();
-            $err->error = $sql->errorInfo();
-            $err->query = $query;
-            $err->params = $params;
-            $msg = 'Database error';
-            throw new DatabaseException($msg, $err);
-        }
+        $sql = $this->trigger($query, $params);
 
         /*
          * Return the inserted Id.
@@ -127,26 +114,24 @@ class DatabaseController
     public function select(string $class, string $query, array $params = [])
     {
         /*
-         * Prepare the SQL statement.
+         * Trigger the query execution.
          */
-        $sql = $this->connection->prepare($query);
-
-        /*
-         * Execute the statement with any params that have been passed.
-         */
-        if (!$sql->execute($params)) {
-            $err = new \stdClass();
-            $err->error = $sql->errorInfo();
-            $err->query = $query;
-            $err->params = $params;
-            $msg = 'Database error';
-            throw new DatabaseException($msg, $err);
-        }
+        $sql = $this->trigger($query, $params);
 
         return $sql->fetchObject($class);
     }
 
     public function selectArray(string $class, string $query, array $params = [])
+    {
+        /*
+         * Trigger the query execution.
+         */
+        $sql = $this->trigger($query, $params);
+
+        return $sql->fetchAll(PDO::FETCH_CLASS, $class);
+    }
+
+    private function trigger(string $query, array $params = [])
     {
         /*
          * Prepare the SQL statement.
@@ -165,16 +150,15 @@ class DatabaseController
             throw new DatabaseException($msg, $err);
         }
 
-        return $sql->fetchAll(PDO::FETCH_CLASS, $class);
+        return $sql;
     }
 
     /**
      * Update in the database.
      *
-     * @param string $table
      * @param mixed $model
      */
-    public function update(string $table, $model)
+    public function update($model)
     {
         /*
          * Get the model's public vars.
@@ -189,7 +173,7 @@ class DatabaseController
         /*
          * Kick the query off.
          */
-        $query = 'UPDATE ' . $table . ' SET ';
+        $query = 'UPDATE ' . $model->getTable() . ' SET ';
 
         /*
          * Define the data arrays.
@@ -215,20 +199,8 @@ class DatabaseController
         $params[':id'] = $model->$primary;
 
         /*
-         * Prepare the SQL statement.
+         * Trigger the query execution.
          */
-        $sql = $this->connection->prepare($query);
-
-        /*
-         * Execute the statement with any params that have been passed.
-         */
-        if (!$sql->execute($params)) {
-            $err = new \stdClass();
-            $err->error = $sql->errorInfo();
-            $err->query = $query;
-            $err->params = $params;
-            $msg = 'Database error';
-            throw new DatabaseException($msg, $err);
-        }
+        $sql = $this->trigger($query, $params);
     }
 }
