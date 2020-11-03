@@ -82,15 +82,12 @@ include('common/header.php');
                 </div>
                 <div class="toolbar-action row">
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary float-right">
+                        <button id="form-save" type="button" class="btn btn-primary float-right">
                             <i class="fas fa-save"></i>&nbsp;Save
                         </button>
                     </div>
                 </div>
             </div>
-            <script type="text/javascript">
-                $("#form-data").validate();
-            </script>
         </form>
     </div>
 </div>

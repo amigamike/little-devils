@@ -18,6 +18,8 @@ class DatabaseController
 {
     private $connection = null;
 
+    private $filters = [];
+
     public function __construct()
     {
         $vars = [
@@ -50,6 +52,18 @@ class DatabaseController
          * Create the connection.
          */
         $this->connection = new PDO($dsn, getenv('DB_USERNAME'), getenv('DB_PASSWORD'));
+    }
+
+    /**
+     * Set the filters for filtering the results.
+     *
+     * @param array $filters
+     * @return $this
+     */
+    public function filters(array $filters)
+    {
+        $this->filters = $filters;
+        return $this;
     }
 
     /**
@@ -133,6 +147,16 @@ class DatabaseController
 
     private function trigger(string $query, array $params = [])
     {
+        /*
+         * If there are filter, use them.
+         */
+        if (!empty($this->filters)) {
+            foreach ($this->filters as $col => $value) {
+                $query .= ' AND ' . $col . '=:' . $col;
+                $params[':' . $col] = $value;
+            }
+        }
+
         /*
          * Prepare the SQL statement.
          */

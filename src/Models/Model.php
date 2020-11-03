@@ -45,6 +45,11 @@ class Model
     public $deleted_at = null;
 
     /**
+     * Filter the results.
+     */
+    private $filters = [];
+
+    /**
      * Return all the entries.
      *
      * @return array $return
@@ -54,10 +59,12 @@ class Model
         /*
          * Define the db controller and trigger the select.
          */
-        return (new DatabaseController())->selectArray(
-            get_class($this),
-            'SELECT * FROM ' . $this->table . ' WHERE deleted_at IS NULL'
-        );
+        return (new DatabaseController())
+            ->filters($this->filters)
+            ->selectArray(
+                get_class($this),
+                'SELECT * FROM ' . $this->table . ' WHERE deleted_at IS NULL'
+            );
     }
 
     public function delete()
@@ -76,6 +83,18 @@ class Model
          * Update the data into the table in the db.
          */
         return $db->update($this);
+    }
+
+    /**
+     * Set a filter for filtering the results.
+     *
+     * @param string $column
+     * @param mixed $value
+     * @return void
+     */
+    public function filter(string $column, $value)
+    {
+        $this->filters[$column] = $value;
     }
 
     public function getById(int $id)

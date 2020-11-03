@@ -1,22 +1,33 @@
 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
     <h5 class="mark">Emergency Contacts</h5>
+    <div class="row mt-4">
+        <div class="col float-right">
+            <small class="required float-right">* required fields</small>
+        </div>
+    </div>
     <div id="contact" class="row">
         <div class="col">
             <div class="form-group">
-                <label class="styled" for="">First Name</label>
-                <input name="first_name" type="text" class="form-control">
+                <label class="styled" for="">First Name<span class="required">*</span></label>
+                <input name="first_name" type="text" class="form-control" required>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
-                <label class="styled" for="">Last Name</label>
-                <input name="last_name" type="text" class="form-control">
+                <label class="styled" for="">Last Name<span class="required">*</span></label>
+                <input name="last_name" type="text" class="form-control" required>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
-                <label class="styled" for="">Phone</label>
-                <input name="phone_no" type="text" class="form-control">
+                <label class="styled" for="">Phone no.<span class="required">*</span></label>
+                <input name="phone_no" type="text" class="form-control" required>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label class="styled" for="">Relationship<span class="required">*</span></label>
+                <input name="relationship" type="text" class="form-control" required>
             </div>
         </div>
         <div class="col-md-2 col-lg-1">

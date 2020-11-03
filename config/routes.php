@@ -16,7 +16,12 @@ try {
     $router = new RouterController();
 
     $router->get(
-        '/api/people/list',
+        '/api/rooms',
+        'MikeWelsh\LittleDevils\Controllers\RoomsController::list'
+    );
+
+    $router->get(
+        '/api/people',
         'MikeWelsh\LittleDevils\Controllers\PeopleController::list'
     );
 

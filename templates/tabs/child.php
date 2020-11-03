@@ -26,6 +26,11 @@
                 <label class="styled" for="">DOB<span class="required">*</span></label>
                 <input name="dob" type="text" class="form-control datepicker" placeholder="dd/mm/yyyy" required>
             </div>
+            <div class="form-group">
+                <label class="styled">Room<span class="required">*</span></label>
+                <select id="select-room" name="room" class="form-control" required>
+                </select>
+            </div>
         </div>
         <div class="col">
             <div class="form-group">

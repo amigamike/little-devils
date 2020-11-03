@@ -15,6 +15,7 @@ function buildPeopleEdit(data) {
     $('#child-data input[name=city]').val(data.city);
     $('#child-data input[name=county]').val(data.county);
     $('#child-data input[name=postcode]').val(data.postcode);
+    $('#child-data select[name=room]').val(data.room_id);
 
     if (data.parents) {
         $.each(data.parents, function (i, parent) {
@@ -28,6 +29,10 @@ function buildPeopleEdit(data) {
             $('#parent-data-' + (i + 1) + ' input[name=county]').val(parent.county);
             $('#parent-data-' + (i + 1) + ' input[name=postcode]').val(parent.postcode);
             $('#parent-data-' + (i + 1) + ' input[name=child_id]').val(data.id);
+            $('#parent-data-' + (i + 1) + ' input[name=email]').val(parent.email);
+            $('#parent-data-' + (i + 1) + ' input[name=phone_no]').val(parent.phone_no);
+            $('#parent-data-' + (i + 1) + ' input[name=relationship]').val(parent.relationship);
+            $('#parent-data-' + (i + 1) + ' select[name=title]').val(parent.title);
         });
     }
 
@@ -64,6 +69,15 @@ function buildPeopleSelect(data) {
     }
 }
 
+function buildRoomsSelect(data) {
+    $('#select-room').html('<option value="0" disabled selected>Please select a room</option>');
+    if (data) {
+        $.each(data, function(i, item) {
+            $('#select-room').append('<option value="' + item.id + '">' + item.name + '</option>');
+        });
+    }
+}
+
 function dateUk(date) {
     date = new Date(date);
     return ((date.getDate() < 10) ? '0' + date.getDate() : date.getDate())  + '/' + date.getMonth() + '/' + date.getFullYear();
@@ -79,8 +93,16 @@ function deleteContact(entry) {
 
 function loadPeopleSelect() {
     api.get(
-        '/people/list',
+        '/people?type=child',
         'buildPeopleSelect',
+        'apiFailed'
+    );
+}
+
+function loadRoomsSelect() {
+    api.get(
+        '/rooms',
+        'buildRoomsSelect',
         'apiFailed'
     );
 }
@@ -146,6 +168,7 @@ function saveData(data) {
 $(function() {
     if (loggedIn) {
         loadPeopleSelect();
+        loadRoomsSelect();
     }
 
     $('#add-contact').click(function () {
@@ -163,6 +186,20 @@ $(function() {
     });
 
     $('#form-save').click(function() {
+        var validator = $("#form-data").validate();
+        if (!validator.form()) {
+            $.toast({
+                heading: 'Missing required fields',
+                text: 'Please double check each of the forms',
+                icon: 'error',
+                loader: true,
+                loaderBg: '#f97272',
+                bgColor: '#e83c3c',
+                position: 'bottom-right'
+            });
+            return;
+        }
+
         $('#form-save').hide();
         saveCount = 0;
 
@@ -178,13 +215,19 @@ $(function() {
             data.county = $('#' + source + ' input[name=county]').val();
             data.postcode = $('#' + source + ' input[name=postcode]').val();
             data.type = $('#' + source + ' input[name=type]').val();
-
+            
             if (data.type == 'parent') {
+                data.phone_no = $('#' + source + ' input[name=phone_no]').val();
+                data.email = $('#' + source + ' input[name=email]').val();
+                data.title = $('#' + source + ' select[name=title]').val();
+                data.relationship = $('#' + source + ' input[name=relationship]').val();
                 data.child_id = $('#' + source + ' input[name=child_id]').val();
+            } else {
+                data.room_id = $('#' + source + ' select[name=room]').val();
             }
 
             var action = 'add';
-            
+
             if (data.id) {
                 action = $('#' + source + ' input[name=id]').val();
             }

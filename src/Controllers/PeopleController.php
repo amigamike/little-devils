@@ -63,14 +63,20 @@ class PeopleController
         );
     }
 
-    public static function list()
+    public static function list($params)
     {
         /*
          * Validate the api key.
          */
         (new AuthenticationController())->validApi();
 
-        $data = (new People())->all();
+        $model = new People();
+
+        if (!empty($params['type'])) {
+            $model->filter('type', $params['type']);
+        }
+
+        $data = $model->all();
 
         return new JsonResponse(
             'People list',

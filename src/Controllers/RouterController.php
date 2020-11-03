@@ -118,6 +118,13 @@ class RouterController
         }
 
         /*
+         * Save the get data if any to the route params.
+         */
+        if (!empty($_GET)) {
+            $routeParams = array_merge($routeParams, $_GET);
+        }
+
+        /*
          * Check to see if the route matches the requested URI.
          */
         if (rtrim($route, '/') == $path && $requestMethod == $method) {
