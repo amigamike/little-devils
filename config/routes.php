@@ -20,6 +20,21 @@ try {
         'MikeWelsh\LittleDevils\Controllers\RoomsController::list'
     );
 
+    $router->post(
+        '/api/logs/add',
+        'MikeWelsh\LittleDevils\Controllers\LogsController::add'
+    );
+
+    $router->delete(
+        '/api/logs/{id}',
+        'MikeWelsh\LittleDevils\Controllers\LogsController::delete'
+    );
+
+    $router->get(
+        '/api/logs',
+        'MikeWelsh\LittleDevils\Controllers\LogsController::list'
+    );
+
     $router->get(
         '/api/people',
         'MikeWelsh\LittleDevils\Controllers\PeopleController::list'

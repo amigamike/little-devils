@@ -11,7 +11,6 @@
 namespace MikeWelsh\LittleDevils\Controllers;
 
 use MikeWelsh\LittleDevils\Controllers\AuthenticationController;
-use MikeWelsh\LittleDevils\Controllers\ConsoleController;
 use MikeWelsh\LittleDevils\Exceptions\NotFoundException;
 use MikeWelsh\LittleDevils\Exceptions\PersonException;
 use MikeWelsh\LittleDevils\Helpers\RequestHelper;

@@ -80,16 +80,17 @@ class RouterController
         $path = PathHelper::getPath();
 
         /*
+         * Define the route parameters.
+         */
+        $routeParams = [];
+
+        /*
          * Check to see if its an api call.
          */
         if (strpos($path, '/api') !== false) {
             $_REQUEST['api'] = true;
+            $routeParams['api'] = true;
         }
-
-        /*
-         * Define the route parameters.
-         */
-        $routeParams = [];
 
         /*
          * Check to see if the route has any parameters.

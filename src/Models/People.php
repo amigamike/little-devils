@@ -11,6 +11,7 @@
 namespace MikeWelsh\LittleDevils\Models;
 
 use MikeWelsh\LittleDevils\Models\Model;
+use MikeWelsh\LittleDevils\Models\Log;
 
 class People extends Model
 {
@@ -74,6 +75,19 @@ class People extends Model
             FROM contacts 
             JOIN ' . $this->table . ' people ON people.id = contacts.person_id AND people.deleted_at IS NULL 
             WHERE contacts.deleted_at IS NULL AND type="contact" AND child_id=:id',
+            [
+                ':id' => $id
+            ]
+        );
+
+        $data->logs = (new Log())->selectArray(
+            'SELECT 
+                logs.*,
+                groups.name AS group_name
+            FROM logs 
+            JOIN users ON users.id = logs.user_id AND users.deleted_at IS NULL 
+            JOIN groups ON groups.id = users.group_id AND groups.deleted_at IS NULL 
+            WHERE logs.deleted_at IS NULL AND person_id=:id',
             [
                 ':id' => $id
             ]

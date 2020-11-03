@@ -3,9 +3,9 @@
     <div class="row">
         <div class="col-3">
             <div class="form-group">
-                <label class="styled" for="">Type</label>
-                <select name="" id="" class="form-control">
-                    <option value="">Please Select</option>
+                <label class="styled">Type</label>
+                <select name="type" class="form-control">
+                    <option value="0" disabled>Please Select</option>
                     <option>Attendance Note</option>
                     <option>Covid-19</option>
                     <option>Medical</option>
@@ -17,14 +17,16 @@
         </div>
         <div class="col">
             <div class="form-group">
-                <label class="styled" for="">Details</label>
-                <textarea class="form-control" name="" id="" rows="5"></textarea>
+                <label class="styled">Details</label>
+                <textarea class="form-control" name="info" rows="5"></textarea>
             </div>
         </div>
         <div class="col-md-2 col-lg-1">
             <div class="form-group">
-                <label for="">&nbsp;</label><br>
-                <button class="btn btn-primary">Add</button>
+                <label>&nbsp;</label><br>
+                <button id="add-log" type="button" class="btn btn-info">
+                <i class="fas fa-plus"></i>&nbsp;Add
+                </button>
             </div>
         </div>
     </div>
@@ -39,21 +41,6 @@
                 <th class="text-center" width="75">Delete</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>04/11/2020</td>
-                <td>Nursery</td>
-                <td class="text-bold">Attendance Note</td>
-                <td>Missed a session today</td>
-                <td class="text-center"><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></td>
-            </tr>
-            <tr>
-                <td>05/11/2020</td>
-                <td>Parent</td>
-                <td class="text-bold">Covid-19</td>
-                <td>Had a test and came out clear</td>
-                <td class="text-center"><button class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button></td>
-            </tr>
-        </tbody>
+        <tbody></tbody>
     </table>
 </div>

@@ -40,6 +40,21 @@ class User extends Model
         );
     }
 
+    public function getById($id)
+    {
+        return $this->select(
+            'SELECT
+                u.*,
+                groups.name AS group_name 
+            FROM ' . $this->table . ' as u 
+            JOIN groups ON groups.id = u.group_id AND groups.deleted_at IS NULL 
+            WHERE u.id=:id',
+            [
+                ':id' => $id
+            ]
+        );
+    }
+
     public function login(Site $site, string $email, string $password)
     {
         return $this->select(

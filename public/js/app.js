@@ -49,6 +49,17 @@ function buildPeopleEdit(data) {
         });
     }
 
+    if (data.logs) {
+        $.each(data.logs, function (i, log) {
+            $('#logs tbody').append(renderLog(log));
+        });
+
+        $('.btn-delete-log').unbind('click');
+        $('.btn-delete-log').bind('click', function () {
+            deleteLog(this);
+        });
+    }
+
     $.toast({
         heading: 'Load complete',
         text: data.message,
@@ -87,6 +98,14 @@ function deleteContact(entry) {
     api.delete(
         '/contacts/' + $(entry).attr('data-id'),
         'removeContact',
+        'apiFailed'
+    );
+}
+
+function deleteLog(entry) {
+    api.delete(
+        '/logs/' + $(entry).attr('data-id'),
+        'removeLog',
         'apiFailed'
     );
 }
@@ -131,6 +150,18 @@ function removeContact(data) {
     });
 }
 
+function removeLog(data) {
+    $('#log-' + data.id).remove();
+
+    $.toast({
+        heading: 'Log removed',
+        text: data.message,
+        icon: 'success',
+        loader: true,
+        position: 'bottom-right'
+    });
+}
+
 function renderContact(data) {
     var html = '<tr id="contact-' + data.id + '"><td>' + dateUk(data.created_at) + '</td>';
     html += '<td>' + data.title + ' ' + data.first_name + ' ' + data.last_name + '</td>';
@@ -138,6 +169,17 @@ function renderContact(data) {
     html += '<td>' + data.relationship + '</td>';
     html += '<td class="text-center">';
     html += '<button data-id="' + data.id + '" type="button" class="btn btn-danger btn-sm btn-delete-contact"><i class="fa fa-trash"></i></button>';
+    html += '</td></tr>';
+    return html;
+}
+
+function renderLog(data) {
+    var html = '<tr id="log-' + data.id + '"><td>' + dateUk(data.created_at) + '</td>';
+    html += '<td>' + ((data.group_name) ? data.group_name : 'Unknown') + '</td>';
+    html += '<td>' + data.type + '</td>';
+    html += '<td>' + data.info + '</td>';
+    html += '<td class="text-center">';
+    html += '<button data-id="' + data.id + '" type="button" class="btn btn-danger btn-sm btn-delete-log"><i class="fa fa-trash"></i></button>';
     html += '</td></tr>';
     return html;
 }
@@ -177,6 +219,24 @@ function saveData(data) {
     }
 
     $('#form-save').show();
+}
+
+function saveLog(data) {
+    $('#logs textarea[name=info]').text('');
+    $('#logs tbody').append(renderLog(data));
+
+    $('.btn-delete-log').unbind('click');
+    $('.btn-delete-log').bind('click', function () {
+        deleteLog(this);
+    });
+
+    $.toast({
+        heading: 'Log added',
+        text: data.message,
+        icon: 'success',
+        loader: true,
+        position: 'bottom-right'
+    });
 }
 
 $(function() {
@@ -227,6 +287,27 @@ $(function() {
             '/contacts/' + $('#child-data input[name=id]').val(),
             data,
             'saveContact',
+            'apiFailed'
+        );
+    });
+
+    $('#add-log').click(function () {
+        var data = {};
+        data.type = $('#logs select[name=type]').val();
+        data.person_id = $('#child-data input[name=id]').val();
+
+        data.info = $('#logs textarea[name=info]').val();
+        $('#logs textarea[name=info]').removeClass('error');
+        if (!data.info) {
+            missingRequired();
+            $('#logs textarea[name=info]').addClass('error');
+            return;
+        }
+
+        api.post(
+            '/logs/add',
+            data,
+            'saveLog',
             'apiFailed'
         );
     });

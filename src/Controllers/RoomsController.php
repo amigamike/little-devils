@@ -10,7 +10,6 @@
 
 namespace MikeWelsh\LittleDevils\Controllers;
 
-use MikeWelsh\LittleDevils\Controllers\ConsoleController;
 use MikeWelsh\LittleDevils\Exceptions\RoomException;
 use MikeWelsh\LittleDevils\Models\Room;
 use MikeWelsh\LittleDevils\Responses\JsonResponse;
