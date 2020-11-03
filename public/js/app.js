@@ -51,6 +51,8 @@ function buildPeopleEdit(data) {
         loader: true,
         position: 'bottom-right'
     });
+
+    $('#form-save').show();
 }
 
 function buildPeopleSelect(data) {
@@ -137,6 +139,8 @@ function saveData(data) {
             position: 'bottom-right'
         });
     }
+
+    $('#form-save').show();
 }
 
 $(function() {
@@ -159,6 +163,7 @@ $(function() {
     });
 
     $('#form-save').click(function() {
+        $('#form-save').hide();
         saveCount = 0;
 
         $.each(sources, function(i, source) {
@@ -178,8 +183,14 @@ $(function() {
                 data.child_id = $('#' + source + ' input[name=child_id]').val();
             }
 
+            var action = 'add';
+            
+            if (data.id) {
+                action = $('#' + source + ' input[name=id]').val();
+            }
+
             api.post(
-                '/people/' + $('#' + source + ' input[name=id]').val(),
+                '/people/' + action,
                 data,
                 'saveData',
                 'apiFailed'

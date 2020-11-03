@@ -61,12 +61,12 @@ include('common/header.php');
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a  id="contact-tab"
-                            href="#contact" 
+                        <a  id="logs-tab"
+                            href="#logs" 
                             class="nav-link"
                             data-toggle="tab"
                             role="tab" 
-                            aria-controls="contact" 
+                            aria-controls="logs" 
                             aria-selected="false">
                             <i class="fas fa-2x fa-book"></i><br>Child Logs
                         </a>
@@ -82,12 +82,15 @@ include('common/header.php');
                 </div>
                 <div class="toolbar-action row">
                     <div class="col-12">
-                        <button id="form-save" type="button" class="btn btn-primary float-right">
+                        <button type="submit" class="btn btn-primary float-right">
                             <i class="fas fa-save"></i>&nbsp;Save
                         </button>
                     </div>
                 </div>
             </div>
+            <script type="text/javascript">
+                $("#form-data").validate();
+            </script>
         </form>
     </div>
 </div>

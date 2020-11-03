@@ -28,6 +28,12 @@ class RouterController
         'DELETE'
     ];
 
+    private $requestMethods = [
+        'POST',
+        'PUT',
+        'PATCH'
+    ];
+
     /**
      * Indicate whether the route is found or not.
      */
@@ -92,17 +98,21 @@ class RouterController
             $routeParams = $this->routeArguments($route, $path);
             $route = $routeParams[0];
             $routeParams = $routeParams[1];
+        }
 
-            if ($_SERVER['CONTENT_TYPE'] == 'application/json') {
-                $request = file_get_contents("php://input");
+        /*
+         * Json content so get what is passed over in the request.
+         */
+        if ($_SERVER['CONTENT_TYPE'] == 'application/json') {
+            $request = file_get_contents("php://input");
+            
+            if ($request) {
+                $request = json_decode($request);
+                if (is_object($request)) {
+                    $request = (array) $request;
+                }
                 if ($request) {
-                    $request = json_decode($request);
-                    if (is_object($request)) {
-                        $request = (array) $request;
-                    }
-                    if ($request) {
-                        $routeParams = array_merge($routeParams, $request);
-                    }
+                    $routeParams = array_merge($routeParams, $request);
                 }
             }
         }
@@ -112,7 +122,6 @@ class RouterController
          */
         if (rtrim($route, '/') == $path && $requestMethod == $method) {
             $this->found = true;
-            
             call_user_func_array($func, [$routeParams]);
         }
         

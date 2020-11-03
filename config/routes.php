@@ -9,7 +9,6 @@
 
 use MikeWelsh\LittleDevils\Controllers\AuthenticationController;
 use MikeWelsh\LittleDevils\Controllers\RouterController;
-use MikeWelsh\LittleDevils\Controllers\PeopleController;
 use MikeWelsh\LittleDevils\Controllers\ViewController;
 use MikeWelsh\LittleDevils\Responses\JsonResponse;
 
@@ -24,6 +23,11 @@ try {
     $router->get(
         '/api/people/{id}',
         'MikeWelsh\LittleDevils\Controllers\PeopleController::get'
+    );
+
+    $router->post(
+        '/api/people/add',
+        'MikeWelsh\LittleDevils\Controllers\PeopleController::add'
     );
 
     $router->post(

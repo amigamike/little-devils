@@ -1,4 +1,4 @@
-<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+<div class="tab-pane fade" id="logs" role="tabpanel" aria-labelledby="logs-tab">
     <h5 class="mark">Child Logs</h5>
     <div class="row">
         <div class="col-3">

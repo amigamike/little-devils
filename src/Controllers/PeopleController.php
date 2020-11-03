@@ -21,6 +21,29 @@ use MikeWelsh\LittleDevils\Responses\JsonResponse;
 
 class PeopleController
 {
+    public static function add($params)
+    {
+        /*
+         * Validate the api key.
+         */
+        (new AuthenticationController())->validApi();
+
+        $data = new People();
+
+        self::required($params);
+
+        $data = self::set($params, $data);
+
+        $data->save();
+
+        self::setParent($params, $data);
+
+        return new JsonResponse(
+            'Person added',
+            $data
+        );
+    }
+
     public static function get($params)
     {
         /*
@@ -55,19 +78,8 @@ class PeopleController
         );
     }
 
-    public static function save($params)
+    private static function required($params)
     {
-        /*
-         * Validate the api key.
-         */
-        (new AuthenticationController())->validApi();
-
-        $data = (new People())->getById($params['id']);
-
-        if (empty($data)) {
-            throw new NotFoundException('Person not found');
-        }
-
         $required = [
             "first_name",
             "last_name",
@@ -89,7 +101,37 @@ class PeopleController
         if ($missing) {
             throw new PersonException('Missing required data', $missing);
         }
+    }
 
+    public static function save($params)
+    {
+        /*
+         * Validate the api key.
+         */
+        (new AuthenticationController())->validApi();
+
+        $data = (new People())->getById($params['id']);
+
+        if (empty($data)) {
+            throw new NotFoundException('Person not found');
+        }
+
+        self::required($params);
+
+        $data = self::set($params, $data);
+
+        $data->update();
+
+        self::setParent($params, $data);
+
+        return new JsonResponse(
+            'Person updated',
+            $data
+        );
+    }
+
+    private static function set($params, $data)
+    {
         foreach ($data as $key => $value) {
             if (isset($params[$key])) {
                 $data->$key = $params[$key];
@@ -100,8 +142,11 @@ class PeopleController
             $data->dob = date('Y-m-d', strtotime($data->dob));
         }
 
-        $data->update();
+        return $data;
+    }
 
+    private static function setParent($params, $data)
+    {
         if ($data->type == 'parent' && !empty($params['child_id'])) {
             $parent = (new Parents())->getByIds($data->id, $params['child_id']);
             if (empty($parent)) {
@@ -114,10 +159,5 @@ class PeopleController
                 $parent->update();
             }
         }
-
-        return new JsonResponse(
-            'Person updated',
-            $data
-        );
     }
 }
