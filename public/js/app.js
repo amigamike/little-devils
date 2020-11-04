@@ -101,7 +101,7 @@ function buildPeopleSelect(data) {
 function buildReport(data) {
     if (!data[0]) {
         $.toast({
-            heading: 'Little notification',
+            heading: 'Oops',
             text: 'There is nothing to report',
             icon: 'info',
             loader: true,
@@ -110,11 +110,24 @@ function buildReport(data) {
         return;
     }
 
+    $('#report-name').html(data[0].room_name);
+
     var labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
     var values = [];
 
+    $('#report-details').html('');
+
     $.each(data, function (i, item) {
         values.push(item.total);
+        $('#report-details').append(
+            '<tr>' +
+            '<td>' + (i + 1) + '</td>' +
+            '<td>' + dateMonth(item.period) + '</td>' +
+            '<td>' + item.room_fee + '&nbsp;<span class="percent">(' + calPercent(item.total, item.room_fee) + '%)</td>' +
+            '<td>' + item.funding + '&nbsp;<span class="percent">(' + calPercent(item.total, item.funding) + '%)</td>' +
+            '<td>' + item.total + '</td>' +
+            '</tr>'
+        );
     });
 
     var ctx = document.getElementById('report-chart');
@@ -162,6 +175,16 @@ function buildRoomsSelect(data) {
             $('select[name=room]').append('<option value="' + item.id + '">' + item.name + '</option>');
         });
     }
+}
+
+function calPercent(total, value) {
+    return ((value/total) * 100).toFixed(2);
+}
+
+function dateMonth(date) {
+    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    date = new Date(date);
+    return months[date.getMonth()] + ' ' + date.getFullYear();
 }
 
 function dateUk(date) {

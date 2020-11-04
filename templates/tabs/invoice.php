@@ -33,8 +33,8 @@
         </div>
     </div>
     <h5 class="mark">Invoice History</h5>
-    <table class="table">
-        <thead class="thead-light">
+    <table class="table table-striped">
+        <thead>
             <tr>
                 <th width="120">Date</th>
                 <th width="120">Added By</th>

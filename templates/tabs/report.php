@@ -35,4 +35,20 @@
             <canvas id="report-chart" width="400" height="400"></canvas>
         </div>
     </div>
+    <div class="row mt-4">
+        <div class="col-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th width="20">No.</th>
+                        <th width="120">Month</th>
+                        <th width="250">Total fees (&pound;)</th>
+                        <th width="250">Total funding (&pound;) </th>
+                        <th width="250">Total revenue (&pound;) </th>
+                    </tr>
+                </thead>
+                <tbody id="report-details"></tbody>
+            </table>
+        </div>
+    </div>
 </div>
