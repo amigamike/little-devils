@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 404 template.
+ * 500 template.
  *
  * @author      Mike Welsh (mike@amigamike.com)
  * @copyright   2020 Mike Welsh
@@ -16,7 +16,7 @@ include('common/header.php');
                 Oops...
             </div>
             <div class="card-body">
-                <h5>Page not found</h5>
+                <h5><?= $data->getMessage(); ?></h5>
             </div>
         </div>
     </div>

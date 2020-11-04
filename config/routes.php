@@ -111,8 +111,29 @@ try {
             $err->getCode()
         );
     } else {
-        echo $err->getMessage() . '<br/><pre>';
-        var_dump($err);
-        echo '</pre>';
+        /*
+         * Define the view controller.
+         */
+        $view = new ViewController();
+
+        /*
+         * Get the error number to use as the template.
+         */
+        $template = $err->getCode();
+
+        /*
+         * Double check the template exists.
+         */
+        if (!$view->templateExists($template)) {
+            /*
+            * Default error template.
+            */
+            $tempate = 500;
+        }
+
+        /*
+         * Render the error template.
+         */
+        $view->render($template, $err);
     }
 }

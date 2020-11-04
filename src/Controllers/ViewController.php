@@ -132,4 +132,17 @@ class ViewController
             ]
         );
     }
+
+    /**
+     * Check to see if the template exists.
+     *
+     * @param string $template
+     * @return bool
+     */
+    public function templateExists($template): bool
+    {
+        $this->setTemplate($template);
+
+        return file_exists($this->template);
+    }
 }
