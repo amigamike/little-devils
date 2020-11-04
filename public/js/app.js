@@ -80,11 +80,68 @@ function buildPeopleSelect(data) {
     }
 }
 
+function buildReport(data) {
+    if (!data[0]) {
+        $.toast({
+            heading: 'Little notification',
+            text: 'There is nothing to report',
+            icon: 'info',
+            loader: true,
+            position: 'bottom-right'
+        });
+        return;
+    }
+
+    var labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+    var values = [];
+
+    $.each(data, function (i, item) {
+        values.push(item.total);
+    });
+
+    var ctx = document.getElementById('report-chart');
+    var lineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: data[0].room_name,
+                    data: values,
+                    backgroundColor: "rgba(255, 99, 132, 0.2)",
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    borderWidth: 1,
+                    fill: false,
+                    lineTension: 0
+                }
+            ]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+
+    $.toast({
+        heading: 'Success',
+        text: 'Generated the report',
+        icon: 'success',
+        loader: true,
+        position: 'bottom-right'
+    });
+}
+
 function buildRoomsSelect(data) {
-    $('#select-room').html('<option value="0" disabled selected>Please select a room</option>');
+    $('select[name=room]').html('<option value="0" disabled selected>Please select a room</option>');
     if (data) {
         $.each(data, function(i, item) {
-            $('#select-room').append('<option value="' + item.id + '">' + item.name + '</option>');
+            $('select[name=room]').append('<option value="' + item.id + '">' + item.name + '</option>');
         });
     }
 }
@@ -308,6 +365,14 @@ $(function() {
             '/logs/add',
             data,
             'saveLog',
+            'apiFailed'
+        );
+    });
+
+    $('#generate-report').click(function () {
+        api.get(
+            '/revenue?room=' + $('#reports select[name=room]').val() + '&year=' + $('#reports select[name=year]').val(),
+            'buildReport',
             'apiFailed'
         );
     });

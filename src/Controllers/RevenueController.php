@@ -1,53 +1,40 @@
 <?php
 
 /**
- * Logs controller.
+ * Revenue controller.
  *
- * @package     MikeWelsh\LittleDevils\Controllers\LogsController
+ * @package     MikeWelsh\LittleDevils\Controllers\RevenueController
  * @author      Mike Welsh (mike@amigamike.com)
  * @copyright   2020 Mike Welsh
  */
 
 namespace MikeWelsh\LittleDevils\Controllers;
 
-use MikeWelsh\LittleDevils\Exceptions\LogException;
-use MikeWelsh\LittleDevils\Models\Log;
-use MikeWelsh\LittleDevils\Models\User;
+use MikeWelsh\LittleDevils\Exceptions\RevenueException;
+use MikeWelsh\LittleDevils\Models\Revenue;
 use MikeWelsh\LittleDevils\Responses\JsonResponse;
 
-class LogsController
+class RevenueController
 {
     public static function add($params)
     {
         /*
          * Validate the api key.
          */
-        if ($params['api']) {
-            (new AuthenticationController())->validApi();
-        }
+        (new AuthenticationController())->validApi();
 
-        $data = new Log();
+        $data = new Revenue();
 
-        if ($params['api']) {
-            self::required($params);
-        }
+        self::required($params);
 
         $data = self::set($params, $data);
 
         $data->save();
 
-        $user = (new User())->getById($data->user_id);
-
-        $data->group_name = $user->group_name;
-
-        if ($params['api']) {
-            return new JsonResponse(
-                'Log added',
-                $data
-            );
-        } else {
-            return true;
-        }
+        return new JsonResponse(
+            'Revenue added',
+            $data
+        );
     }
 
     public static function delete($params)
@@ -57,16 +44,16 @@ class LogsController
          */
         (new AuthenticationController())->validApi();
 
-        $data = (new Log())->getById($params['id']);
+        $data = (new Revenue())->getById($params['id']);
 
         if (empty($data)) {
-            throw new NotFoundException('Log not found');
+            throw new NotFoundException('Revenue not found');
         }
 
         $data->delete();
 
         return new JsonResponse(
-            'Log deleted',
+            'Revenue deleted',
             $data
         );
     }
@@ -78,16 +65,29 @@ class LogsController
          */
         (new AuthenticationController())->validApi();
 
-        $model = new Log();
+        $model = new Revenue();
 
-        if (!empty($params['person'])) {
-            $model->filter('person_id', $params['person']);
+        if (!empty($params['year'])) {
+            $model->filterBetween(
+                'period',
+                $params['year'] . '-01-01',
+                $params['year'] . '-12-31'
+            );
         }
+
+        if (!empty($params['room'])) {
+            $model->filter(
+                'room_id',
+                $params['room']
+            );
+        }
+
+        $model->order('period');
 
         $data = $model->all();
 
         return new JsonResponse(
-            'Logs list',
+            'Revenue list',
             $data
         );
     }
@@ -95,9 +95,11 @@ class LogsController
     private static function required($params)
     {
         $required = [
-            "person_id",
-            "type",
-            "info"
+            "room_id",
+            "period",
+            "room_fee",
+            "funding",
+            "total"
         ];
 
         $missing = [];
@@ -108,7 +110,7 @@ class LogsController
         }
 
         if ($missing) {
-            throw new LogException('Missing required data', $missing);
+            throw new RevenueException('Missing required data', $missing);
         }
     }
 
@@ -119,9 +121,6 @@ class LogsController
                 $data->$key = $params[$key];
             }
         }
-
-        $data->user_id = $_REQUEST[AuthenticationController::SESSION_NAME]->id;
-
         return $data;
     }
 }

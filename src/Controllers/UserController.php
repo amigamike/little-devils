@@ -14,6 +14,7 @@ use MikeWelsh\LittleDevils\Controllers\ConsoleController;
 use MikeWelsh\LittleDevils\Exceptions\UserException;
 use MikeWelsh\LittleDevils\Helpers\SecurityHelper;
 use MikeWelsh\LittleDevils\Helpers\StringHelper;
+use MikeWelsh\LittleDevils\Models\Group;
 use MikeWelsh\LittleDevils\Models\Site;
 use MikeWelsh\LittleDevils\Models\User;
 
@@ -74,6 +75,26 @@ class UserController
             $user->site_id = intval(readline());
 
             if (empty($user->site_id)) {
+                $console->error('You must input some data');
+            }
+        }
+
+        /*
+         * Ask the user for input.
+         */
+        $console->output('Available groups');
+        while (empty($user->group_id)) {
+            foreach ((new Groups())->all() as $group) {
+                $console->info($group->id . ' | ' . $group->name);
+            }
+            $console->input('Please set the user\'s group Id from the list above:');
+
+            /*
+             * Read their input.
+             */
+            $user->group_id = intval(readline());
+
+            if (empty($user->group_id)) {
                 $console->error('You must input some data');
             }
         }

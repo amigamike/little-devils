@@ -35,6 +35,26 @@ try {
         'MikeWelsh\LittleDevils\Controllers\LogsController::list'
     );
 
+    $router->post(
+        '/api/invoices/add',
+        'MikeWelsh\LittleDevils\Controllers\InvoicesController::add'
+    );
+
+    $router->delete(
+        '/api/invoices/{id}',
+        'MikeWelsh\LittleDevils\Controllers\InvoicesController::delete'
+    );
+
+    $router->get(
+        '/api/invoices',
+        'MikeWelsh\LittleDevils\Controllers\InvoicesController::list'
+    );
+
+    $router->get(
+        '/api/revenue',
+        'MikeWelsh\LittleDevils\Controllers\RevenueController::list'
+    );
+
     $router->get(
         '/api/people',
         'MikeWelsh\LittleDevils\Controllers\PeopleController::list'

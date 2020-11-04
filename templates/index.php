@@ -71,6 +71,28 @@ include('common/header.php');
                             <i class="fas fa-2x fa-book"></i><br>Child Logs
                         </a>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <a  id="invoices-tab"
+                            href="#invoices" 
+                            class="nav-link"
+                            data-toggle="tab"
+                            role="tab" 
+                            aria-controls="invoices" 
+                            aria-selected="false">
+                            <i class="fas fa-2x fa-money-check-alt"></i><br>Invoices
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a  id="reports-tab"
+                            href="#reports" 
+                            class="nav-link"
+                            data-toggle="tab"
+                            role="tab" 
+                            aria-controls="reports" 
+                            aria-selected="false">
+                            <i class="fas fa-2x fa-chart-line"></i></i><br>Reports
+                        </a>
+                    </li>
                 </ul>
                 <div id="myTabContent" class="tab-content">
                     <?php
@@ -78,6 +100,8 @@ include('common/header.php');
                         include('tabs/parent.php');
                         include('tabs/emergency.php');
                         include('tabs/logs.php');
+                        include('tabs/invoice.php');
+                        include('tabs/report.php');
                     ?>
                 </div>
                 <div class="toolbar-action row">

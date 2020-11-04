@@ -15,6 +15,8 @@ $auth = new AuthenticationController();
 <html>
     <head>
         <meta charset="utf-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Little Devils</title>
         <link rel="icon" href="/imgs/favicon-32.png" sizes="32x32">
         <!-- CSS only -->
@@ -27,10 +29,12 @@ $auth = new AuthenticationController();
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
         <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
         <script src="/js/jquery.toast.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" ></script>
         <script src="/js/api.js"></script>
         <script src="/js/app.js"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css">
         <link href="/css/fontawesome/css/all.min.css" rel="stylesheet">
         <link href="/css/app.css?<?= time(); ?>" rel="stylesheet">
     </head>

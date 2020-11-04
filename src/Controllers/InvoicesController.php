@@ -1,53 +1,43 @@
 <?php
 
 /**
- * Logs controller.
+ * Invoices controller.
  *
- * @package     MikeWelsh\LittleDevils\Controllers\LogsController
+ * @package     MikeWelsh\LittleDevils\Controllers\InvoicesController
  * @author      Mike Welsh (mike@amigamike.com)
  * @copyright   2020 Mike Welsh
  */
 
 namespace MikeWelsh\LittleDevils\Controllers;
 
-use MikeWelsh\LittleDevils\Exceptions\LogException;
-use MikeWelsh\LittleDevils\Models\Log;
+use MikeWelsh\LittleDevils\Exceptions\InvoiceException;
+use MikeWelsh\LittleDevils\Models\Invoice;
 use MikeWelsh\LittleDevils\Models\User;
 use MikeWelsh\LittleDevils\Responses\JsonResponse;
 
-class LogsController
+class InvoicesController
 {
     public static function add($params)
     {
         /*
          * Validate the api key.
          */
-        if ($params['api']) {
-            (new AuthenticationController())->validApi();
-        }
+        (new AuthenticationController())->validApi();
 
-        $data = new Log();
+        $data = new Invoice();
 
-        if ($params['api']) {
-            self::required($params);
-        }
+        self::required($params);
 
         $data = self::set($params, $data);
 
         $data->save();
 
-        $user = (new User())->getById($data->user_id);
+        $data->user = (new User())->getById($data->user_id);
 
-        $data->group_name = $user->group_name;
-
-        if ($params['api']) {
-            return new JsonResponse(
-                'Log added',
-                $data
-            );
-        } else {
-            return true;
-        }
+        return new JsonResponse(
+            'Invoice added',
+            $data
+        );
     }
 
     public static function delete($params)
@@ -57,16 +47,16 @@ class LogsController
          */
         (new AuthenticationController())->validApi();
 
-        $data = (new Log())->getById($params['id']);
+        $data = (new Invoice())->getById($params['id']);
 
         if (empty($data)) {
-            throw new NotFoundException('Log not found');
+            throw new NotFoundException('Invoice not found');
         }
 
         $data->delete();
 
         return new JsonResponse(
-            'Log deleted',
+            'Invoice deleted',
             $data
         );
     }
@@ -78,7 +68,7 @@ class LogsController
          */
         (new AuthenticationController())->validApi();
 
-        $model = new Log();
+        $model = new Invoice();
 
         if (!empty($params['person'])) {
             $model->filter('person_id', $params['person']);
@@ -87,7 +77,7 @@ class LogsController
         $data = $model->all();
 
         return new JsonResponse(
-            'Logs list',
+            'Invoices list',
             $data
         );
     }
@@ -97,7 +87,7 @@ class LogsController
         $required = [
             "person_id",
             "type",
-            "info"
+            "amount"
         ];
 
         $missing = [];
@@ -108,7 +98,7 @@ class LogsController
         }
 
         if ($missing) {
-            throw new LogException('Missing required data', $missing);
+            throw new InvoiceException('Missing required data', $missing);
         }
     }
 

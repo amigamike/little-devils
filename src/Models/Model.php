@@ -47,7 +47,17 @@ class Model
     /**
      * Filter the results.
      */
-    private $filters = [];
+    public $filters = [];
+
+    /**
+     * Filter the results.
+     */
+    public $filtersBetween = [];
+
+    /**
+     * Order the results.
+     */
+    public $order = [];
 
     /**
      * Return all the entries.
@@ -61,6 +71,8 @@ class Model
          */
         return (new DatabaseController())
             ->filters($this->filters)
+            ->filtersBetween($this->filtersBetween)
+            ->order($this->order)
             ->selectArray(
                 get_class($this),
                 'SELECT * FROM ' . $this->table . ' WHERE deleted_at IS NULL'
@@ -90,11 +102,28 @@ class Model
      *
      * @param string $column
      * @param mixed $value
-     * @return void
+     * @return mixed $this
      */
     public function filter(string $column, $value)
     {
         $this->filters[$column] = $value;
+        return $this;
+    }
+
+    /**
+     * Set a filter between for filtering the results.
+     *
+     * @param string $column
+     * @param string $start
+     * @param string $end
+     * @return mixed $this
+     */
+    public function filterBetween(string $column, string $start, string $end)
+    {
+        $this->filtersBetween[$column] = [];
+        $this->filtersBetween[$column][] = $start;
+        $this->filtersBetween[$column][] = $end;
+        return $this;
     }
 
     public function getById(int $id)
@@ -125,6 +154,19 @@ class Model
     public function getTable()
     {
         return $this->table;
+    }
+
+    /**
+     * Set a order for ordering the results.
+     *
+     * @param string $column
+     * @param string $direction
+     * @return mixed $this
+     */
+    public function order(string $column, string $direction = 'ASC')
+    {
+        $this->order[$column] = $direction;
+        return $this;
     }
 
     /**

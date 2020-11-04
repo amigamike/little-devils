@@ -1,0 +1,23 @@
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `site_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `api_key` varchar(255) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `status` varchar(10) NOT NULL DEFAULT 'active',
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id_IDX` (`id`) USING BTREE,
+  KEY `users_first_name_IDX` (`first_name`) USING BTREE,
+  KEY `users_last_name_IDX` (`last_name`) USING BTREE,
+  KEY `users_site_id_IDX` (`site_id`) USING BTREE,
+  KEY `users_email_IDX` (`email`) USING BTREE,
+  KEY `users_status_IDX` (`status`) USING BTREE,
+  KEY `users_api_key_IDX` (`api_key`) USING BTREE,
+  KEY `users_group_id_IDX` (`group_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;

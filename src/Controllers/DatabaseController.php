@@ -19,6 +19,7 @@ class DatabaseController
     private $connection = null;
 
     private $filters = [];
+    private $filtersBetween = [];
 
     public function __construct()
     {
@@ -63,6 +64,30 @@ class DatabaseController
     public function filters(array $filters)
     {
         $this->filters = $filters;
+        return $this;
+    }
+
+    /**
+     * Set the filters between for filtering the results.
+     *
+     * @param array $filters
+     * @return $this
+     */
+    public function filtersBetween(array $filters)
+    {
+        $this->filtersBetween = $filters;
+        return $this;
+    }
+
+    /**
+     * Set the order for ordering the results.
+     *
+     * @param array $order
+     * @return $this
+     */
+    public function order(array $order)
+    {
+        $this->order = $order;
         return $this;
     }
 
@@ -155,6 +180,34 @@ class DatabaseController
                 $query .= ' AND ' . $col . '=:' . $col;
                 $params[':' . $col] = $value;
             }
+        }
+
+        /*
+         * If there are filters for between, use them.
+         */
+        if (!empty($this->filtersBetween)) {
+            $iLoop = 0;
+            foreach ($this->filtersBetween as $col => $filters) {
+                $query .= ' AND (' . $col . ' BETWEEN ';
+                foreach ($filters as $filter) {
+                    $query .= ':' . $col . '_filter_' . $iLoop;
+                    $params[':' . $col . '_filter_' . $iLoop] = $filter;
+                    $iLoop++;
+                    $query .= ' AND ';
+                }
+                $query = rtrim($query, ' AND ') . ')';
+            }
+        }
+
+        /*
+         * If there are orders, use them.
+         */
+        if (!empty($this->order)) {
+            $query .= ' ORDER BY ';
+            foreach ($this->order as $col => $direction) {
+                $query .= $col . ' ' . $direction . ', ';
+            }
+            $query = rtrim($query, ', ');
         }
 
         /*
