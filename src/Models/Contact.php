@@ -23,4 +23,15 @@ class Contact extends Model
     public $id = 0;
     public $child_id = 0;
     public $person_id = 0;
+
+    public function getByIds($person_id, $child_id)
+    {
+        return $this->select(
+            'SELECT * FROM ' . $this->table . ' WHERE person_id=:person_id AND child_id=:child_id',
+            [
+                ':person_id' => $person_id,
+                ':child_id' => $child_id
+            ]
+        );
+    }
 }

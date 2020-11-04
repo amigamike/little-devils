@@ -369,9 +369,13 @@ function saveData(data) {
             loader: true,
             position: 'bottom-right'
         });
-    }
 
-    $('#form-save').show();
+        api.get(
+            '/people/' + $('#child-data input[name=id]').val(),
+            'buildPeopleEdit',
+            'apiFailed'
+        );
+    }
 }
 
 function saveInvoice(data) {

@@ -75,7 +75,7 @@ class People extends Model
                 people.created_at
             FROM contacts 
             JOIN ' . $this->table . ' people ON people.id = contacts.person_id AND people.deleted_at IS NULL 
-            WHERE contacts.deleted_at IS NULL AND type="contact" AND child_id=:id',
+            WHERE contacts.deleted_at IS NULL AND child_id=:id',
             [
                 ':id' => $id
             ]

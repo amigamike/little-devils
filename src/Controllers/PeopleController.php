@@ -14,6 +14,7 @@ use MikeWelsh\LittleDevils\Controllers\AuthenticationController;
 use MikeWelsh\LittleDevils\Exceptions\NotFoundException;
 use MikeWelsh\LittleDevils\Exceptions\PersonException;
 use MikeWelsh\LittleDevils\Helpers\RequestHelper;
+use MikeWelsh\LittleDevils\Models\Contact;
 use MikeWelsh\LittleDevils\Models\Parents;
 use MikeWelsh\LittleDevils\Models\People;
 use MikeWelsh\LittleDevils\Responses\JsonResponse;
@@ -162,6 +163,17 @@ class PeopleController
             } else {
                 $parent->deleted_at = null;
                 $parent->update();
+            }
+
+            $contact = (new Contact())->getByIds($data->id, $params['child_id']);
+            if (empty($contact)) {
+                $contact = new Contact();
+                $contact->person_id = $data->id;
+                $contact->child_id = $params['child_id'];
+                $contact->save();
+            } else {
+                $contact->deleted_at = null;
+                $contact->update();
             }
         }
     }
