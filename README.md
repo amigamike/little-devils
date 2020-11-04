@@ -52,3 +52,11 @@ Log the number of login attempts. After say three or so, lock the account.
 ### Security
 
 Make sure of the groups and hide sensitve data from certain types of users.
+
+### Deleting
+
+Have a warning before actually deleting which requires the user to agree before marking the item as deleted.
+
+### Room management
+
+Add support to manage the rooms, funding, costs, etc.

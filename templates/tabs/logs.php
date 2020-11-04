@@ -6,12 +6,12 @@
                 <label class="styled">Type</label>
                 <select name="type" class="form-control">
                     <option value="0" disabled>Please Select</option>
-                    <option>Attendance Note</option>
-                    <option>Covid-19</option>
-                    <option>Medical</option>
-                    <option>Accident</option>
-                    <option>Temp Collection Password</option>
-                    <option>Other</option>
+                    <option value="Attendance Note">Attendance Note</option>
+                    <option value="Covid-19">Covid-19</option>
+                    <option value="Medical">Medical</option>
+                    <option value="Accident">Accident</option>
+                    <option value="Temp Collection Password">Temp Collection Password</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
         </div>
@@ -24,7 +24,7 @@
         <div class="col-md-2 col-lg-1">
             <div class="form-group">
                 <label>&nbsp;</label><br>
-                <button id="add-log" type="button" class="btn btn-info">
+                <button id="add-log" type="button" class="btn btn-info btn-form" disabled>
                 <i class="fas fa-plus"></i>&nbsp;Add
                 </button>
             </div>

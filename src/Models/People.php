@@ -10,6 +10,7 @@
 
 namespace MikeWelsh\LittleDevils\Models;
 
+use MikeWelsh\LittleDevils\Models\Invoice;
 use MikeWelsh\LittleDevils\Models\Model;
 use MikeWelsh\LittleDevils\Models\Log;
 
@@ -88,6 +89,19 @@ class People extends Model
             JOIN users ON users.id = logs.user_id AND users.deleted_at IS NULL 
             JOIN groups ON groups.id = users.group_id AND groups.deleted_at IS NULL 
             WHERE logs.deleted_at IS NULL AND person_id=:id',
+            [
+                ':id' => $id
+            ]
+        );
+
+        $data->invoices = (new Invoice())->selectArray(
+            'SELECT 
+                invoices.*,
+                CONCAT(users.first_name, " ", users.last_name) AS full_name
+            FROM invoices 
+            JOIN ' . $this->table . ' people ON people.id = invoices.person_id AND people.deleted_at IS NULL 
+            JOIN users ON users.id = invoices.user_id AND users.deleted_at IS NULL 
+            WHERE invoices.deleted_at IS NULL AND invoices.person_id=:id',
             [
                 ':id' => $id
             ]

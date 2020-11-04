@@ -60,6 +60,24 @@ function buildPeopleEdit(data) {
         });
     }
 
+    if (data.invoices) {
+        $.each(data.invoices, function (i, invoice) {
+            $('#invoices tbody').append(renderInvoice(invoice));
+        });
+
+        $('.btn-delete-invoice').unbind('click');
+        $('.btn-delete-invoice').bind('click', function () {
+            deleteInvoice(this);
+        });
+
+        $('.btn-paid-invoice').unbind('click');
+        $('.btn-paid-invoice').bind('click', function () {
+            payInvoice(this);
+        });
+    }
+
+    $('.btn-form').prop('disabled', false);
+
     $.toast({
         heading: 'Load complete',
         text: data.message,
@@ -159,6 +177,14 @@ function deleteContact(entry) {
     );
 }
 
+function deleteInvoice(entry) {
+    api.delete(
+        '/invoices/' + $(entry).attr('data-id'),
+        'removeInvoice',
+        'apiFailed'
+    );
+}
+
 function deleteLog(entry) {
     api.delete(
         '/logs/' + $(entry).attr('data-id'),
@@ -195,12 +221,45 @@ function missingRequired(message = 'Please double check each of the forms') {
     });
 }
 
+function paidInvoice(data) {
+    $('#invoice-' + data.id + ' .invoice-status').html(data.status);
+
+    $.toast({
+        heading: 'Invoice marked as paid',
+        text: '',
+        icon: 'success',
+        loader: true,
+        position: 'bottom-right'
+    });
+}
+
+function payInvoice(entry) {
+    api.patch(
+        '/invoices/' + $(entry).attr('data-id'),
+        null,
+        'paidInvoice',
+        'apiFailed'
+    );
+}
+
 function removeContact(data) {
     $('#contact-' + data.id).remove();
 
     $.toast({
         heading: 'Contact removed',
-        text: data.message,
+        text: '',
+        icon: 'success',
+        loader: true,
+        position: 'bottom-right'
+    });
+}
+
+function removeInvoice(data) {
+    $('#invoice-' + data.id).remove();
+
+    $.toast({
+        heading: 'Invoice removed',
+        text: '',
         icon: 'success',
         loader: true,
         position: 'bottom-right'
@@ -212,7 +271,7 @@ function removeLog(data) {
 
     $.toast({
         heading: 'Log removed',
-        text: data.message,
+        text: '',
         icon: 'success',
         loader: true,
         position: 'bottom-right'
@@ -226,6 +285,20 @@ function renderContact(data) {
     html += '<td>' + data.relationship + '</td>';
     html += '<td class="text-center">';
     html += '<button data-id="' + data.id + '" type="button" class="btn btn-danger btn-sm btn-delete-contact"><i class="fa fa-trash"></i></button>';
+    html += '</td></tr>';
+    return html;
+}
+
+function renderInvoice(data) {
+    var html = '<tr id="invoice-' + data.id + '"><td>' + dateUk(data.created_at) + '</td>';
+    html += '<td>' + data.full_name + '</td>';
+    html += '<td>' + data.type + '</td>';
+    html += '<td>' + data.amount + '</td>';
+    html += '<td class="invoice-status">' + data.status + '</td>';
+    html += '<td>' + data.note + '</td>';
+    html += '<td width="120px" class="text-center">';
+    html += '<button data-id="' + data.id + '" type="button" class="btn btn-danger btn-sm btn-delete-invoice" title="Mark the invoice as deleted"><i class="fa fa-trash"></i></button>';
+    html += '<button data-id="' + data.id + '" type="button" class="btn btn-success btn-sm btn-paid-invoice ml-2" title="Mark the invoice as paid"><i class="fas fa-check"></i></button>';
     html += '</td></tr>';
     return html;
 }
@@ -276,6 +349,30 @@ function saveData(data) {
     }
 
     $('#form-save').show();
+}
+
+function saveInvoice(data) {
+    $('#invoices input[name=amount]').val('');
+    $('#invoices textarea[name=note]').val('');
+    $('#invoices tbody').append(renderInvoice(data));
+
+    $('.btn-delete-invoice').unbind('click');
+    $('.btn-delete-invoice').bind('click', function () {
+        deleteInvoice(this);
+    });
+
+    $('.btn-paid-invoice').unbind('click');
+    $('.btn-paid-invoice').bind('click', function () {
+        paidInvoice(this);
+    });
+
+    $.toast({
+        heading: 'Invoice added',
+        text: data.message,
+        icon: 'success',
+        loader: true,
+        position: 'bottom-right'
+    });
 }
 
 function saveLog(data) {
@@ -344,6 +441,34 @@ $(function() {
             '/contacts/' + $('#child-data input[name=id]').val(),
             data,
             'saveContact',
+            'apiFailed'
+        );
+    });
+
+    $('#add-invoice').click(function () {
+        var data = {};
+        var missing = false;
+        data.type = $('#invoices select[name=type]').val();
+        data.person_id = $('#child-data input[name=id]').val();
+
+        data.amount = $('#invoices input[name=amount]').val();
+        $('#invoices input[name=amount]').removeClass('error');
+        if (!data.amount) {
+            $('#invoices input[name=amount]').addClass('error');
+            missing = true;
+        }
+
+        data.note = $('#invoices textarea[name=note]').val();
+
+        if (missing) {
+            missingRequired();
+            return;
+        }
+
+        api.post(
+            '/invoices/add',
+            data,
+            'saveInvoice',
             'apiFailed'
         );
     });

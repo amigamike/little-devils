@@ -44,7 +44,7 @@
         <div class="col-md-2 col-lg-1">
             <div class="form-group">
                 <label for="">&nbsp;</label><br>
-                <button id="add-contact" type="button" class="btn btn-info">
+                <button id="add-contact" type="button" class="btn btn-info btn-form" disabled>
                     <i class="fas fa-plus"></i>&nbsp;Add
                 </button>
             </div>

@@ -2,6 +2,7 @@ CREATE TABLE `invoices` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `person_id` int(11) NOT NULL,
+  `type` varchar(255) NOT NULL,
   `amount` float(10,2) NOT NULL,
   `note` text DEFAULT NULL,
   `status` varchar(20) NOT NULL DEFAULT 'outstanding',
@@ -12,5 +13,6 @@ CREATE TABLE `invoices` (
   KEY `invoices_id_IDX` (`id`) USING BTREE,
   KEY `invoices_user_id_IDX` (`user_id`) USING BTREE,
   KEY `invoices_person_id_IDX` (`person_id`) USING BTREE,
-  KEY `invoices_amount_IDX` (`amount`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  KEY `invoices_amount_IDX` (`amount`) USING BTREE,
+  KEY `invoices_type_IDX` (`type`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;

@@ -6,15 +6,15 @@
                 <label class="styled">Type</label>
                 <select name="type" class="form-control">
                     <option value="0" disabled>Please Select</option>
-                    <option>Attendance</option>
-                    <option>Damage</option>
-                    <option>Medical</option>
-                    <option>Other</option>
+                    <option value="Attendance">Attendance</option>
+                    <option value="Damage">Damage</option>
+                    <option value="Medical">Medical</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
             <div class="form-group">
                 <label class="styled">Amount</label>
-                <input class="form-control" name="amount" />
+                <input class="form-control" name="amount" type="number" min="1" step="any" />
             </div>
         </div>
         <div class="col">
@@ -26,7 +26,7 @@
         <div class="col-md-2 col-lg-1">
             <div class="form-group">
                 <label>&nbsp;</label><br>
-                <button id="add-invoice" type="button" class="btn btn-info">
+                <button id="add-invoice" type="button" class="btn btn-info btn-form" disabled>
                 <i class="fas fa-plus"></i>&nbsp;Add
                 </button>
             </div>
@@ -39,6 +39,7 @@
                 <th width="120">Date</th>
                 <th width="120">Added By</th>
                 <th width="250">Type</th>
+                <th width="120">Amount (&pound;)</th>
                 <th width="120">Status</th>
                 <th>Note</th>
                 <th class="text-center" width="75">Delete</th>

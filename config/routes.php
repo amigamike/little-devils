@@ -40,6 +40,11 @@ try {
         'MikeWelsh\LittleDevils\Controllers\InvoicesController::add'
     );
 
+    $router->patch(
+        '/api/invoices/{id}',
+        'MikeWelsh\LittleDevils\Controllers\InvoicesController::paid'
+    );
+
     $router->delete(
         '/api/invoices/{id}',
         'MikeWelsh\LittleDevils\Controllers\InvoicesController::delete'

@@ -32,7 +32,9 @@ class InvoicesController
 
         $data->save();
 
-        $data->user = (new User())->getById($data->user_id);
+        $user = (new User())->getById($data->user_id);
+
+        $data->full_name = $user->first_name . ' ' . $user->last_name;
 
         return new JsonResponse(
             'Invoice added',
@@ -78,6 +80,29 @@ class InvoicesController
 
         return new JsonResponse(
             'Invoices list',
+            $data
+        );
+    }
+
+    public static function paid($params)
+    {
+        /*
+         * Validate the api key.
+         */
+        (new AuthenticationController())->validApi();
+
+        $data = (new Invoice())->getById($params['id']);
+
+        if (empty($data)) {
+            throw new NotFoundException('Invoice not found');
+        }
+
+        $data->status = 'paid';
+
+        $data->update();
+
+        return new JsonResponse(
+            'Invoice deleted',
             $data
         );
     }

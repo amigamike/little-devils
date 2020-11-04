@@ -23,6 +23,7 @@ class Invoice extends Model
     public $id = 0;
     public $user_id = 0;
     public $person_id = 0;
+    public $type = '';
     public $amount = 0.00;
     public $note = '';
     public $status = 'outstanding';

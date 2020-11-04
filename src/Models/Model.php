@@ -47,17 +47,17 @@ class Model
     /**
      * Filter the results.
      */
-    public $filters = [];
+    protected $filters = [];
 
     /**
      * Filter the results.
      */
-    public $filtersBetween = [];
+    protected $filtersBetween = [];
 
     /**
      * Order the results.
      */
-    public $order = [];
+    protected $order = [];
 
     /**
      * Return all the entries.
