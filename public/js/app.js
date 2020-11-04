@@ -586,4 +586,6 @@ $(function() {
             );
         }
     );
+
+    $('#select-child').select2();
 });
