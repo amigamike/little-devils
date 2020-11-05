@@ -521,6 +521,11 @@ $(function() {
         );
     });
 
+    $('.datepicker').datepicker({
+        format:'dd/mm/yyyy',
+        autoclose: true
+    });
+
     $('#generate-report').click(function () {
         api.get(
             '/revenue?room=' + $('#reports select[name=room]').val() + '&year=' + $('#reports select[name=year]').val(),

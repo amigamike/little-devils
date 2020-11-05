@@ -1,14 +1,10 @@
-            <div class="row">
-                <div class="col-12 mb-2">
-                    <small class="pl-3">&copy;<?= date('Y'); ?> Mike Welsh</small>
-                </div>
+                </main>
             </div>
+            <footer class="c-footer">
+                <div>Nursery Management System. &copy;<?= date('Y'); ?> Mike Welsh.</div>
+            </footer>
         </div>
-        <script type="text/javascript">
-            $('.datepicker').datepicker({
-                format:'dd/mm/yyyy',
-                autoclose: true
-            });
-        </script>
+        <script src="https://unpkg.com/@popperjs/core@2"></script>
+        <script src="https://unpkg.com/@coreui/coreui/dist/js/coreui.bundle.min.js"></script>
     </body>
 </html>
