@@ -69,14 +69,19 @@ class Api {
      * @param {*} failed
      */
     call(method, url, data, success, failed) {
-        $.ajax({
+        var options = {
             method: method,
             contentType: 'application/json',
             headers: {"X-API-KEY": API_KEY},
             dataType: 'json',
-            url: API_URL + url,
-            data: JSON.stringify(data)
-          })
+            url: API_URL + url
+        };
+
+        if (data) {
+            options.data = JSON.stringify(data);
+        }
+
+        $.ajax(options)
         .done(function(response) {
             var func = null;
             if (typeof(response.data) == 'undefined') {

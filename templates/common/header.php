@@ -47,10 +47,13 @@ $auth = new AuthenticationController();
         <?php
         if ($auth->valid()) {
             include('sidebar.php');
-            ?>
+        }
+        ?>
+        
         <div class="c-wrapper">
-            <?php
-                include('pageHeader.php');
+        <?php
+        if ($auth->valid()) {
+            include('pageHeader.php');
         }
         ?>        
             <div class="c-body">

@@ -13,6 +13,7 @@ namespace MikeWelsh\LittleDevils\Controllers;
 use MikeWelsh\LittleDevils\Controllers\AuthenticationController;
 use MikeWelsh\LittleDevils\Exceptions\MethodNotAllowedException;
 use MikeWelsh\LittleDevils\Helpers\PathHelper;
+use MikeWelsh\LittleDevils\Responses\JsonResponse;
 
 class RouterController
 {
@@ -147,6 +148,15 @@ class RouterController
          * If the page is not found, throw the page not found error.
          */
         if (!$this->found) {
+            if (isset($_REQUEST['api'])) {
+                return new JsonResponse(
+                    'Endpoint not found',
+                    null,
+                    'error',
+                    404
+                );
+            }
+
             header("404 Page Not Found", true, 404);
             echo 'Page not found';
         }

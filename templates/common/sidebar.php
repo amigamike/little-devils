@@ -10,7 +10,7 @@
         </li>
         <li class="c-sidebar-nav-title">People</li>
         <li class="c-sidebar-nav-item">
-            <a class="c-sidebar-nav-link" href="colors.html">
+            <a class="c-sidebar-nav-link" href="/children">
                 <i class="fa fa-child mr-3"></i> Children
             </a>
         </li>

@@ -68,6 +68,13 @@ class AuthenticationController
     public function login(array $data)
     {
         /*
+         * Confirm the key is set.
+         */
+        if (empty($data['css_key'])) {
+            throw new AuthenticationException('Missing cross-site scripting security key');
+        }
+
+        /*
          * Make sure the css key is valid.
          */
         if (!SecurityHelper::cssKeyValid($data['css_key'])) {
