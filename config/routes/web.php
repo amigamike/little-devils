@@ -34,3 +34,7 @@ $router->get('/children', function () {
 $router->get('/parents', function () {
     return (new ViewController('parents/index'))->render();
 });
+
+$router->get('/rooms', function () {
+    return (new ViewController('rooms/index'))->render();
+});

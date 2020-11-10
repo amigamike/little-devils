@@ -21,7 +21,7 @@
         </li>
         <li class="c-sidebar-nav-title">Rooms</li>
         <li class="c-sidebar-nav-dropdown">
-            <a class="c-sidebar-nav-link" href="colors.html">
+            <a class="c-sidebar-nav-link" href="/rooms">
                 <i class="far fa-building mr-3"></i> Rooms
             </a>
         </li>

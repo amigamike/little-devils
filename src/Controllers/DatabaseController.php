@@ -330,19 +330,19 @@ class DatabaseController
             $start = substr(
                 $query,
                 0,
-                strpos(strtoupper($query), 'FROM')
+                strrpos(strtoupper($query), 'FROM')
             );
         
             $end = substr(
                 $query,
-                strpos(strtoupper($query), 'FROM'),
-                strlen($query) - strpos(strtoupper($query), 'FROM')
+                strrpos(strtoupper($query), 'FROM'),
+                strlen($query) - strrpos(strtoupper($query), 'FROM')
             );
 
             $countQuery = '(SELECT count(*) ' . substr(
                 $query,
-                strpos(strtoupper($query), 'FROM'),
-                strlen($query) - strpos(strtoupper($query), 'FROM')
+                strrpos(strtoupper($query), 'FROM'),
+                strlen($query) - strrpos(strtoupper($query), 'FROM')
             ) . ') AS total ';
 
             $query = $start . ', ' . $countQuery . ' ' . $end;

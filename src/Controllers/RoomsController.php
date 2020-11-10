@@ -25,6 +25,16 @@ class RoomsController
 
         $model = new Room();
 
+        if (!empty($params['query'])) {
+            $model->likeOr(
+                [
+                    'first_name',
+                    'last_name'
+                ],
+                $params['query']
+            );
+        }
+
         $data = $model
             ->paginate(
                 (!empty($params['page']) ? intval($params['page']) : 1),
