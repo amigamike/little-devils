@@ -80,7 +80,14 @@ class List {
             html += window.location + '?page=' + iLoop;
             html += '">' + iLoop + '</a></li>';
         }
-        html += '<li class="page-item"><a class="page-link" href="#">Next</a></li>';
+        html += '<li class="page-item">';
+        html += '<a class="page-link';
+        if (data.current_page != data.end) {
+            html += '" href="' + window.location + '?page=' + (data.current_page + 1) + '"';
+        } else {
+            html += ' disabled" href="#"';
+        }
+        html += '>Next</a></li>';
 
         $('#' + this.id + ' ul.pagination').html(html);
     }
