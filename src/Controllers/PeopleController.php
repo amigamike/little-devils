@@ -76,11 +76,29 @@ class PeopleController
             $model->filter('type', $params['type']);
         }
 
-        $data = $model->all();
+        if (!empty($params['query'])) {
+            $model->likeOr(
+                [
+                    'first_name',
+                    'last_name'
+                ],
+                $params['query']
+            );
+        }
+
+        $data = $model
+            ->paginate(
+                (!empty($params['page']) ? intval($params['page']) : 1),
+                (!empty($params['per_page']) ? intval($params['per_page']) : 25)
+            )
+            ->all();
 
         return new JsonResponse(
             'People list',
-            $data
+            $data,
+            'success',
+            200,
+            $model->pagination
         );
     }
 

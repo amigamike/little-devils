@@ -28,59 +28,37 @@ include(__DIR__ . '/../common/header.php');
                     <div class="card-header">
                         Children
                     </div>
-                    <div class="card-body">
-                        <table id="list" class="table table-responsive-sm table-bordered table-striped table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Name</th>
-                                    <th>Room</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Vishnu Serghei</td>
-                                    <td>2012/01/01</td>
-                                    <td>Member</td>
-                                    <td><span class="badge badge-success">Active</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Zbyněk Phoibos</td>
-                                    <td>2012/02/01</td>
-                                    <td>Staff</td>
-                                    <td><span class="badge badge-danger">Banned</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Einar Randall</td>
-                                    <td>2012/02/01</td>
-                                    <td>Admin</td>
-                                    <td><span class="badge badge-secondary">Inactive</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Félix Troels</td>
-                                    <td>2012/03/01</td>
-                                    <td>Member</td>
-                                    <td><span class="badge badge-warning">Pending</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Aulus Agmundr</td>
-                                    <td>2012/01/21</td>
-                                    <td>Staff</td>
-                                    <td><span class="badge badge-success">Active</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <nav>
-                            <ul class="pagination">
-                                <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">4</a></li>
-                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                            </ul>
-                        </nav>
+                    <div id="list" class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="input-group mb-4">
+                                    <input class="form-control" type="text" name="search" placeholder="Search the data">
+                                    <span class="input-group-prepend">
+                                        <button class="btn btn-primary" type="button">
+                                            <i class="fas fa-search"></i>&nbsp;Search
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Name</th>
+                                            <th>Room</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                                <nav>
+                                    <ul class="pagination"></ul>
+                                </nav>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

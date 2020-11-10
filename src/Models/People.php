@@ -45,26 +45,18 @@ class People extends Model
      *
      * @return array $return
      */
-    public function all(): array
+    public function all(string $query = ''): array
     {
-        /*
-         * Define the db controller and trigger the select.
-         */
-        return (new DatabaseController())
-            ->filters($this->filters)
-            ->filtersBetween($this->filtersBetween)
-            ->order($this->order)
-            ->selectArray(
-                get_class($this),
-                'SELECT
-                    p.*,
-                    CONCAT(first_name, " ", last_name) AS full_name,
-                    DATE_FORMAT(dob, "%d/%m/%Y") AS dob,
-                    rooms.name AS room_name 
-                FROM ' . $this->table . ' p ' .
-                'JOIN rooms ON rooms.id = p.room_id AND rooms.deleted_at IS NULL ' .
-                'WHERE p.deleted_at IS NULL'
-            );
+        return parent::all(
+            'SELECT
+                p.*,
+                CONCAT(first_name, " ", last_name) AS full_name,
+                DATE_FORMAT(dob, "%d/%m/%Y") AS dob,
+                rooms.name AS room_name 
+            FROM ' . $this->table . ' p ' .
+            'JOIN rooms ON rooms.id = p.room_id AND rooms.deleted_at IS NULL ' .
+            'WHERE p.deleted_at IS NULL'
+        );
     }
 
     public function getById($id)

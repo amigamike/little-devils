@@ -12,17 +12,57 @@
 namespace MikeWelsh\LittleDevils\Controllers;
 
 use MikeWelsh\LittleDevils\Exceptions\DatabaseException;
+use MikeWelsh\LittleDevils\Models\Pagination;
 use PDO;
 
 class DatabaseController
 {
+    /**
+     * Database connection.
+     * @var $connection
+     */
     private $connection = null;
 
-    private $filters = [];
-    private $filtersBetween = [];
+    /**
+     * Current page for pagination.
+     * @var int $current_page
+     */
+    private int $current_page = 1;
+
+    /**
+     * Filters array.
+     * @var array $filters
+     */
+    private array $filters = [];
+
+    /**
+     * Filters array for building between query.
+     * @var array $filtersBetween
+     */
+    private array $filtersBetween = [];
+
+    /**
+     * Array for building likes with an or condition in the query.
+     * @var array $orLikes
+     */
+    private array $orLikes = [];
+
+    /**
+     * Pagination object.
+     * @var Pagination $pagination
+     */
+    public Pagination $pagination;
+
+    /**
+     * Per page used for the pagination.
+     * @var int $per_page
+     */
+    private int $per_page = 25;
 
     public function __construct()
     {
+        $this->pagination = new Pagination();
+
         $vars = [
             'DB_DRIVER',
             'DB_DATABASE',
@@ -80,6 +120,18 @@ class DatabaseController
     }
 
     /**
+     * Set the or likes.
+     *
+     * @param array $likes
+     * @return $this
+     */
+    public function likeOr(array $likes)
+    {
+        $this->orLikes = $likes;
+        return $this;
+    }
+
+    /**
      * Set the order for ordering the results.
      *
      * @param array $order
@@ -88,6 +140,20 @@ class DatabaseController
     public function order(array $order)
     {
         $this->order = $order;
+        return $this;
+    }
+
+    /**
+     * Set the values for the pagination object.
+     *
+     * @param int $current_page
+     * @param int $per_page
+     * @return $this
+     */
+    public function paginate(int $current_page, int $per_page)
+    {
+        $this->current_page = $current_page;
+        $this->per_page = $per_page;
         return $this;
     }
 
@@ -150,6 +216,14 @@ class DatabaseController
         return $this->connection->lastInsertId();
     }
 
+    /**
+     * Trigger a select and return the result as an object.
+     *
+     * @param string $class
+     * @param string $query
+     * @param array $params
+     * @return $result
+     */
     public function select(string $class, string $query, array $params = [])
     {
         /*
@@ -157,9 +231,27 @@ class DatabaseController
          */
         $sql = $this->trigger($query, $params);
 
-        return $sql->fetchObject($class);
+        $result = $sql->fetchObject($class);
+
+        if ($this->current_page && $this->per_page) {
+            $this->pagination = new Pagination($this->current_page, $this->per_page);
+            $this->pagination->total = $result->total;
+            unset($result->total);
+
+            $this->pagination->update();
+        }
+
+        return $result;
     }
 
+    /**
+     * Trigger a select and return results as array.
+     *
+     * @param string $class
+     * @param string $query
+     * @param array $params
+     * @return $result
+     */
     public function selectArray(string $class, string $query, array $params = [])
     {
         /*
@@ -167,9 +259,31 @@ class DatabaseController
          */
         $sql = $this->trigger($query, $params);
 
-        return $sql->fetchAll(PDO::FETCH_CLASS, $class);
+        $results = $sql->fetchAll(PDO::FETCH_CLASS, $class);
+
+        if ($this->current_page && $this->per_page) {
+            $this->pagination = new Pagination($this->current_page, $this->per_page);
+
+            foreach ($results as $key => $result) {
+                if (empty($this->pagination->total)) {
+                    $this->pagination->total = $result->total;
+                }
+                unset($result->total);
+            }
+
+            $this->pagination->update();
+        }
+
+        return $results;
     }
 
+    /**
+     * Trigger the query with params.
+     *
+     * @param string $query
+     * @param array $params
+     * @return $sql
+     */
     private function trigger(string $query, array $params = [])
     {
         /*
@@ -197,6 +311,44 @@ class DatabaseController
                 }
                 $query = rtrim($query, ' AND ') . ')';
             }
+        }
+
+        /*
+         * If there are or likes, use them.
+         */
+        if (!empty($this->orLikes)) {
+            $query .= ' AND (';
+            foreach ($this->orLikes as $col => $value) {
+                $query .= $col . '=:' . $col . ' OR ';
+                $params[':' . $col] = $value;
+            }
+            $query = rtrim($query, ' OR ');
+            $query .= ' )';
+        }
+
+        if ($this->current_page && $this->per_page) {
+            $start = substr(
+                $query,
+                0,
+                strpos(strtoupper($query), 'FROM')
+            );
+        
+            $end = substr(
+                $query,
+                strpos(strtoupper($query), 'FROM'),
+                strlen($query) - strpos(strtoupper($query), 'FROM')
+            );
+
+            $countQuery = '(SELECT count(*) ' . substr(
+                $query,
+                strpos(strtoupper($query), 'FROM'),
+                strlen($query) - strpos(strtoupper($query), 'FROM')
+            ) . ') AS total ';
+
+            $query = $start . ', ' . $countQuery . ' ' . $end;
+        
+            $offset = (($this->current_page - 1) * $this->per_page);
+            $query .= ' LIMIT ' . $this->per_page . ($offset ? ' OFFSET ' . $offset : '');
         }
 
         /*

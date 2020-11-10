@@ -21,12 +21,55 @@ class List {
         $.each(data, function (i, row) {
             html += '<tr>';
             $.each(local.map, function (i2, item) {
-                html += '<td>' + row[item] + '</td>';
+                html += '<td>';
+                if (item.toLowerCase() == 'status') {
+                    html += local.buildStatus(row[item]);
+                } else {
+                    html += row[item];
+                }
+                html += '</td>';
             });
             html += '</tr>';
         });
 
         $('#' + this.id + ' tbody').html(html);
+    }
+
+    buildPagination(data) {
+        var html = '<li class="page-item">';
+        html += '<a class="page-link';
+        if (data.current_page != 1) {
+            html += '" href="' + window.location + '?page=' + (data.current_page - 1) + '"';
+        } else {
+            html += ' disabled" href="#"';
+        }
+        html += '>Prev</a>';
+        html += '</li>';
+        for(var iLoop = data.start; iLoop <= data.end; iLoop++) {
+            html += '<li class="page-item';
+            if (iLoop == data.current_page) {
+                html += ' active';
+            }
+            html += '"><a class="page-link" href="';
+            html += window.location + '?page=' + iLoop;
+            html += '">' + iLoop + '</a></li>';
+        }
+        html += '<li class="page-item"><a class="page-link" href="#">Next</a></li>';
+
+        $('#' + this.id + ' ul.pagination').html(html);
+    }
+
+    buildStatus(status) {
+        switch (status.toLowerCase()) {
+            case 'active':
+                return '<span class="badge badge-success">Active</span>';
+            case 'inactive':
+                return '<span class="badge badge-warning">Inactive</span>';
+            case 'deleted':
+                return '<span class="badge badge-danger">Deleted</span>';
+            default:
+                return status;
+        }
     }
 
     failedList(data) {
@@ -42,6 +85,6 @@ class List {
     }
 
     get(url) {
-        api.get(url, 'list.buildList', 'list.failedList');
+        api.get(url, 'list.buildList', 'list.failedList', 'list.buildPagination');
     }
 }

@@ -23,11 +23,21 @@ class RoomsController
          */
         (new AuthenticationController())->validApi();
 
-        $data = (new Room())->all();
+        $model = new Room();
+
+        $data = $model
+            ->paginate(
+                (!empty($params['page']) ? intval($params['page']) : 1),
+                (!empty($params['per_page']) ? intval($params['per_page']) : 25)
+            )
+            ->all();
 
         return new JsonResponse(
             'Rooms list',
-            $data
+            $data,
+            'success',
+            200,
+            $model->pagination
         );
     }
 }

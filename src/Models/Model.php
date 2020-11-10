@@ -11,6 +11,7 @@
 namespace MikeWelsh\LittleDevils\Models;
 
 use MikeWelsh\LittleDevils\Controllers\DatabaseController;
+use MikeWelsh\LittleDevils\Models\Pagination;
 
 class Model
 {
@@ -46,37 +47,75 @@ class Model
 
     /**
      * Filter the results.
+     * @var array $filters
      */
     protected $filters = [];
 
     /**
      * Filter the results.
+     * @var array $filtersBetween
      */
     protected $filtersBetween = [];
 
     /**
      * Order the results.
+     * @var array $order
      */
     protected $order = [];
+
+    /**
+     * Like ors array.
+     * @var array $orLikes
+     */
+    protected $orLikes = [];
+
+    /**
+     * Pagination object.
+     * @var Pagination $pagination
+     */
+    public Pagination $pagination;
+
+    /**
+     * The current page.
+     * @var int $current_page
+     */
+    protected int $current_page = 1;
+
+    /**
+     * The per page.
+     * @var int $per_page
+     */
+    protected int $per_page = 25;
 
     /**
      * Return all the entries.
      *
      * @return array $return
      */
-    public function all(): array
+    public function all(string $query = ''): array
     {
+        if (empty($query)) {
+            $query = 'SELECT * FROM ' . $this->table . ' WHERE deleted_at IS NULL';
+        }
+
         /*
          * Define the db controller and trigger the select.
          */
-        return (new DatabaseController())
+        $db = new DatabaseController();
+        $results = $db
             ->filters($this->filters)
             ->filtersBetween($this->filtersBetween)
             ->order($this->order)
+            ->paginate($this->current_page, $this->per_page)
+            ->likeOr($this->orLikes)
             ->selectArray(
                 get_class($this),
-                'SELECT * FROM ' . $this->table . ' WHERE deleted_at IS NULL'
+                $query
             );
+        
+        $this->pagination = $db->pagination;
+
+        return $results;
     }
 
     public function delete()
@@ -126,10 +165,13 @@ class Model
         return $this;
     }
 
+    /**
+     * Get the result by its primary id
+     */
     public function getById(int $id)
     {
         return $this->select(
-            'SELECT * FROM ' . $this->table . ' WHERE id=:id',
+            'SELECT * FROM ' . $this->table . ' WHERE ' . $this->primary . '=:id',
             [
                 ':id' => $id
             ]
@@ -157,6 +199,25 @@ class Model
     }
 
     /**
+     * Set the like ors.
+     *
+     * @param mixed $fields
+     * @param string $query
+     */
+    public function likeOr($fields, string $query)
+    {
+        if (is_array($fields)) {
+            foreach ($fields as $field) {
+                $this->orLikes[$field] = $query;
+            }
+        } else {
+            $this->orLikes[$fields] = $query;
+        }
+
+        return $this;
+    }
+
+    /**
      * Set a order for ordering the results.
      *
      * @param string $column
@@ -167,6 +228,24 @@ class Model
     {
         $this->order[$column] = $direction;
         return $this;
+    }
+
+    /**
+     * Paginate the results.
+     *
+     * @param int $page
+     * @param int $per_page
+     */
+    public function paginate(int $page = 1, int $per_page = 25)
+    {
+        $this->current_page = $page;
+        $this->per_page = $per_page;
+        return $this;
+    }
+
+    public function pagination()
+    {
+
     }
 
     /**

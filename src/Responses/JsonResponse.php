@@ -21,7 +21,7 @@ class JsonResponse
      * @param int $code
      * @return null
      */
-    public function __construct(string $message, $data, string $status = 'success', int $code = 200)
+    public function __construct(string $message, $data, string $status = 'success', int $code = 200, $pagination = null)
     {
         /**
          * Set the header content type to that of JSON.
@@ -42,6 +42,10 @@ class JsonResponse
             'message' => $message,
             'data' => $data
         ];
+
+        if ($pagination) {
+            $output['pagination'] = $pagination;
+        }
 
         /**
          * If the data is an Exception, get various params from it.

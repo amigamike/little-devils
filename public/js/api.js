@@ -13,8 +13,8 @@ class Api {
      * @param {*} success
      * @param {*} failed
      */
-    delete(url, success, failed) {
-        return this.call('DELETE', url, null, success, failed);
+    delete(url, success, failed, pagination) {
+        return this.call('DELETE', url, null, success, failed, pagination);
     }
 
     /**
@@ -23,8 +23,8 @@ class Api {
      * @param {*} success
      * @param {*} failed
      */
-    get(url, success, failed) {
-        return this.call('GET', url, null, success, failed);
+    get(url, success, failed, pagination) {
+        return this.call('GET', url, null, success, failed, pagination);
     }
 
     /**
@@ -34,8 +34,8 @@ class Api {
      * @param {*} success
      * @param {*} failed
      */
-    post(url, data, success, failed) {
-        return this.call('POST', url, data, success, failed);
+    post(url, data, success, failed, pagination) {
+        return this.call('POST', url, data, success, failed, pagination);
     }
 
     /**
@@ -45,8 +45,8 @@ class Api {
      * @param {*} success
      * @param {*} failed
      */
-    put(url, data, success, failed) {
-        return this.call('PUT', url, data, success, failed);
+    put(url, data, success, failed, pagination) {
+        return this.call('PUT', url, data, success, failed, pagination);
     }
 
     /**
@@ -56,8 +56,8 @@ class Api {
      * @param {*} success
      * @param {*} failed
      */
-    patch(url, data, success, failed) {
-        return this.call('PATCH', url, data, success, failed);
+    patch(url, data, success, failed, pagination) {
+        return this.call('PATCH', url, data, success, failed, pagination);
     }
 
     /**
@@ -68,7 +68,7 @@ class Api {
      * @param {*} success
      * @param {*} failed
      */
-    call(method, url, data, success, failed) {
+    call(method, url, data, success, failed, pagination) {
         var options = {
             method: method,
             contentType: 'application/json',
@@ -98,6 +98,11 @@ class Api {
             }
 
             if (func) {
+                eval(func);
+            }
+
+            if (pagination) {
+                func = pagination + "(response.pagination);";
                 eval(func);
             }
         })
