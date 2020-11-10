@@ -29,6 +29,12 @@ class List {
     }
 
     buildList(data) {
+        if (!data.length) {
+            $('#' + this.id + ' tbody').html('<tr><td colspan="' + this.map.length + '"><strong>No results</strong></td></tr>');
+            $('#processing').hide();
+            return;
+        }
+
         var html = '';
         var local = this;
         $.each(data, function (i, row) {
@@ -46,9 +52,16 @@ class List {
         });
 
         $('#' + this.id + ' tbody').html(html);
+
+        $('#processing').hide();
     }
 
     buildPagination(data) {
+        if (!data.total) {
+            $('#' + this.id + ' ul.pagination').html('');
+            return;
+        }
+
         var html = '<li class="page-item">';
         html += '<a class="page-link';
         if (data.current_page != 1) {
@@ -87,6 +100,7 @@ class List {
 
     clearSearch() {
         $('#' + this.id + ' input[name=query]').val('');
+        $('#' + this.id + ' .search-clear').hide();
         this.get(this.url);
     }
 
@@ -103,6 +117,7 @@ class List {
     }
 
     get(url = '') {
+        $('#processing').show();
         if (!url) {
             url = this.url;
         }

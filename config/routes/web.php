@@ -30,3 +30,7 @@ $router->get('/logout', function () {
 $router->get('/children', function () {
     return (new ViewController('children/index'))->render();
 });
+
+$router->get('/parents', function () {
+    return (new ViewController('parents/index'))->render();
+});

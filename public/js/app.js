@@ -422,8 +422,8 @@ function saveLog(data) {
 
 $(function() {
     if (loggedIn) {
-        loadPeopleSelect();
-        loadRoomsSelect();
+        //loadPeopleSelect();
+        //loadRoomsSelect();
     }
 
     $('#add-contact').click(function () {

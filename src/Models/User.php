@@ -23,6 +23,8 @@ class User extends Model
 
     public $id = 0;
     public $site_id = 0;
+    public $group_id = 0;
+    public $room_id = 0;
     public $api_key = '';
     public $first_name = '';
     public $last_name = '';

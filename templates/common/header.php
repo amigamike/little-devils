@@ -39,6 +39,21 @@ $auth = new AuthenticationController();
         <link href="/css/app.css?<?= time(); ?>" rel="stylesheet">
     </head>
     <body class="c-app c-dark-theme" cz-shortcut-listen="true">
+        <div id="processing" class="modal-backdrop fade hide">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-12 align-self-center">
+                        <div class="sk-wave">
+                            <div class="sk-rect sk-rect1"></div>
+                            <div class="sk-rect sk-rect2"></div>
+                            <div class="sk-rect sk-rect3"></div>
+                            <div class="sk-rect sk-rect4"></div>
+                            <div class="sk-rect sk-rect5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script type="text/javascript">
             var API_KEY = '<?= $auth->get('api_key'); ?>';
             var API_URL = '<?= getenv('API_URL'); ?>';
@@ -47,9 +62,9 @@ $auth = new AuthenticationController();
         <?php
         if ($auth->valid()) {
             include('sidebar.php');
+            include(__DIR__ . '/../widgets/pda.php');
         }
         ?>
-        
         <div class="c-wrapper">
         <?php
         if ($auth->valid()) {
