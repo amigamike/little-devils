@@ -9,10 +9,23 @@
 class List {
     id = '';
     map = {};
+    url = '';
 
-    constructor(id, map) {
+    constructor(id, map, url) {
         this.id = id;
         this.map = map;
+        this.url = url;
+
+        var local = this;
+        $('#' + id + ' button[name=search]').click(function () {
+            local.search();
+        });
+
+        $('#' + id + ' button[name=clear]').click(function () {
+            local.clearSearch();
+        });
+
+        this.get();
     }
 
     buildList(data) {
@@ -72,6 +85,11 @@ class List {
         }
     }
 
+    clearSearch() {
+        $('#' + this.id + ' input[name=query]').val('');
+        this.get(this.url);
+    }
+
     failedList(data) {
         $.toast({
             heading: 'Error',
@@ -84,7 +102,38 @@ class List {
         });
     }
 
-    get(url) {
+    get(url = '') {
+        if (!url) {
+            url = this.url;
+        }
         api.get(url, 'list.buildList', 'list.failedList', 'list.buildPagination');
+    }
+
+    search() {
+        var query = $('#' + this.id + ' input[name=query]').val();
+
+        if (!query) {
+            $.toast({
+                heading: 'Missing required',
+                text: 'Please enter a search query',
+                icon: 'error',
+                loader: true,
+                loaderBg: '#f97272',
+                bgColor: '#e83c3c',
+                position: 'bottom-right'
+            });
+            return;
+        }
+
+        var url = this.url;
+        if (url.indexOf('?')) {
+            url += '&';
+        } else {
+            url += '?';
+        }
+        url += 'query=' + query;
+        this.get(url);
+
+        $('#' + this.id + ' .search-clear').show();
     }
 }

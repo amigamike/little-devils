@@ -32,9 +32,14 @@ include(__DIR__ . '/../common/header.php');
                         <div class="row">
                             <div class="col-4">
                                 <div class="input-group mb-4">
-                                    <input class="form-control" type="text" name="search" placeholder="Search the data">
+                                    <input class="form-control" type="text" name="query" placeholder="Search the data">
+                                    <span class="search-clear input-group-prepend hide">
+                                        <button name="clear" class="btn btn-warning" type="button">
+                                            <i class="fas fa-backspace"></i>&nbsp;Clear
+                                        </button>
+                                    </span>
                                     <span class="input-group-prepend">
-                                        <button class="btn btn-primary" type="button">
+                                        <button name="search" class="btn btn-primary" type="button">
                                             <i class="fas fa-search"></i>&nbsp;Search
                                         </button>
                                     </span>
@@ -74,10 +79,9 @@ include(__DIR__ . '/../common/header.php');
             'full_name',
             'room_name',
             'status'
-        ]
+        ],
+        '/people?type=child'
     );
-
-    list.get('/people?type=child');
 </script>
 <?php
 include(__DIR__ . '/../common/footer.php');
