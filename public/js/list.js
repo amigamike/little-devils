@@ -47,7 +47,7 @@ class List {
         url = splits[0] + '?';
 
         params.forEach(function(value, key) {
-            if (appends[key] != '') {
+            if (appends[key] == undefined) {
                 url += key + '=' + value + '&';
                 hasParams = true;
             }
@@ -61,7 +61,7 @@ class List {
         });
 
         url = url.replace(/&+$/,'');
-        if (!hasParams) {
+        if (hasParams == false) {
             url = url.replace(/\?+$/,'');
         }
 
@@ -102,10 +102,14 @@ class List {
             return;
         }
 
+        var params = {};
+        params.page = '';
+
         var html = '<li class="page-item">';
         html += '<a class="page-link';
         if (data.current_page != 1) {
-            html += '" href="' + window.location + '?page=' + (data.current_page - 1) + '"';
+            params.page = data.current_page - 1;
+            html += '" href="' + this.appendUrl(window.location.href, params) + '"';
         } else {
             html += ' disabled" href="#"';
         }
@@ -117,13 +121,15 @@ class List {
                 html += ' active';
             }
             html += '"><a class="page-link" href="';
-            html += window.location + '?page=' + iLoop;
+            params.page = iLoop;
+            html += this.appendUrl(window.location.href, params);
             html += '">' + iLoop + '</a></li>';
         }
         html += '<li class="page-item">';
         html += '<a class="page-link';
         if (data.current_page != data.end) {
-            html += '" href="' + window.location + '?page=' + (data.current_page + 1) + '"';
+            params.page = data.current_page + 1;
+            html += '" href="' + this.appendUrl(window.location.href, params) + '"';
         } else {
             html += ' disabled" href="#"';
         }
