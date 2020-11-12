@@ -35,7 +35,7 @@ include(__DIR__ . '/../common/header.php');
                                     <input class="form-control" type="text" name="query" placeholder="Search the data">
                                     <span class="search-clear input-group-prepend hide">
                                         <button name="clear" class="btn btn-warning" type="button">
-                                            <i class="fas fa-backspace"></i>&nbsp;Clear
+                                            <i class="fas fa-backspace"></i>&nbsp;&nbsp;Clear
                                         </button>
                                     </span>
                                     <span class="input-group-prepend">

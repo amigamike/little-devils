@@ -28,6 +28,46 @@ class List {
         this.get();
     }
 
+    appendUrl(url, appends) {
+        var hasParams = false;
+        var splits = url.split('?');
+        if (!splits[1]) {
+            url += '?';
+            $.each(appends, function(key, value) {
+                if (value != '') {
+                    url += key + '=' + value + '&';
+                    hasParams = true;
+                }
+            });
+
+            return url.replace(/&+$/,'');
+        }
+
+        var params = new URLSearchParams(splits[1]);
+        url = splits[0] + '?';
+
+        params.forEach(function(value, key) {
+            if (appends[key] != '') {
+                url += key + '=' + value + '&';
+                hasParams = true;
+            }
+        });
+
+        $.each(appends, function(key, value) {
+            if (value != '') {
+                url += key + '=' + value + '&';
+                hasParams = true;
+            }
+        });
+
+        url = url.replace(/&+$/,'');
+        if (!hasParams) {
+            url = url.replace(/\?+$/,'');
+        }
+
+        return url;
+    }
+
     buildList(data) {
         if (!data.length) {
             $('#' + this.id + ' tbody').html('<tr><td colspan="' + this.map.length + '"><strong>No results</strong></td></tr>');
@@ -108,7 +148,15 @@ class List {
     clearSearch() {
         $('#' + this.id + ' input[name=query]').val('');
         $('#' + this.id + ' .search-clear').hide();
-        this.get(this.url);
+
+        var params = {};
+        params.query = '';
+
+        this.get(this.appendUrl(this.url, params));
+        
+        if(history.pushState) {
+            history.pushState(null, null, this.appendUrl(window.location.href, params));
+        }
     }
 
     failedList(data) {
@@ -147,14 +195,13 @@ class List {
             return;
         }
 
-        var url = this.url;
-        if (url.indexOf('?')) {
-            url += '&';
-        } else {
-            url += '?';
+        var params = {};
+        params.query = query;
+        this.get(this.appendUrl(this.url, params));
+        
+        if(history.pushState) {
+            history.pushState(null, null, this.appendUrl(window.location.href, params));
         }
-        url += 'query=' + query;
-        this.get(url);
 
         $('#' + this.id + ' .search-clear').show();
     }

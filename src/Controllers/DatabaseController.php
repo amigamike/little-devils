@@ -319,8 +319,8 @@ class DatabaseController
         if (!empty($this->orLikes)) {
             $query .= ' AND (';
             foreach ($this->orLikes as $col => $value) {
-                $query .= $col . '=:' . $col . ' OR ';
-                $params[':' . $col] = $value;
+                $query .= $col . ' LIKE :' . $col . ' OR ';
+                $params[':' . $col] = '%' . $value . '%';
             }
             $query = rtrim($query, ' OR ');
             $query .= ' )';

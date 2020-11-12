@@ -32,10 +32,14 @@ include(__DIR__ . '/../common/header.php');
                         <div class="row">
                             <div class="col-4">
                                 <div class="input-group mb-4">
-                                    <input class="form-control" type="text" name="query" placeholder="Search the data">
-                                    <span class="search-clear input-group-prepend hide">
+                                    <input  name="query"
+                                            class="form-control" 
+                                            type="text"
+                                            placeholder="Search the data" 
+                                            value="<?= !empty($_GET['query']) ? $_GET['query'] : ''; ?>">
+                                    <span class="search-clear input-group-prepend<?= !empty($_GET['query']) ? '' : ' hide'; ?>">
                                         <button name="clear" class="btn btn-warning" type="button">
-                                            <i class="fas fa-backspace"></i>&nbsp;Clear
+                                            <i class="fas fa-backspace"></i>&nbsp;&nbsp;Clear
                                         </button>
                                     </span>
                                     <span class="input-group-prepend">
@@ -80,7 +84,7 @@ include(__DIR__ . '/../common/header.php');
             'room_name',
             'status'
         ],
-        '/people?type=child'
+        '/people?type=child<?= !empty($_GET['query']) ? '&query=' . $_GET['query'] : ''; ?>'
     );
 </script>
 <?php
