@@ -25,7 +25,19 @@ class List {
             local.clearSearch();
         });
 
-        this.get();
+        var location = window.location.href;
+        var splits = location.split('?');
+        if (splits[1]) {
+            var params = {};
+            var entries = (new URLSearchParams(splits[1])).entries();
+            
+            for(var entry of entries) {
+                params[entry[0]] = entry[1];
+            }
+            url = this.appendUrl(this.url, params);
+        }
+        
+        this.get(url);
     }
 
     appendUrl(url, appends) {
@@ -69,7 +81,7 @@ class List {
     }
 
     buildList(data) {
-        if (!data.length) {
+        if (data == undefined || data == null) {
             $('#' + this.id + ' tbody').html('<tr><td colspan="' + this.map.length + '"><strong>No results</strong></td></tr>');
             $('#processing').hide();
             return;
@@ -97,7 +109,7 @@ class List {
     }
 
     buildPagination(data) {
-        if (!data.total) {
+        if (data == undefined || data == null) {
             $('#' + this.id + ' ul.pagination').html('');
             return;
         }
@@ -158,10 +170,13 @@ class List {
         var params = {};
         params.query = '';
 
-        this.get(this.appendUrl(this.url, params));
+        var url = this.appendUrl(this.url, params);
+        this.get(url);
         
         if(history.pushState) {
-            history.pushState(null, null, this.appendUrl(window.location.href, params));
+            params.page = 1;
+            url = this.appendUrl(window.location.href, params);
+            history.pushState(null, null, url);
         }
     }
 
@@ -203,6 +218,7 @@ class List {
 
         var params = {};
         params.query = query;
+        params.page = 1;
         this.get(this.appendUrl(this.url, params));
         
         if(history.pushState) {
