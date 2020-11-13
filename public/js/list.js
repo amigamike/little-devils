@@ -25,6 +25,12 @@ class List {
             local.clearSearch();
         });
 
+        $('#' + id + ' input[name=query]').on('keypress', function(e) {
+            if(e.which == 13) {
+                local.search();
+            }
+        });
+
         var location = window.location.href;
         var splits = location.split('?');
         if (splits[1]) {
