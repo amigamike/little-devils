@@ -76,6 +76,14 @@ class PeopleController
             $model->filter('type', $params['type']);
         }
 
+        if (!empty($params['sort'])) {
+            $direction = 'ASC';
+            if (!empty($params['sd'])) {
+                $direction = strtoupper($params['sd']);
+            }
+            $model->order($params['sort'], $direction);
+        }
+
         if (!empty($params['query'])) {
             $model->likeOr(
                 [

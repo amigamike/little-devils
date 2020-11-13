@@ -346,9 +346,6 @@ class DatabaseController
             ) . ') AS total ';
 
             $query = $start . ', ' . $countQuery . ' ' . $end;
-        
-            $offset = (($this->current_page - 1) * $this->per_page);
-            $query .= ' LIMIT ' . $this->per_page . ($offset ? ' OFFSET ' . $offset : '');
         }
 
         /*
@@ -357,9 +354,17 @@ class DatabaseController
         if (!empty($this->order)) {
             $query .= ' ORDER BY ';
             foreach ($this->order as $col => $direction) {
+                if ($direction != 'ASC' || $direction != 'DESC') {
+                    $direction = 'ASC';
+                }
                 $query .= $col . ' ' . $direction . ', ';
             }
             $query = rtrim($query, ', ');
+        }
+
+        if ($this->current_page && $this->per_page) {
+            $offset = (($this->current_page - 1) * $this->per_page);
+            $query .= ' LIMIT ' . $this->per_page . ($offset ? ' OFFSET ' . $offset : '');
         }
 
         /*
