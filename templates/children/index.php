@@ -56,8 +56,8 @@ include(__DIR__ . '/../common/header.php');
                                             class="form-control" 
                                             type="text"
                                             placeholder="Search the data" 
-                                            value="<?= !empty($_GET['query']) ? $_GET['query'] : ''; ?>">
-                                    <span class="search-clear input-group-prepend<?= !empty($_GET['query']) ? '' : ' hide'; ?>">
+                                            value="">
+                                    <span class="search-clear input-group-prepend hide">
                                         <button name="clear" class="btn btn-warning" type="button">
                                             <i class="fas fa-backspace"></i>&nbsp;&nbsp;Clear
                                         </button>
@@ -98,11 +98,6 @@ include(__DIR__ . '/../common/header.php');
 </div>
 <script src="/js/list.js"></script>
 <script type="text/javascript">
-    function buildStats(data) {
-        $('#people-present').html(data.present);
-        $('#people-absent').html(data.absent);
-        $('#people-left').html(data.left);
-    }
     api.get('/stats/people', 'buildStats');
 
     var list = new List(

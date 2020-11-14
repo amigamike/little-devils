@@ -39,6 +39,10 @@ class List {
             
             for(var entry of entries) {
                 params[entry[0]] = entry[1];
+                if (entry[0] == 'query') {
+                    $('#' + this.id + ' input[name=query]').val(entry[1]);
+                    $('#' + this.id + ' .search-clear').removeClass('hide');
+                }
             }
             url = this.appendUrl(this.url, params);
         }

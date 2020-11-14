@@ -177,6 +177,12 @@ function buildRoomsSelect(data) {
     }
 }
 
+function buildStats(data) {
+    $('#people-present').html(data.present);
+    $('#people-absent').html(data.absent);
+    $('#people-left').html(data.left);
+}
+
 function calPercent(total, value) {
     return ((value/total) * 100).toFixed(2);
 }
