@@ -26,6 +26,7 @@ class People extends Model
     public $id = 0;
     public $type = '';
     public $room_id = 0;
+    public $sex = '';
     public $title = '';
     public $relationship = '';
     public $first_name = '';
@@ -54,7 +55,7 @@ class People extends Model
                 DATE_FORMAT(dob, "%d/%m/%Y") AS dob,
                 rooms.name AS room_name 
             FROM ' . $this->table . ' p ' .
-            'JOIN rooms ON rooms.id = p.room_id AND rooms.deleted_at IS NULL ' .
+            'LEFT JOIN rooms ON rooms.id = p.room_id AND rooms.deleted_at IS NULL ' .
             'WHERE p.deleted_at IS NULL'
         );
     }

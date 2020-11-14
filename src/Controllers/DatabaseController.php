@@ -27,7 +27,7 @@ class DatabaseController
      * Current page for pagination.
      * @var int $current_page
      */
-    private int $current_page = 1;
+    private int $current_page = 0;
 
     /**
      * Filters array.
@@ -40,6 +40,12 @@ class DatabaseController
      * @var array $filtersBetween
      */
     private array $filtersBetween = [];
+
+    /**
+     * Is the query a select one.
+     * @var bool $isSelect
+     */
+    private bool $isSelect = false;
 
     /**
      * Array for building likes with an or condition in the query.
@@ -166,9 +172,14 @@ class DatabaseController
     public function insert($model)
     {
         /*
+         * Not a select query.
+         */
+        $this->isSelect = false;
+        
+        /*
          * Get the model's public vars.
          */
-        $vars = get_class_vars(get_class($model));
+        $vars = $model->toArray();
 
         /*
          * Drop the primary key.
@@ -194,7 +205,7 @@ class DatabaseController
         foreach ($vars as $var => $value) {
             $sqlVars .= "`" . $var . "`,";
             $sqlValues .= ":" . $var . ",";
-            $params[':' . $var] = $model->$var;
+            $params[':' . $var] = $value;
         }
 
         /*
@@ -227,15 +238,20 @@ class DatabaseController
     public function select(string $class, string $query, array $params = [])
     {
         /*
+         * Not a select query.
+         */
+        $this->isSelect = true;
+
+        /*
          * Trigger the query execution.
          */
         $sql = $this->trigger($query, $params);
 
         $result = $sql->fetchObject($class);
 
-        if ($this->current_page && $this->per_page) {
+        if ($this->current_page && $this->per_page && $result) {
             $this->pagination = new Pagination($this->current_page, $this->per_page);
-            $this->pagination->total = $result->total;
+            $this->pagination->total = intval($result->total);
             unset($result->total);
 
             $this->pagination->update();
@@ -254,6 +270,11 @@ class DatabaseController
      */
     public function selectArray(string $class, string $query, array $params = [])
     {
+        /*
+         * Not a select query.
+         */
+        $this->isSelect = true;
+
         /*
          * Trigger the query execution.
          */
@@ -286,6 +307,13 @@ class DatabaseController
      */
     private function trigger(string $query, array $params = [])
     {
+        /*
+         * If there is no where, add one.
+         */
+        if (strpos(strtoupper($query), ' WHERE ') == false && $this->isSelect) {
+            $query .= ' WHERE 1 ';
+        }
+
         /*
          * If there are filter, use them.
          */
@@ -326,7 +354,7 @@ class DatabaseController
             $query .= ' )';
         }
 
-        if ($this->current_page && $this->per_page) {
+        if ($this->current_page && $this->per_page && $this->isSelect) {
             $start = substr(
                 $query,
                 0,
@@ -362,7 +390,7 @@ class DatabaseController
             $query = rtrim($query, ', ');
         }
 
-        if ($this->current_page && $this->per_page) {
+        if ($this->current_page && $this->per_page && $this->isSelect) {
             $offset = (($this->current_page - 1) * $this->per_page);
             $query .= ' LIMIT ' . $this->per_page . ($offset ? ' OFFSET ' . $offset : '');
         }
@@ -395,9 +423,14 @@ class DatabaseController
     public function update($model)
     {
         /*
+         * Not a select query.
+         */
+        $this->isSelect = false;
+
+        /*
          * Get the model's public vars.
          */
-        $vars = get_class_vars(get_class($model));
+        $vars = $model->toArray();
 
         /*
          * Drop the primary key.
@@ -420,7 +453,7 @@ class DatabaseController
          */
         foreach ($vars as $var => $value) {
             $query .= "`" . $var . "`=:" . $var . ",";
-            $params[':' . $var] = $model->$var;
+            $params[':' . $var] = $value;
         }
 
         /*

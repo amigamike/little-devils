@@ -96,19 +96,16 @@ include(__DIR__ . '/../common/header.php');
 </div>
 <script src="/js/list.js"></script>
 <script type="text/javascript">
-    var list = null;
-    $(function() {
-        list = new List(
-            'list',
-            [
-                'id',
-                'full_name',
-                'room_name',
-                'status'
-            ],
-            '/people?type=child'
-        );
-    });
+    var list = new List(
+        'list',
+        [
+            'id',
+            'full_name',
+            'room_name',
+            'status'
+        ],
+        '/people?type=child'
+    );
 </script>
 <?php
 include(__DIR__ . '/../common/footer.php');

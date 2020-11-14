@@ -15,6 +15,8 @@ require_once('vendor/autoload.php');
 $dotenv = Dotenv\Dotenv::createImmutable('config');
 $dotenv->load();
 
+putenv("ROOT=" . __DIR__ . "/");
+
 use MikeWelsh\LittleDevils\Controllers\ConsoleController;
 
 /*
@@ -54,7 +56,8 @@ $console->title("Commander 0.0.1\n");
  */
 $commands = [
     'create-site' => 'MikeWelsh\LittleDevils\Controllers\SiteController::createSite',
-    'create-user' => 'MikeWelsh\LittleDevils\Controllers\UserController::createUser'
+    'create-user' => 'MikeWelsh\LittleDevils\Controllers\UserController::createUser',
+    'seed-people' => 'MikeWelsh\LittleDevils\Controllers\PeopleController::seedPeople'
 ];
 
 /*

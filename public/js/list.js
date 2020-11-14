@@ -87,11 +87,17 @@ class List {
     }
 
     buildList(data) {
-        if (data == undefined || data == null) {
+        var nothing = false;
+        if (data == undefined || data == null || !data) {
+            nothing = true;
+        }
+
+        if (!data.length || nothing) {
             $('#' + this.id + ' tbody').html('<tr><td colspan="' + this.map.length + '"><strong>No results</strong></td></tr>');
             $('#processing').hide();
             return;
         }
+
 
         var html = '';
         var local = this;

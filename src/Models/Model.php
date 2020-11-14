@@ -94,6 +94,10 @@ class Model
      */
     public function all(string $query = ''): array
     {
+        if (!$this->current_page) {
+            $this->current_page = 1;
+        }
+
         if (empty($query)) {
             $query = 'SELECT * FROM ' . $this->table . ' WHERE deleted_at IS NULL';
         }
@@ -163,6 +167,15 @@ class Model
         $this->filtersBetween[$column][] = $start;
         $this->filtersBetween[$column][] = $end;
         return $this;
+    }
+
+    public function get()
+    {
+        return $this->select(
+            'SELECT 
+                *
+            FROM ' . $this->table
+        );
     }
 
     /**
@@ -243,11 +256,6 @@ class Model
         return $this;
     }
 
-    public function pagination()
-    {
-
-    }
-
     /**
      * Save the data into the database.
      *
@@ -282,16 +290,21 @@ class Model
      *
      * @param string $query
      */
-    public function select(string $query, array $params)
+    public function select(string $query, array $params = [])
     {
         /*
          * Define the db controller and trigger the select.
          */
-        return (new DatabaseController())->select(
-            get_class($this),
-            $query,
-            $params
-        );
+        return (new DatabaseController())
+            ->filters($this->filters)
+            ->filtersBetween($this->filtersBetween)
+            ->order($this->order)
+            ->likeOr($this->orLikes)
+            ->select(
+                get_class($this),
+                $query,
+                $params
+            );
     }
 
     /**
@@ -305,11 +318,38 @@ class Model
         /*
          * Define the db controller and trigger the select.
          */
-        return (new DatabaseController())->selectArray(
-            get_class($this),
-            $query,
-            $params
-        );
+        return (new DatabaseController())
+            ->filters($this->filters)
+            ->filtersBetween($this->filtersBetween)
+            ->order($this->order)
+            ->paginate($this->current_page, $this->per_page)
+            ->likeOr($this->orLikes)
+            ->selectArray(
+                get_class($this),
+                $query,
+                $params
+            );
+    }
+
+    /**
+     * Convert the model to an array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $reflect = new \ReflectionClass($this);
+        $vars = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC);
+
+        $array = [];
+        foreach ($vars as $key => $var) {
+            $name = $var->name;
+            if ($name != 'pagination') {
+                $array[$name] = $this->$name;
+            }
+        }
+
+        return $array;
     }
 
     /**

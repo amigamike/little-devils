@@ -17,10 +17,40 @@ use MikeWelsh\LittleDevils\Helpers\RequestHelper;
 use MikeWelsh\LittleDevils\Models\Contact;
 use MikeWelsh\LittleDevils\Models\Parents;
 use MikeWelsh\LittleDevils\Models\People;
+use MikeWelsh\LittleDevils\Models\Room;
 use MikeWelsh\LittleDevils\Responses\JsonResponse;
 
 class PeopleController
 {
+    private $address_lines = [
+        'Side St',
+        'Walker Ave',
+        'Town Walk',
+        'Eagle Hill',
+        'Castle Rd',
+        'Station Way'
+    ];
+
+    private $cities = [
+        'Newway',
+        'Broadcity',
+        'Yorkville',
+        'Folksville',
+        'Poles'
+    ];
+
+    private $counties = [
+        'County Cook',
+        'North Walk',
+        'Eastland'
+    ];
+
+    private $titles_male = ['Mr', 'Dr'];
+    private $titles_female = ['Ms', 'Mrs', 'Dr'];
+
+    private $domains = ['vagrant-do.com', 'mashmonkwhit.org', 'strongarmwashmate.co.uk', 'myemailishere.com'];
+    private $postcodes = ['A', 'C', 'X', 'D'];
+
     public static function add($params)
     {
         /*
@@ -160,6 +190,199 @@ class PeopleController
             'Person updated',
             $data
         );
+    }
+
+    private function peopleExtra($model)
+    {
+        $model->phone_no = '0123 ';
+        for ($iLoop = 0; $iLoop < 6; $iLoop++) {
+            $model->phone_no .= rand(1, 9);
+        }
+    
+        $model->email = strtolower($model->first_name) .
+            '.' .
+            strtolower($model->last_name) .
+            '@' .
+            $this->domains[rand(0, count($this->domains) - 1)];
+
+        $model->address_line_1 = rand(1, 89) . ' ' . $this->address_lines[rand(0, count($this->address_lines) - 1)];
+        $model->city = $this->cities[rand(0, count($this->cities) - 1)];
+        $model->county = $this->counties[rand(0, count($this->counties) - 1)];
+        $model->postcode = strtoupper(substr($model->county, 0, 2)) .
+            rand(10, 40) .
+            ' ' .
+            rand(1, 9) .
+            $this->postcodes[rand(0, count($this->postcodes) - 1)] .
+            $this->postcodes[rand(0, count($this->postcodes) - 1)];
+
+        return $model;
+    }
+
+    public function seedPeople()
+    {
+        /*
+         * Define the console conntroller.
+         */
+        $console = new ConsoleController();
+
+        /*
+         * Inform the user of the creation.
+         */
+        $console->info('Creating a some people');
+
+        /*
+         * Define a first names array.
+         */
+        $females = [
+            'Jane',
+            'Kayleigh',
+            'Rachel',
+            'Lauren',
+            'Laura',
+            'Helen',
+            'Zoey',
+            'Jenny',
+            'Kira',
+            'Joan',
+            'Mary',
+            'Lisa',
+            'Kelly',
+            'May',
+            'Emma',
+            'Sarah'
+        ];
+
+        $males = [
+            'Michael',
+            'John',
+            'Tom',
+            'Thomas',
+            'Gavin',
+            'Paul',
+            'Luke',
+            'Mathew',
+            'Zack',
+            'David',
+            'Leonard',
+            'Mark',
+            'Keith',
+            'Joe',
+            'Stewart',
+            'Aidan',
+        ];
+
+        /*
+         * Define a last names array.
+         */
+        $last_names = explode("\n", file_get_contents(getenv('ROOT') . 'last_names.txt'));
+
+        $fathers = [];
+
+        /*
+         * Generate parents.
+         */
+        $count = 1;
+        while ($count != 50) {
+            $father = new People();
+            $father->first_name = $males[rand(0, count($males) - 1)];
+            $father->last_name = $last_names[rand(0, count($last_names) - 1)];
+            $father->type = 'parent';
+            $father->relationship = 'Father';
+            $father->sex = 'male';
+            $father = $this->peopleExtra($father);
+
+            $check = (new People())
+                ->filter('first_name', $father->first_name)
+                ->filter('last_name', $father->last_name)
+                ->get();
+
+            if (!$check) {
+                $father->save();
+
+                $fathers[] = $father;
+                $count++;
+            }
+        }
+
+        $rooms = (new Room())->all();
+
+        $statuses = ['present', 'absent', 'left'];
+
+        foreach ($fathers as $key => $father) {
+            $mother = new People();
+            $mother->first_name = $females[rand(0, count($females) - 1)];
+            $mother->last_name = $father->last_name;
+            $mother->type = 'parent';
+            $mother->relationship = 'Mother';
+            $mother->sex = 'female';
+            $mother = $this->peopleExtra($mother);
+
+            if (intval($key % 10) != 0) {
+                $mother->address_line_1 = $father->address_line_1;
+                $mother->city = $father->city;
+                $mother->county = $father->county;
+                $mother->postcode = $father->postcode;
+            }
+
+            $mother->save();
+
+            $model = new People();
+            $female = rand(0, 1);
+            if ($female == 0) {
+                $model->first_name = $females[rand(0, count($females) - 1)];
+                $model->relationship = 'Daughter';
+                $model->sex = 'female';
+            } else {
+                $model->first_name = $males[rand(0, count($males) - 1)];
+                $model->relationship = 'Son';
+                $model->sex = 'male';
+            }
+            $model->last_name = $father->last_name;
+
+            $model->type = 'child';
+
+            $room = ($rooms[rand(0, count($rooms) - 1)]);
+            $model->room_id = $room->id;
+
+            if (strpos(strtolower($room->name), 'baby')) {
+                $model->dob = (intval(date('Y')) - 2) . '-' . rand(1, 12) . '-' . rand(1, 28);
+            } else {
+                $model->dob = (intval(date('Y')) - 4) . '-' . rand(1, 12) . '-' . rand(1, 28);
+            }
+
+            $model->address_line_1 = $father->address_line_1;
+            $model->city = $father->city;
+            $model->county = $father->county;
+            $model->postcode = $father->postcode;
+            if (intval($key % 5) == 0) {
+                $model->status = $statuses[rand(1, count($statuses) - 1)];
+            }
+
+            $check = true;
+            while ($check) {
+                $check = (new People())
+                    ->filter('first_name', $model->first_name)
+                    ->filter('last_name', $model->last_name)
+                    ->get();
+                if ($female == 0) {
+                    $model->first_name = $females[rand(0, count($females) - 1)];
+                } else {
+                    $model->first_name = $males[rand(0, count($males) - 1)];
+                }
+            }
+
+            $model->save();
+
+            $parent = new Parents();
+            $parent->parent_id = $father->id;
+            $parent->child_id = $model->id;
+            $parent->save();
+
+            $parent = new Parents();
+            $parent->parent_id = $mother->id;
+            $parent->child_id = $model->id;
+            $parent->save();
+        }
     }
 
     private static function set($params, $data)
