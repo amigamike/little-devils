@@ -106,6 +106,17 @@ class List {
                 html += '<td>';
                 if (item.toLowerCase() == 'status') {
                     html += local.buildStatus(row[item]);
+                } else if (item.search('icon=') > 0) {
+                    var splits = item.split('|icon=');
+                    if (splits[1]) {
+                        var options = JSON.parse(splits[1]);
+                        html += '&nbsp;<span class="h4"><i class="fas ';
+                        html += options[row[splits[0]]];
+                        html += '"></i></span>';
+                        console.log(row[splits[0]]);
+                    } else {
+                        html += 'ERROR';
+                    }
                 } else {
                     html += row[item];
                 }
@@ -214,6 +225,7 @@ class List {
 
         var url = this.appendUrl(this.url, params);
         this.get(url);
+        api.get(this.appendUrl('/stats/people', params), 'buildStats');
         
         if(history.pushState) {
             params.page = 1;
@@ -262,6 +274,8 @@ class List {
         params.query = query;
         params.page = 1;
         this.get(this.appendUrl(this.url, params));
+
+        api.get(this.appendUrl('/stats/people', params), 'buildStats');
         
         if(history.pushState) {
             history.pushState(null, null, this.appendUrl(window.location.href, params));

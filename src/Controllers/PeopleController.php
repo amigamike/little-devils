@@ -427,14 +427,27 @@ class PeopleController
         }
     }
 
-    public static function stats()
+    public static function stats($params)
     {
-        $stats = (new People())
-            ->select('SELECT 
-            (SELECT count(id) FROM people WHERE status="present" AND deleted_at IS NULL) AS `present`,
-            (SELECT count(id) FROM people WHERE status="absent" AND deleted_at IS NULL) AS `absent`,
-            (SELECT count(id) FROM people WHERE status="left" AND deleted_at IS NULL) AS `left`
-            FROM people');
+        $model = new People();
+
+        $queryEnd = ' AND deleted_at IS NULL AND `type` = "child"';
+        if (!empty($params['query'])) {
+            $model->likeOr(
+                [
+                    'first_name',
+                    'last_name'
+                ],
+                $params['query']
+            );
+            $queryEnd .= ' AND (first_name LIKE :first_name OR last_name LIKE :last_name) ';
+        }
+
+        $stats = $model->select('SELECT 
+            (SELECT count(id) FROM people WHERE status="present"' . $queryEnd . ') AS `present`,
+            (SELECT count(id) FROM people WHERE status="absent"' . $queryEnd . ') AS `absent`,
+            (SELECT count(id) FROM people WHERE status="left"' . $queryEnd . ') AS `left`
+            FROM people WHERE deleted_at IS NULL AND `type` = "child"');
         
         $return = new \stdClass();
         $return->present = $stats->present;

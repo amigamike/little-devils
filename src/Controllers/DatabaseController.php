@@ -310,7 +310,7 @@ class DatabaseController
         /*
          * If there is no where, add one.
          */
-        if (strpos(strtoupper($query), ' WHERE ') == false && $this->isSelect) {
+        if (strrpos(strtoupper($query), ' WHERE ') == false && $this->isSelect) {
             $query .= ' WHERE 1 ';
         }
 

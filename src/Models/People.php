@@ -26,7 +26,7 @@ class People extends Model
     public $id = 0;
     public $type = '';
     public $room_id = 0;
-    public $sex = '';
+    public $gender = '';
     public $title = '';
     public $relationship = '';
     public $first_name = '';

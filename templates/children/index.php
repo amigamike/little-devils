@@ -72,10 +72,12 @@ include(__DIR__ . '/../common/header.php');
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <table class="table table-responsive-sm table-bordered table-striped table-sm">
+                                <table  id="children-list" 
+                                        class="table table-responsive-sm table-bordered table-striped table-sm">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
+                                            <th width="50px">Id</th>
+                                            <th width="70px">Gender</th>
                                             <th>Name</th>
                                             <th>Room</th>
                                             <th>Status</th>
@@ -107,6 +109,7 @@ include(__DIR__ . '/../common/header.php');
         'list',
         [
             'id',
+            'gender|icon={"male":"fa-male","female":"fa-female"}',
             'full_name',
             'room_name',
             'status'
