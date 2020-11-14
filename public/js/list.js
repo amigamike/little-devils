@@ -98,7 +98,6 @@ class List {
             return;
         }
 
-
         var html = '';
         var local = this;
         $.each(data, function (i, row) {
@@ -189,12 +188,18 @@ class List {
 
     buildStatus(status) {
         switch (status.toLowerCase()) {
+            case 'absent':
+                return '<span class="badge badge-warning">Absent</span>';
             case 'active':
                 return '<span class="badge badge-success">Active</span>';
             case 'inactive':
                 return '<span class="badge badge-warning">Inactive</span>';
             case 'deleted':
                 return '<span class="badge badge-danger">Deleted</span>';
+            case 'left':
+                return '<span class="badge badge-danger">Left</span>';
+            case 'present':
+                return '<span class="badge badge-success">Present</span>';
             default:
                 return status;
         }

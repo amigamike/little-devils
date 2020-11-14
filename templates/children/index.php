@@ -22,23 +22,23 @@ include(__DIR__ . '/../common/header.php');
 ?>
 <div class="container-fluid">
     <div class="fade-in">
-        <div class="row pt-2 pb-1">
+        <div id="people-stats" class="row pt-2 pb-1">
             <div class="col-sm-3">
                 <div class="c-callout c-callout-success">
                     <small class="text-muted">Present</small><br>
-                    <strong class="h4">5</strong>
+                    <strong id="people-present" class="h4">0</strong>
                 </div>
             </div>
             <div class="col-sm-3">
                 <div class="c-callout c-callout-warning">
                     <small class="text-muted">Absent</small><br>
-                    <strong class="h4">5</strong>
+                    <strong id="people-absent" class="h4">0</strong>
                 </div>
             </div>
             <div class="col-sm-3">
                 <div class="c-callout c-callout-danger">
                     <small class="text-muted">Left</small><br>
-                    <strong class="h4">5</strong>
+                    <strong id="people-left" class="h4">0</strong>
                 </div>
             </div>
         </div>
@@ -96,6 +96,13 @@ include(__DIR__ . '/../common/header.php');
 </div>
 <script src="/js/list.js"></script>
 <script type="text/javascript">
+    function buildStats(data) {
+        $('#people-present').html(data.present);
+        $('#people-absent').html(data.absent);
+        $('#people-left').html(data.left);
+    }
+    api.get('/stats/people', 'buildStats');
+
     var list = new List(
         'list',
         [

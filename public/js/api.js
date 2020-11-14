@@ -90,9 +90,11 @@ class Api {
                     message += '<br/> "' + response.message + '"';
                 }
 
-                if (failed) {
-                    func = failed + "(response.data);";
+                if (!failed) {
+                    failed = 'apiFailed';
                 }
+
+                func = failed + "(response.data);";
             } else if (success) {
                 func = success + "(response.data);";
             }

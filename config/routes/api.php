@@ -63,6 +63,11 @@ $router->get(
     'MikeWelsh\LittleDevils\Controllers\PeopleController::get'
 );
 
+$router->get(
+    '/api/stats/people',
+    'MikeWelsh\LittleDevils\Controllers\PeopleController::stats'
+);
+
 $router->post(
     '/api/people/add',
     'MikeWelsh\LittleDevils\Controllers\PeopleController::add'

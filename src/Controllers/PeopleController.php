@@ -140,6 +140,32 @@ class PeopleController
         );
     }
 
+    private function peopleExtra($model)
+    {
+        $model->phone_no = '0123 ';
+        for ($iLoop = 0; $iLoop < 6; $iLoop++) {
+            $model->phone_no .= rand(1, 9);
+        }
+    
+        $model->email = strtolower($model->first_name) .
+            '.' .
+            strtolower($model->last_name) .
+            '@' .
+            $this->domains[rand(0, count($this->domains) - 1)];
+
+        $model->address_line_1 = rand(1, 89) . ' ' . $this->address_lines[rand(0, count($this->address_lines) - 1)];
+        $model->city = $this->cities[rand(0, count($this->cities) - 1)];
+        $model->county = $this->counties[rand(0, count($this->counties) - 1)];
+        $model->postcode = strtoupper(substr($model->county, 0, 2)) .
+            rand(10, 40) .
+            ' ' .
+            rand(1, 9) .
+            $this->postcodes[rand(0, count($this->postcodes) - 1)] .
+            $this->postcodes[rand(0, count($this->postcodes) - 1)];
+
+        return $model;
+    }
+
     private static function required($params)
     {
         $required = [
@@ -190,32 +216,6 @@ class PeopleController
             'Person updated',
             $data
         );
-    }
-
-    private function peopleExtra($model)
-    {
-        $model->phone_no = '0123 ';
-        for ($iLoop = 0; $iLoop < 6; $iLoop++) {
-            $model->phone_no .= rand(1, 9);
-        }
-    
-        $model->email = strtolower($model->first_name) .
-            '.' .
-            strtolower($model->last_name) .
-            '@' .
-            $this->domains[rand(0, count($this->domains) - 1)];
-
-        $model->address_line_1 = rand(1, 89) . ' ' . $this->address_lines[rand(0, count($this->address_lines) - 1)];
-        $model->city = $this->cities[rand(0, count($this->cities) - 1)];
-        $model->county = $this->counties[rand(0, count($this->counties) - 1)];
-        $model->postcode = strtoupper(substr($model->county, 0, 2)) .
-            rand(10, 40) .
-            ' ' .
-            rand(1, 9) .
-            $this->postcodes[rand(0, count($this->postcodes) - 1)] .
-            $this->postcodes[rand(0, count($this->postcodes) - 1)];
-
-        return $model;
     }
 
     public function seedPeople()
@@ -425,5 +425,25 @@ class PeopleController
                 $contact->update();
             }
         }
+    }
+
+    public static function stats()
+    {
+        $stats = (new People())
+            ->select('SELECT 
+            (SELECT count(id) FROM people WHERE status="present" AND deleted_at IS NULL) AS `present`,
+            (SELECT count(id) FROM people WHERE status="absent" AND deleted_at IS NULL) AS `absent`,
+            (SELECT count(id) FROM people WHERE status="left" AND deleted_at IS NULL) AS `left`
+            FROM people');
+        
+        $return = new \stdClass();
+        $return->present = $stats->present;
+        $return->absent = $stats->absent;
+        $return->left = $stats->left;
+
+        return new JsonResponse(
+            'People stats',
+            $return
+        );
     }
 }

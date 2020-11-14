@@ -39,7 +39,7 @@ class People extends Model
     public $postcode = '';
     public $phone_no = '';
     public $email = '';
-    public $status = 'active';
+    public $status = 'present';
 
     /**
      * Return all the entries.
@@ -73,6 +73,10 @@ class People extends Model
                 ':id' => $id
             ]
         );
+
+        if (empty($data)) {
+            return $data;
+        }
 
         $data->parents = $this->selectArray(
             'SELECT 
