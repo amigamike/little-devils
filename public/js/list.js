@@ -120,40 +120,65 @@ class List {
             return;
         }
 
+        var local = this;
         var params = {};
         params.page = '';
 
         var html = '<li class="page-item">';
-        html += '<a class="page-link';
+        html += '<span class="btn-pagination page-link';
         if (data.current_page != 1) {
             params.page = data.current_page - 1;
-            html += '" href="' + this.appendUrl(window.location.href, params) + '"';
+            html += '" data-href="' + this.appendUrl(window.location.href, params) + '"';
         } else {
-            html += ' disabled" href="#"';
+            html += ' disabled"';
         }
-        html += '>Prev</a>';
+        html += '>Prev</span>';
         html += '</li>';
         for(var iLoop = data.start; iLoop <= data.end; iLoop++) {
             html += '<li class="page-item';
             if (iLoop == data.current_page) {
                 html += ' active';
             }
-            html += '"><a class="page-link" href="';
+            html += '"><span class="btn-pagination page-link" data-href="';
             params.page = iLoop;
             html += this.appendUrl(window.location.href, params);
-            html += '">' + iLoop + '</a></li>';
+            html += '">' + iLoop + '</span></li>';
         }
         html += '<li class="page-item">';
-        html += '<a class="page-link';
+        html += '<span class="btn-pagination page-link';
         if (data.current_page != data.end) {
             params.page = data.current_page + 1;
-            html += '" href="' + this.appendUrl(window.location.href, params) + '"';
+            html += '" data-href="' + this.appendUrl(window.location.href, params) + '"';
         } else {
-            html += ' disabled" href="#"';
+            html += ' disabled"';
         }
-        html += '>Next</a></li>';
+        html += '>Next</span></li>';
 
         $('#' + this.id + ' ul.pagination').html(html);
+
+        $('.btn-pagination').unbind('click');
+        $('.btn-pagination').bind('click', function() {
+            var location = $(this).data('href');
+            if (location == null || location == undefined) {
+                return;
+            }
+
+            var splits = location.split('?');
+            if (splits[1]) {
+                var params = {};
+                var entries = (new URLSearchParams(splits[1])).entries();
+                
+                for(var entry of entries) {
+                    params[entry[0]] = entry[1];
+                }
+
+                if(history.pushState) {
+                    history.pushState(null, null, local.appendUrl(window.location.href, params));
+                }
+
+                local.get(local.appendUrl(local.url, params));
+            }
+        });
     }
 
     buildStatus(status) {
