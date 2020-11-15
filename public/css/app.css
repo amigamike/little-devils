@@ -26,6 +26,10 @@ form input.error {
     border:3px solid #f80094 !important;
 }
 
+h1 {
+    font-size: 22px;
+}
+
 .hide {
     display: none;
 }

@@ -1,6 +1,10 @@
 <div class="c-sidebar c-sidebar-dark c-sidebar-fixed c-sidebar-lg-show" id="sidebar">
-    <div class="c-sidebar-brand d-md-down-none">
-        <h1>Little Devils</h1>
+    <div class="c-sidebar-brand d-md-down-none pt-2">
+        <h1 class="pr-5">
+            <img src="/imgs/logo.png" width="32px">
+            &nbsp;
+            Little Devils
+        </h1>
     </div>
     <ul class="c-sidebar-nav ps ps--active-y">
         <li class="c-sidebar-nav-item">
