@@ -13,6 +13,7 @@ class List {
     sort = '';
     sd = '';
     query = '';
+    page = 1;
 
     constructor(id, map, url) {
         this.id = id;
@@ -37,6 +38,8 @@ class List {
                     this.sort = entry[1];
                 } else if (entry[0] == 'sd') {
                     this.sd = entry[1];
+                } else if (entry[0] == 'page') {
+                    this.page = entry[1];
                 }
             }
             url = this.appendUrl(this.url, params);
@@ -215,6 +218,9 @@ class List {
                 
                 for(var entry of entries) {
                     params[entry[0]] = entry[1];
+                    if (entry[0] == 'page') {
+                        local.page = entry[1];
+                    }
                 }
 
                 if(history.pushState) {
@@ -250,14 +256,14 @@ class List {
         $('#' + this.id + ' .search-clear').hide();
 
         var params = {};
-        params.query = '';
+        params.query = this.query = '';
 
         var url = this.appendUrl(this.url, params);
         this.get(url);
         api.get(this.appendUrl('/stats/people', params), 'buildStats');
         
         if(history.pushState) {
-            params.page = 1;
+            params.page = this.page = 1;
             url = this.appendUrl(window.location.href, params);
             history.pushState(null, null, url);
         }
@@ -300,8 +306,8 @@ class List {
         }
 
         var params = {};
-        params.query = query;
-        params.page = 1;
+        params.query = this.query = query;
+        params.page = this.page = 1;
         if (this.sort && this.sd) {
             params.sort = this.sort;
             params.sd = this.sd;
@@ -344,6 +350,7 @@ class List {
         if (this.query) {
             params.query = this.query;
         }
+        params.page = this.page;
         params.sort = this.sort;
         params.sd = this.sd;
 
