@@ -53,10 +53,15 @@
                 </small>
             </div>
             <div class="progress progress-xs">
+                <div class="progress-bar bg-warning" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
                 <div class="progress-bar bg-danger" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                <div class="progress-bar bg-info" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>                
             </div>
-            <small class="text-muted">Children 12 / 24, Staff 6 / 6</small>
+            <small class="text-muted">
+                <span class="c-sidebar-nav-title p-0">Staff</span> <span class="text-warning">6</span> / 
+                <span class="c-sidebar-nav-title p-0">Children</span> <span class="text-danger">12</span> / 
+                <span class="c-sidebar-nav-title p-0">Capacity</span> <span class="text-primary">24</span>
+            </small>
         </li>
         <div class="ps__rail-x" style="left: 0px; bottom: 0px;">
             <div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
@@ -65,5 +70,9 @@
             <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 451px;"></div>
         </div>
     </ul>
-    <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-unfoldable"></button>
+    <span id="sidebar-footer" class="text-muted">
+        Nursery Management System<br/>
+        &copy;<?= date('Y'); ?> Mike Welsh.
+    </span>
+    <!--<button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="#sidebar"  data-class="c-sidebar-unfoldable"></button>-->
 </div>

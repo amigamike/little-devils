@@ -59,6 +59,21 @@ h1 {
     padding-left: 2px;
 }
 
+#sidebar-footer {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex: 0 0 50px;
+    flex: 0 0 50px;
+    -ms-flex-pack: left;
+    justify-content: left;
+    width: inherit;
+    padding: 7px 10px;
+    cursor: pointer;
+    border: 0;
+    font-size: 12px;
+    background-color: rgba(0,0,0,.3);
+}
+
 .toolbar-action {
     margin-top: 20px;
     margin-bottom: 20px;

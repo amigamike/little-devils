@@ -76,13 +76,13 @@ include(__DIR__ . '/../common/header.php');
                                         class="table table-responsive-sm table-bordered table-striped table-sm">
                                     <thead>
                                         <tr>
-                                            <th width="70px">
+                                            <th width="95px">
                                                 Id
                                                 <span class="btn list-sort float-right" data-sort="id">
                                                     <i class="fas fa-sort-up"></i>
                                                 </span>
                                             </th>
-                                            <th width="110px">
+                                            <th width="95px">
                                                 Gender
                                                 <span class="btn list-sort float-right" data-sort="gender">
                                                     <i class="fas fa-sort"></i>
