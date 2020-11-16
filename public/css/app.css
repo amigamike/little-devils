@@ -40,6 +40,10 @@ h1 {
     border-color: #4638c2;
 }*/
 
+.list-sort {
+    padding: 0;
+}
+
 .percent {
     color: #2ad66f;
     font-size: 0.8em;

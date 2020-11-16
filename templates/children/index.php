@@ -76,11 +76,36 @@ include(__DIR__ . '/../common/header.php');
                                         class="table table-responsive-sm table-bordered table-striped table-sm">
                                     <thead>
                                         <tr>
-                                            <th width="50px">Id</th>
-                                            <th width="70px">Gender</th>
-                                            <th>Name</th>
-                                            <th>Room</th>
-                                            <th>Status</th>
+                                            <th width="70px">
+                                                Id
+                                                <span class="btn list-sort float-right" data-sort="id">
+                                                    <i class="fas fa-sort-up"></i>
+                                                </span>
+                                            </th>
+                                            <th width="110px">
+                                                Gender
+                                                <span class="btn list-sort float-right" data-sort="gender">
+                                                    <i class="fas fa-sort"></i>
+                                                </span>
+                                            </th>
+                                            <th>
+                                                Name
+                                                <span class="btn list-sort float-right" data-sort="first_name">
+                                                    <i class="fas fa-sort"></i>
+                                                </span>
+                                            </th>
+                                            <th>
+                                                Room
+                                                <span class="btn list-sort float-right" data-sort="room_name">
+                                                    <i class="fas fa-sort"></i>
+                                                </span>
+                                            </th>
+                                            <th>
+                                                Status
+                                                <span class="btn list-sort float-right" data-sort="status">
+                                                    <i class="fas fa-sort"></i>
+                                                </span>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>

@@ -10,6 +10,9 @@ class List {
     id = '';
     map = {};
     url = '';
+    sort = '';
+    sd = '';
+    query = '';
 
     constructor(id, map, url) {
         this.id = id;
@@ -17,19 +20,6 @@ class List {
         this.url = url;
 
         var local = this;
-        $('#' + id + ' button[name=search]').click(function () {
-            local.search();
-        });
-
-        $('#' + id + ' button[name=clear]').click(function () {
-            local.clearSearch();
-        });
-
-        $('#' + id + ' input[name=query]').on('keypress', function(e) {
-            if(e.which == 13) {
-                local.search();
-            }
-        });
 
         var location = window.location.href;
         var splits = location.split('?');
@@ -41,12 +31,48 @@ class List {
                 params[entry[0]] = entry[1];
                 if (entry[0] == 'query') {
                     $('#' + this.id + ' input[name=query]').val(entry[1]);
+                    this.query = entry[1];
                     $('#' + this.id + ' .search-clear').removeClass('hide');
+                } else if (entry[0] == 'sort') {
+                    this.sort = entry[1];
+                } else if (entry[0] == 'sd') {
+                    this.sd = entry[1];
                 }
             }
             url = this.appendUrl(this.url, params);
+
+            $('#' + id + ' .list-sort').each(function (i, item) {
+                var icon = $(item).children('i');
+                icon.removeClass('fa-sort-up').removeClass('fa-sort-down').addClass('fa-sort');
+
+                if ($(item).data('sort') == local.sort) {
+                    if (local.sd == 'ASC') {
+                        icon.addClass('fa-sort-up');
+                    } else {
+                        icon.addClass('fa-sort-down');
+                    }
+                }
+            });
         }
-        
+
+        $('#' + id + ' button[name=search]').click(function () {
+            local.search();
+        });
+
+        $('#' + id + ' button[name=clear]').click(function () {
+            local.clearSearch();
+        });
+
+        $('#' + id + ' .list-sort').click(function () {
+            local.sortList(this);
+        });
+
+        $('#' + id + ' input[name=query]').on('keypress', function(e) {
+            if(e.which == 13) {
+                local.search();
+            }
+        });
+
         this.get(url);
     }
 
@@ -117,7 +143,6 @@ class List {
                         html += '&nbsp;<span class="h4"><i class="fas ';
                         html += options[row[splits[0]]];
                         html += '"></i></span>';
-                        console.log(row[splits[0]]);
                     } else {
                         html += 'ERROR';
                     }
@@ -277,6 +302,10 @@ class List {
         var params = {};
         params.query = query;
         params.page = 1;
+        if (this.sort && this.sd) {
+            params.sort = this.sort;
+            params.sd = this.sd;
+        }
         this.get(this.appendUrl(this.url, params));
 
         api.get(this.appendUrl('/stats/people', params), 'buildStats');
@@ -286,5 +315,41 @@ class List {
         }
 
         $('#' + this.id + ' .search-clear').show();
+    }
+
+    sortList(button) {
+        $('#' + this.id + ' .list-sort i').each(function (i, item) {
+            $(item).removeClass('fa-sort-up').removeClass('fa-sort-down').addClass('fa-sort');
+        });
+
+        var icon = $(button).children('i');
+        if (this.sort != $(button).data('sort')) {
+            this.sd = '';
+        }
+        this.sort = $(button).data('sort');
+
+        if (this.sd == 'ASC') {
+            icon.removeClass('fa-sort-up').removeClass('fa-sort').addClass('fa-sort-down');
+            this.sd = 'DESC';
+        } else if (this.sd == 'DESC') {
+            icon.removeClass('fa-sort-down').removeClass('fa-sort-up').addClass('fa-sort');
+            this.sd = '';
+            this.sort = '';
+        } else {
+            icon.removeClass('fa-sort-down').removeClass('fa-sort').addClass('fa-sort-up');
+            this.sd = 'ASC';
+        }
+
+        var params = {};
+        if (this.query) {
+            params.query = this.query;
+        }
+        params.sort = this.sort;
+        params.sd = this.sd;
+
+        this.get(this.appendUrl(this.url, params));
+        if(history.pushState) {
+            history.pushState(null, null, this.appendUrl(window.location.href, params));
+        }
     }
 }

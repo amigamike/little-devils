@@ -38,7 +38,7 @@ $auth = new AuthenticationController();
         <link href="/css/fontawesome/css/all.min.css" rel="stylesheet">
         <link href="/css/app.css?<?= time(); ?>" rel="stylesheet">
     </head>
-    <body class="c-app c-dark-theme" cz-shortcut-listen="true">
+    <body class="c-app c-legacy-theme" cz-shortcut-listen="true">
         <div id="processing" class="modal-backdrop fade hide">
             <div class="container">
                 <div class="row align-items-center">

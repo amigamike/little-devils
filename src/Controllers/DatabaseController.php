@@ -382,7 +382,7 @@ class DatabaseController
         if (!empty($this->order)) {
             $query .= ' ORDER BY ';
             foreach ($this->order as $col => $direction) {
-                if ($direction != 'ASC' || $direction != 'DESC') {
+                if ($direction != 'ASC' && $direction != 'DESC') {
                     $direction = 'ASC';
                 }
                 $query .= $col . ' ' . $direction . ', ';
