@@ -13,6 +13,11 @@ $router->get(
     'MikeWelsh\LittleDevils\Controllers\RoomsController::list'
 );
 
+$router->get(
+    '/api/stats/rooms',
+    'MikeWelsh\LittleDevils\Controllers\RoomsController::stats'
+);
+
 $router->post(
     '/api/logs/add',
     'MikeWelsh\LittleDevils\Controllers\LogsController::add'

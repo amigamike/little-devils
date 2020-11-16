@@ -177,6 +177,36 @@ function buildRoomsSelect(data) {
     }
 }
 
+function buildRoomsStats(data) {
+    if (data == undefined || data == null) {
+        return;
+    }
+
+    var html = '';
+
+    $(data).each(function (i, room) {
+        html += '<li class="c-sidebar-nav-item px-3 c-d-compact-none c-d-minimized-none pb-3">';
+        html += '<div class="text-uppercase mb-1">';
+        html += '<small>';
+        html += '<strong>' + room.name + '</strong>';
+        html += '</small>';
+        html += '</div>';
+        html += '<div class="progress progress-xs">';
+        html += '<div class="progress-bar bg-warning" role="progressbar" style="width: ' + ((room.staff / room.capacity) * 100) + '%" aria-valuenow="' + ((room.staff / room.capacity) * 100) + '" aria-valuemin="0" aria-valuemax="100"></div>';
+        html += '<div class="progress-bar bg-danger" role="progressbar" style="width: ' + ((room.children / room.capacity) * 100) + '%" aria-valuenow="' + ((room.children / room.capacity) * 100) + '" aria-valuemin="0" aria-valuemax="100"></div>';
+        html += '<div class="progress-bar bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>';           
+        html += '</div>';
+        html += '<small class="text-muted">';
+        html += '<span class="c-sidebar-nav-title p-0">Staff</span> <span class="text-warning">' + room.staff + '</span> / ';
+        html += '<span class="c-sidebar-nav-title p-0">Children</span> <span class="text-danger">' + room.children + '</span> / '; 
+        html += '<span class="c-sidebar-nav-title p-0">Capacity</span> <span class="text-primary">' + room.capacity + '</span>';
+        html += '</small>';
+        html += '</li>';
+    });
+
+    $('#sidebar-menu').append(html);
+}
+
 function buildStats(data) {
     $('#people-present').html(data.present);
     $('#people-absent').html(data.absent);

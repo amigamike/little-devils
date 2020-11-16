@@ -50,4 +50,44 @@ class RoomsController
             $model->pagination
         );
     }
+
+    /**
+     * Get the room stats
+     *
+     * @param array $params
+     * @return JsonResponse
+     */
+    public static function stats(array $params)
+    {
+        $model = (new Room())
+            ->order('name', 'ASC');
+
+        $query = 'SELECT 
+        rooms.*,
+        (
+            SELECT 
+                count(id) 
+            FROM 
+                people 
+            WHERE 
+                `type`="child" AND
+                `room_id`=rooms.id
+        ) AS `children`,
+        (
+            SELECT 
+                count(id) 
+            FROM 
+                users 
+            WHERE 
+                `room_id`=rooms.id
+        ) AS `staff`
+        FROM rooms WHERE rooms.deleted_at IS NULL AND rooms.site_id=' . $params['site']->id;
+
+        $stats = $model->selectArray($query);
+    
+        return new JsonResponse(
+            'Room stats',
+            $stats
+        );
+    }
 }

@@ -11,6 +11,7 @@
 namespace MikeWelsh\LittleDevils\Controllers;
 
 use MikeWelsh\LittleDevils\Controllers\AuthenticationController;
+use MikeWelsh\LittleDevils\Controllers\SiteController;
 use MikeWelsh\LittleDevils\Exceptions\MethodNotAllowedException;
 use MikeWelsh\LittleDevils\Helpers\PathHelper;
 use MikeWelsh\LittleDevils\Responses\JsonResponse;
@@ -84,6 +85,11 @@ class RouterController
          * Define the route parameters.
          */
         $routeParams = [];
+
+        /*
+         * Get the current site.
+         */
+        $routeParams['site'] = (new SiteController())->getSite();
 
         /*
          * Check to see if its an api call.

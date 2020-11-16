@@ -22,21 +22,21 @@ include(__DIR__ . '/../common/header.php');
 ?>
 <div class="container-fluid">
     <div class="fade-in">
-        <div id="people-stats" class="row pt-2 pb-1">
-            <div class="col-sm-3">
-                <div class="c-callout c-callout-success">
+        <div id="people-stats" class="row p-2 m-0 mb-4">
+            <div class="col-sm-3 p-0">
+                <div class="c-callout m-0 c-callout-success">
                     <small class="text-muted">Present</small><br>
                     <strong id="people-present" class="h4">0</strong>
                 </div>
             </div>
-            <div class="col-sm-3">
-                <div class="c-callout c-callout-warning">
+            <div class="col-sm-3 p-0">
+                <div class="c-callout m-0 c-callout-warning">
                     <small class="text-muted">Absent</small><br>
                     <strong id="people-absent" class="h4">0</strong>
                 </div>
             </div>
-            <div class="col-sm-3">
-                <div class="c-callout c-callout-danger">
+            <div class="col-sm-3 p-0">
+                <div class="c-callout m-0 c-callout-danger">
                     <small class="text-muted">Left</small><br>
                     <strong id="people-left" class="h4">0</strong>
                 </div>

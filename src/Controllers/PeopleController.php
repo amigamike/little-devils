@@ -51,7 +51,13 @@ class PeopleController
     private $domains = ['vagrant-do.com', 'mashmonkwhit.org', 'strongarmwashmate.co.uk', 'myemailishere.com'];
     private $postcodes = ['A', 'C', 'X', 'D'];
 
-    public static function add($params)
+    /**
+     * Add a person.
+     *
+     * @param array $params
+     * @return JsonResponse
+     */
+    public static function add(array $params)
     {
         /*
          * Validate the api key.
@@ -74,7 +80,13 @@ class PeopleController
         );
     }
 
-    public static function get($params)
+    /**
+     * Get a person.
+     *
+     * @param array $params
+     * @return JsonResponse
+     */
+    public static function get(array $params)
     {
         /*
          * Validate the api key.
@@ -93,7 +105,13 @@ class PeopleController
         );
     }
 
-    public static function list($params)
+    /**
+     * Get the people stats.
+     *
+     * @param array $params
+     * @return JsonResponse
+     */
+    public static function list(array $params)
     {
         /*
          * Validate the api key.
@@ -140,6 +158,12 @@ class PeopleController
         );
     }
 
+    /**
+     * Build extra settings for a person.
+     *
+     * @param People $model
+     * @return People $model
+     */
     private function peopleExtra($model)
     {
         $model->phone_no = '0123 ';
@@ -166,6 +190,9 @@ class PeopleController
         return $model;
     }
 
+    /**
+     * Check the required params
+     */
     private static function required($params)
     {
         $required = [
@@ -191,7 +218,13 @@ class PeopleController
         }
     }
 
-    public static function save($params)
+    /**
+     * Save a person.
+     *
+     * @param array $params
+     * @return JsonResponse
+     */
+    public static function save(array $params)
     {
         /*
          * Validate the api key.
@@ -218,6 +251,9 @@ class PeopleController
         );
     }
 
+    /**
+     * Generate seed data for the people table.
+     */
     public function seedPeople()
     {
         /*
@@ -427,7 +463,13 @@ class PeopleController
         }
     }
 
-    public static function stats($params)
+    /**
+     * Get the people stats
+     *
+     * @param array $params
+     * @return JsonResponse
+     */
+    public static function stats(array $params)
     {
         $model = new People();
 
