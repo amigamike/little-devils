@@ -14,11 +14,13 @@ class List {
     sd = '';
     query = '';
     page = 1;
+    edit_url = '';
 
-    constructor(id, map, url) {
+    constructor(id, map, url, edit_url) {
         this.id = id;
         this.map = map;
         this.url = url;
+        this.edit_url = edit_url;
 
         var local = this;
 
@@ -154,6 +156,7 @@ class List {
                 }
                 html += '</td>';
             });
+            html += '<td><a href="' + local.edit_url + '/' + row.id + '" class="btn btn-default h4"><i class="far fa-edit"></i></a></td>';
             html += '</tr>';
         });
 

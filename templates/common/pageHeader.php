@@ -162,9 +162,26 @@
     </ul>
     <div class="c-subheader justify-content-between px-3">
         <ol class="breadcrumb border-0 m-0 px-0 px-md-3">
-            <li class="breadcrumb-item">Home</li>
-            <li class="breadcrumb-item"><a href="#">Admin</a></li>
-            <li class="breadcrumb-item active">Dashboard</li>
+            <?php
+            if ($_SERVER['REQUEST_URI'] == '/') {
+                echo '<li class="breadcrumb-item">';
+                echo '<a href="/" class="active">Home</a>';
+                echo '</li>';
+            } else {
+                $splits = explode('/', $_SERVER['REQUEST_URI']);
+                $full = '';
+                foreach ($splits as $url) {
+                    if ($url) {
+                        $full .= '/' . $url;
+                    }
+                    echo '<li class="breadcrumb-item">';
+                    echo '<a href="' . $full . '"
+                        ' . (($_SERVER['REQUEST_URI'] == $full) ? ' class="active"' : '') . '>' .
+                        ucwords(($url == '') ? 'Home' : (is_numeric($url) ? 'edit' : $url)) . '</a>';
+                    echo '</li>';
+                }
+            }
+            ?>
         </ol>
     </div>
 </header>

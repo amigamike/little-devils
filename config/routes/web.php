@@ -31,6 +31,10 @@ $router->get('/children', function () {
     return (new ViewController('children/index'))->render();
 });
 
+$router->get('/children/{id}', function () {
+    return (new ViewController('children/edit'))->render();
+});
+
 $router->get('/parents', function () {
     return (new ViewController('parents/index'))->render();
 });

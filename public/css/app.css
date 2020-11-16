@@ -34,6 +34,10 @@ h1 {
     display: none;
 }
 
+.breadcrumb-item .active {
+    color: #8a93a2;
+}
+
 /*
 .c-sidebar-close i {
     color: #4638c2;

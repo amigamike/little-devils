@@ -106,6 +106,7 @@ include(__DIR__ . '/../common/header.php');
                                                     <i class="fas fa-sort"></i>
                                                 </span>
                                             </th>
+                                            <th width="100px">&nbsp;</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -134,7 +135,8 @@ include(__DIR__ . '/../common/header.php');
             'room_name',
             'status'
         ],
-        '/people?type=child'
+        '/people?type=child',
+        '/children'
     );
 </script>
 <?php
