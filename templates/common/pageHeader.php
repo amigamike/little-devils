@@ -1,3 +1,16 @@
+<?php
+
+/**
+ * Page header template.
+ *
+ * @author      Mike Welsh (mike@amigamike.com)
+ * @copyright   2020 Mike Welsh
+ * @link        https://amigamike.com
+ */
+
+use  MikeWelsh\LittleDevils\Helpers\PathHelper;
+
+?>
 <header class="c-header c-header-light c-header-fixed">
     <button class="c-header-toggler c-class-toggler d-lg-none mfe-auto" type="button" data-target="#sidebar" data-class="c-sidebar-show">
         <i class="fas fa-bars"></i>
@@ -163,12 +176,13 @@
     <div class="c-subheader justify-content-between px-3">
         <ol class="breadcrumb border-0 m-0 px-0 px-md-3">
             <?php
-            if ($_SERVER['REQUEST_URI'] == '/') {
+            $path = PathHelper::getPath();
+            if ($path == '/') {
                 echo '<li class="breadcrumb-item">';
                 echo '<a href="/" class="active">Home</a>';
                 echo '</li>';
             } else {
-                $splits = explode('/', $_SERVER['REQUEST_URI']);
+                $splits = explode('/', $path);
                 $full = '';
                 foreach ($splits as $url) {
                     if ($url) {
@@ -176,7 +190,7 @@
                     }
                     echo '<li class="breadcrumb-item">';
                     echo '<a href="' . $full . '"
-                        ' . (($_SERVER['REQUEST_URI'] == $full) ? ' class="active"' : '') . '>' .
+                        ' . (($path == $full) ? ' class="active"' : '') . '>' .
                         ucwords(($url == '') ? 'Home' : (is_numeric($url) ? 'edit' : $url)) . '</a>';
                     echo '</li>';
                 }
