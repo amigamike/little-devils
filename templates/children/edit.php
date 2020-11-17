@@ -10,6 +10,7 @@
 
 use MikeWelsh\LittleDevils\Controllers\AuthenticationController;
 use MikeWelsh\LittleDevils\Controllers\ViewController;
+use  MikeWelsh\LittleDevils\Helpers\PathHelper;
 use MikeWelsh\LittleDevils\Models\People;
 use MikeWelsh\LittleDevils\Models\Room;
 
@@ -119,8 +120,18 @@ include(__DIR__ . '/../common/header.php');
             </div>
         </div>
         -->
-        <div class="row mb-4">
-            <div class="col float-right">
+        <div class="row">
+            <div class="col">
+                <a href="/children<?= ($query = PathHelper::getQuery()) ? '?' . http_build_query($query) : ''; ?>" class="btn btn-warning" type="button">
+                    <i class="fas fa-arrow-circle-left"></i>&nbsp;Cancel
+                </a>
+                <button class="btn btn-success float-right" type="button">
+                    <i class="far fa-save"></i>&nbsp;Save
+                </button>
+            </div>
+        </div>
+        <div class="row mb-3 mt-2">
+            <div class="col">
                 <small class="required float-right">* required fields</small>
             </div>
         </div>

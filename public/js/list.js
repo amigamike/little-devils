@@ -135,6 +135,15 @@ class List {
 
         var html = '';
         var local = this;
+
+        var params = {};
+        if (this.query) {
+            params.query = this.query;
+        }
+        params.page = this.page;
+        params.sort = this.sort;
+        params.sd = this.sd;
+
         $.each(data, function (i, row) {
             html += '<tr>';
             $.each(local.map, function (i2, item) {
@@ -156,7 +165,7 @@ class List {
                 }
                 html += '</td>';
             });
-            html += '<td><a href="' + local.edit_url + '/' + row.id + '" title="Edit the entry"><span class="btn btn-primary"><i class="far fa-edit"></i></span></a></td>';
+            html += '<td><a href="' + local.appendUrl(local.edit_url + '/' + row.id, params) + '" title="Edit the entry"><span class="btn btn-primary"><i class="far fa-edit"></i></span></a></td>';
             html += '</tr>';
         });
 
