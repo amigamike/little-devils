@@ -24,6 +24,16 @@ class PathHelper
     }
 
     /**
+     * Get the full path.
+     *
+     * @return string
+     */
+    public static function getFullPath()
+    {
+        return $_SERVER['REQUEST_URI'];
+    }
+
+    /**
      * Get the path.
      *
      * @return string

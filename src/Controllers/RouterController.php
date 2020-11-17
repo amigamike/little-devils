@@ -87,17 +87,16 @@ class RouterController
         $routeParams = [];
 
         /*
+         * Save the request data if any to the route params.
+         */
+        if (!empty($_REQUEST)) {
+            $routeParams = array_merge($routeParams, $_REQUEST);
+        }
+
+        /*
          * Get the current site.
          */
         $routeParams['site'] = (new SiteController())->getSite();
-
-        /*
-         * Check to see if its an api call.
-         */
-        if (strpos($path, '/api') !== false) {
-            $_REQUEST['api'] = true;
-            $routeParams['api'] = true;
-        }
 
         /*
          * Check to see if the route has any parameters.
@@ -126,10 +125,18 @@ class RouterController
         }
 
         /*
-         * Save the get data if any to the route params.
+         * Check to see if its an api call.
          */
-        if (!empty($_GET)) {
-            $routeParams = array_merge($routeParams, $_GET);
+        if (strpos($path, '/api') !== false) {
+            $_REQUEST['api'] = true;
+            $routeParams['api'] = true;
+        }
+
+        /*
+         * Save the request data if any to the route params.
+         */
+        if (!empty($_REQUEST)) {
+            $routeParams = array_merge($routeParams, $_REQUEST);
         }
 
         /*

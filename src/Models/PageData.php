@@ -12,5 +12,5 @@ namespace MikeWelsh\LittleDevils\Models;
 
 class PageData
 {
-    //
+    public $error = null;
 }

@@ -88,7 +88,7 @@
         -->
     </ul>
     <span id="sidebar-footer" class="text-muted">
-        Nursery Management System<br/>
+        Nursery Management System | 0.0.2 alpha<br/>
         &copy;<?= date('Y'); ?> Mike Welsh.
     </span>
     <!--<button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="#sidebar"  data-class="c-sidebar-unfoldable"></button>-->

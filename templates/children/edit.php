@@ -9,8 +9,9 @@
  */
 
 use MikeWelsh\LittleDevils\Controllers\AuthenticationController;
+use MikeWelsh\LittleDevils\Controllers\PeopleController;
 use MikeWelsh\LittleDevils\Controllers\ViewController;
-use  MikeWelsh\LittleDevils\Helpers\PathHelper;
+use MikeWelsh\LittleDevils\Helpers\PathHelper;
 use MikeWelsh\LittleDevils\Models\People;
 use MikeWelsh\LittleDevils\Models\Room;
 
@@ -32,7 +33,7 @@ $rooms = (new Room())->all();
 include(__DIR__ . '/../common/header.php');
 ?>
 <div class="container-fluid">
-    <form method="post" class="fade-in">
+    <form id="form-data" method="post" class="fade-in">
         <div class="row">
             <div class="col-sm-6 col-md-2">
                 <div class="card text-white bg-gradient-primary">
@@ -125,7 +126,7 @@ include(__DIR__ . '/../common/header.php');
                 <a href="/children<?= ($query = PathHelper::getQuery()) ? '?' . http_build_query($query) : ''; ?>" class="btn btn-warning" type="button">
                     <i class="fas fa-arrow-circle-left"></i>&nbsp;Cancel
                 </a>
-                <button class="btn btn-success float-right" type="button">
+                <button id="form-save" class="btn btn-success float-right" type="button">
                     <i class="far fa-save"></i>&nbsp;Save
                 </button>
             </div>
@@ -290,5 +291,16 @@ include(__DIR__ . '/../common/header.php');
         </div>
     </form>
 </div>
+<script type="text/javascript">
+$(function() {
+    <?php
+    if (!empty($data->error)) {
+        ?>
+        missingRequired();
+        <?php
+    }
+    ?>
+});
+</script>
 <?php
 include(__DIR__ . '/../common/footer.php');

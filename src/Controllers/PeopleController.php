@@ -231,6 +231,22 @@ class PeopleController
          */
         (new AuthenticationController())->validApi();
 
+        self::update($params);
+
+        return new JsonResponse(
+            'Person updated',
+            $data
+        );
+    }
+
+    /**
+     * Update a person.
+     *
+     * @param array $params
+     * @return bool
+     */
+    public static function update(array $params)
+    {
         $data = (new People())->getById($params['id']);
 
         if (empty($data)) {
@@ -245,10 +261,7 @@ class PeopleController
 
         self::setParent($params, $data);
 
-        return new JsonResponse(
-            'Person updated',
-            $data
-        );
+        return true;
     }
 
     /**

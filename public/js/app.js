@@ -577,6 +577,9 @@ $(function() {
             return;
         }
 
+        $('#form-data').submit();
+
+        /*
         $('#form-save').hide();
         saveCount = 0;
 
@@ -616,6 +619,7 @@ $(function() {
                 'apiFailed'
             );
         });
+        */
     });
 
     $('#select-child').change(

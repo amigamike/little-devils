@@ -9,7 +9,10 @@
  */
 
 use MikeWelsh\LittleDevils\Controllers\AuthenticationController;
+use MikeWelsh\LittleDevils\Controllers\PeopleController;
 use MikeWelsh\LittleDevils\Controllers\ViewController;
+use MikeWelsh\LittleDevils\Exceptions\PersonException;
+use MikeWelsh\LittleDevils\Helpers\PathHelper;
 
 $router->get('/', function () {
     return (new ViewController('index'))->render();
@@ -33,6 +36,19 @@ $router->get('/children', function () {
 
 $router->get('/children/{id}', function ($params) {
     return (new ViewController('children/edit', $params))->render();
+});
+
+$router->post('/children/{id}', function ($params) {
+    try {
+        if (PeopleController::update($params)) {
+            return ViewController::redirect(PathHelper::getFullPath());
+        } else {
+            return (new ViewController('children/edit', $params))->render();
+        }
+    } catch (PersonException $err) {
+        $params['error'] = $err;
+        return (new ViewController('children/edit', $params))->render();
+    }
 });
 
 $router->get('/parents', function () {
