@@ -156,7 +156,7 @@ class List {
                 }
                 html += '</td>';
             });
-            html += '<td><a href="' + local.edit_url + '/' + row.id + '" class="btn btn-default h4"><i class="far fa-edit"></i></a></td>';
+            html += '<td><a href="' + local.edit_url + '/' + row.id + '" title="Edit the entry"><span class="btn btn-primary"><i class="far fa-edit"></i></span></a></td>';
             html += '</tr>';
         });
 

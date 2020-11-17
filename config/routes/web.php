@@ -31,8 +31,8 @@ $router->get('/children', function () {
     return (new ViewController('children/index'))->render();
 });
 
-$router->get('/children/{id}', function () {
-    return (new ViewController('children/edit'))->render();
+$router->get('/children/{id}', function ($params) {
+    return (new ViewController('children/edit', $params))->render();
 });
 
 $router->get('/parents', function () {

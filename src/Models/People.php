@@ -78,9 +78,20 @@ class People extends Model
             return $data;
         }
 
+        $data->room = $this->select(
+            'SELECT 
+                *
+            FROM rooms
+            WHERE id=:id',
+            [
+                ':id' => $data->room_id
+            ]
+        );
+
         $data->parents = $this->selectArray(
             'SELECT 
                 people.*,
+                CONCAT(first_name, " ", last_name) AS full_name,
                 DATE_FORMAT(dob, "%d/%m/%Y") AS dob
             FROM parents 
             JOIN ' . $this->table . ' people ON people.id = parents.parent_id AND people.deleted_at IS NULL 
@@ -96,7 +107,9 @@ class People extends Model
                 people.title,
                 people.first_name,
                 people.last_name,
+                CONCAT(first_name, " ", last_name) AS full_name,
                 people.phone_no,
+                people.email,
                 people.relationship,
                 people.created_at
             FROM contacts 
