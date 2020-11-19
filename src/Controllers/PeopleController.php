@@ -71,11 +71,39 @@ class PeopleController
         $data = self::set($params, $data);
 
         $data->save();
+        $data->full_name = $data->first_name . ' ' . $data->last_name;
 
         self::setParent($params, $data);
 
         return new JsonResponse(
             'Person added',
+            $data
+        );
+    }
+
+    /**
+     * Delete a person.
+     *
+     * @param array $params
+     * @return JsonResponse
+     */
+    public static function delete(array $params)
+    {
+        /*
+         * Validate the api key.
+         */
+        (new AuthenticationController())->validApi();
+
+        if (empty($params['id'])) {
+            throw new NotFoundException('Person not found');
+        }
+
+        $data = (new People())
+            ->getById($params['id'])
+            ->delete();
+
+        return new JsonResponse(
+            'Person removed',
             $data
         );
     }
@@ -198,13 +226,23 @@ class PeopleController
         $required = [
             "first_name",
             "last_name",
-            "dob",
-            "address_line_1",
-            "city",
-            "county",
-            "postcode",
             "type"
         ];
+
+        if (empty($params['type'])) {
+            $missing[] = 'type';
+            throw new PersonException('Missing required data', $missing);
+        }
+
+        if ($params['type'] == 'child') {
+            $required = [
+                "dob",
+                "address_line_1",
+                "city",
+                "county",
+                "postcode",
+            ];
+        }
 
         $missing = [];
         foreach ($required as $key) {
@@ -438,7 +476,13 @@ class PeopleController
     {
         foreach ($data as $key => $value) {
             if (isset($params[$key])) {
-                $data->$key = $params[$key];
+                if ($key == 'first_name' || $key == 'last_name') {
+                    $data->$key = ucwords($params[$key]);
+                } elseif ($key == 'dob') {
+                    $data->$key = null;
+                } else {
+                    $data->$key = $params[$key];
+                }
             }
         }
 
@@ -462,7 +506,9 @@ class PeopleController
                 $parent->deleted_at = null;
                 $parent->update();
             }
+        }
 
+        if ($data->type == 'contact' && !empty($params['child_id'])) {
             $contact = (new Contact())->getByIds($data->id, $params['child_id']);
             if (empty($contact)) {
                 $contact = new Contact();

@@ -132,8 +132,11 @@ use  MikeWelsh\LittleDevils\Helpers\PathHelper;
                 </a>
             </div>
         </li>
+        <button class="c-header-toggler c-class-toggler" type="button" data-target="#aside" data-class="c-sidebar-show">
+            <i class="far fa-calendar-alt"></i>
+        </button>
         <li class="c-header-nav-item dropdown">
-            <a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <a class="c-header-nav-link mfe-md-3" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 <div class="c-avatar">
                     <img class="c-avatar-img" src="/imgs/avatars/6.jpg" alt="user@email.com">
                 </div>
@@ -169,9 +172,6 @@ use  MikeWelsh\LittleDevils\Helpers\PathHelper;
                 </button>
             </div>
         </li>
-        <button class="c-header-toggler c-class-toggler mfe-md-3" type="button" data-target="#aside" data-class="c-sidebar-show">
-            <i class="far fa-calendar-alt"></i>
-        </button>
     </ul>
     <div class="c-subheader justify-content-between px-3">
         <ol class="breadcrumb border-0 m-0 px-0 px-md-3">
@@ -203,8 +203,8 @@ use  MikeWelsh\LittleDevils\Helpers\PathHelper;
 <div id="logoutModal" class="modal fade" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 id="logoutModalLabel" class="modal-title">Logout?</h5>
+            <div class="modal-header card-header">
+                <span id="logoutModalLabel" class="modal-title">Logout?</span>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

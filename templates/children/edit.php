@@ -243,7 +243,7 @@ include(__DIR__ . '/../common/header.php');
                                 <div class="card-body">
                                     <div class="row mb-2">
                                         <div class="col-12">
-                                            <button class="btn btn-primary float-right" title="Add a parent" type="button">
+                                            <button class="btn btn-primary float-right" title="Add a parent" type="button" data-toggle="modal" data-target="#parentModal">
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </div>
@@ -270,7 +270,7 @@ include(__DIR__ . '/../common/header.php');
                                                 <?php
                                                 foreach ($result->parents as $parent) {
                                                     ?>
-                                                    <tr>
+                                                    <tr id="parent-<?= $parent->id; ?>">
                                                         <td>
                                                             <?= ucwords($parent->relationship); ?>
                                                         </td>
@@ -290,8 +290,11 @@ include(__DIR__ . '/../common/header.php');
                                                             }
                                                             ?>
                                                         </td>
-                                                        <td>
-                                                            <button class="btn btn-danger" title="Delete the parent" type="button">
+                                                        <td class="text-right">
+                                                            <button class="delete-parent btn btn-danger" 
+                                                                    title="Delete the parent" 
+                                                                    type="button" 
+                                                                    data-id="<?= $parent->id; ?>">
                                                                 <i class="fas fa-trash"></i>
                                                             </button>
                                                         </td>
@@ -359,7 +362,7 @@ include(__DIR__ . '/../common/header.php');
                                                             }
                                                             ?>
                                                         </td>
-                                                        <td>
+                                                        <td class="text-right">
                                                             <button class="btn btn-danger" title="Delete the contact" type="button">
                                                                 <i class="fas fa-trash"></i>
                                                             </button>
@@ -411,10 +414,96 @@ include(__DIR__ . '/../common/header.php');
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane" id="messages-1" role="tabpanel">3. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
+                <div id="tab-invoices" class="tab-pane" role="tabpanel">
+
+                </div>
             </div>
         </div>
     </form>
+</div>
+<div id="parentModal" class="modal fade" tabindex="-1" aria-labelledby="parentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header card-header">
+                <span id="parentModalLabel" class="modal-title">Add a parent</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form class="modal-body">
+                <div class="row mt-4">
+                    <div class="col float-right">
+                        <small class="required float-right">* required fields</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="styled">Title<span class="required">*</span></label>
+                            <select name="title" class="form-control" required>
+                                <option value="Mr">Mr</option>
+                                <option value="Ms">Ms</option>
+                                <option value="Mrs">Mrs</option>
+                                <option value="Dr">Dr</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">First Name<span class="required">*</span></label>
+                            <input name="first_name" type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">Last Name<span class="required">*</span></label>
+                            <input name="last_name" type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">Relationship<span class="required">*</span></label>
+                            <input name="relationship" type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">DOB</label>
+                            <input name="dob" type="text" class="form-control datepicker" placeholder="dd/mm/yyyy">
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">Email<span class="required">*</span></label>
+                            <input name="email" type="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">Phone no.<span class="required">*</span></label>
+                            <input name="phone_no" type="text" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="styled">Address 1</label>
+                            <input name="address_line_1" type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">Address 2</label>
+                            <input name="address_line_2" type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">Town</label>
+                            <input name="city" type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">County</label>
+                            <input name="county" type="text" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">Postcode</label>
+                            <input name="postcode" type="text" class="form-control">
+                        </div>
+                        <input name="type" type="hidden" value="parent">
+                        <input name="child_id" type="hidden" value="<?= $result->id; ?>">
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button id="add-parent" type="button" class="btn btn-success">Add</button>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
 $(function() {

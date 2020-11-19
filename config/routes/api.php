@@ -63,6 +63,11 @@ $router->get(
     'MikeWelsh\LittleDevils\Controllers\PeopleController::list'
 );
 
+$router->delete(
+    '/api/people/{id}',
+    'MikeWelsh\LittleDevils\Controllers\PeopleController::delete'
+);
+
 $router->get(
     '/api/people/{id}',
     'MikeWelsh\LittleDevils\Controllers\PeopleController::get'

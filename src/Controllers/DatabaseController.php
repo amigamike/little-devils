@@ -469,5 +469,7 @@ class DatabaseController
          * Trigger the query execution.
          */
         $sql = $this->trigger($query, $params);
+
+        return $model;
     }
 }
