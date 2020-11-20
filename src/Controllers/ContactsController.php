@@ -84,6 +84,8 @@ class ContactsController
 
         $data->save();
 
+        $data->full_name = $data->first_name . ' ' . $data->last_name;
+
         $contact = new Contact();
         $contact->child_id = $child->id;
         $contact->person_id = $data->id;

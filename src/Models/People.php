@@ -123,6 +123,7 @@ class People extends Model
         $data->logs = (new Log())->selectArray(
             'SELECT 
                 logs.*,
+                CONCAT(users.first_name, " ", users.last_name) AS full_name,
                 groups.name AS group_name
             FROM logs 
             JOIN users ON users.id = logs.user_id AND users.deleted_at IS NULL 

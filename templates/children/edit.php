@@ -315,14 +315,14 @@ include(__DIR__ . '/../common/header.php');
                                 <div class="card-body">
                                     <div class="row mb-2">
                                         <div class="col-12">
-                                            <button class="btn btn-primary float-right" title="Add a contact" type="button">
+                                            <button class="btn btn-primary float-right" title="Add a contact" type="button" data-toggle="modal" data-target="#contactModal">
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
-                                            <table  id="parents-list" 
+                                            <table  id="contacts-list" 
                                                     class="table table-responsive-sm table-bordered table-striped table-sm">
                                                 <thead>
                                                     <tr>
@@ -342,7 +342,7 @@ include(__DIR__ . '/../common/header.php');
                                                 <?php
                                                 foreach ($result->contacts as $contact) {
                                                     ?>
-                                                    <tr>
+                                                    <tr id="contact-<?= $contact->id; ?>">
                                                         <td>
                                                             <?= ucwords($contact->relationship); ?>
                                                         </td>
@@ -363,7 +363,10 @@ include(__DIR__ . '/../common/header.php');
                                                             ?>
                                                         </td>
                                                         <td class="text-right">
-                                                            <button class="btn btn-danger" title="Delete the contact" type="button">
+                                                            <button class="delete-contact btn btn-danger" 
+                                                                    title="Delete the contact" 
+                                                                    type="button"
+                                                                    data-id="<?= $contact->id; ?>">
                                                                 <i class="fas fa-trash"></i>
                                                             </button>
                                                         </td>
@@ -378,9 +381,9 @@ include(__DIR__ . '/../common/header.php');
                                 </div>
                             </div>
                         </div>
-                        <input name="id" type="hidden" value="<?= $result->id; ?>">
-                        <input name="type" type="hidden" value="child">
                     </div>
+                    <input name="id" type="hidden" value="<?= $result->id; ?>">
+                    <input name="type" type="hidden" value="child">
                 </div>
                 <div id="tab-logs" class="tab-pane" role="tabpanel">
                     <div class="row">
@@ -390,23 +393,76 @@ include(__DIR__ . '/../common/header.php');
                                     Logs
                                 </div>
                                 <div class="card-body">
-                                    <table  id="table-logs" 
-                                            class="table table-responsive-sm table-bordered table-striped table-sm">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <div class="form-group">
+                                                <label class="styled">Type</label>
+                                                <select name="type" class="form-control">
+                                                    <option value="0" disabled>Please Select</option>
+                                                    <option value="Attendance Note">Attendance Note</option>
+                                                    <option value="Covid-19">Covid-19</option>
+                                                    <option value="Medical">Medical</option>
+                                                    <option value="Accident">Accident</option>
+                                                    <option value="Temp Collection Password">Temp Collection Password</option>
+                                                    <option value="Other">Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label class="styled">Details</label>
+                                                <textarea class="form-control" name="info" rows="5"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 col-lg-1">
+                                            <div class="form-group">
+                                                <label>&nbsp;</label><br>
+                                                <button id="add-log" type="button" class="btn btn-primary">
+                                                    <i class="fas fa-plus"></i>&nbsp;Add
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h5>Log History</h5>
+                                    <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th width="95px">
-                                                    Relationship
-                                                </th>
-                                                <th>
-                                                    Name
-                                                </th>
-                                                <th>
-                                                    Contact
-                                                </th>
-                                                <th width="100px">&nbsp;</th>
+                                                <th width="120">Date</th>
+                                                <th width="120">Added By</th>
+                                                <th width="250">Type</th>
+                                                <th>Details</th>
+                                                <th class="text-center" width="75">Delete</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <?php
+                                            foreach ($result->logs as $log) {
+                                                ?>
+                                                <tr id="log-<?= $log->id; ?>">
+                                                    <td>
+                                                        <?= date('d/m/Y H:i', strtotime($log->created_at)); ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= ucwords($log->full_name); ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= $log->type; ?>
+                                                    </td>
+                                                    <td>
+                                                        <?= $log->info; ?>
+                                                    </td>
+                                                    <td class="text-right">
+                                                        <button class="delete-log btn btn-danger" 
+                                                                title="Delete the log" 
+                                                                type="button"
+                                                                data-id="<?= $log->id; ?>">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                            }
+                                            ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -493,7 +549,6 @@ include(__DIR__ . '/../common/header.php');
                             <label class="styled">Postcode</label>
                             <input name="postcode" type="text" class="form-control">
                         </div>
-                        <input name="type" type="hidden" value="parent">
                         <input name="child_id" type="hidden" value="<?= $result->id; ?>">
                     </div>
                 </div>
@@ -501,6 +556,63 @@ include(__DIR__ . '/../common/header.php');
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button id="add-parent" type="button" class="btn btn-success">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="contactModal" class="modal fade" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header card-header">
+                <span id="contactModalLabel" class="modal-title">Add a contact</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form class="modal-body">
+                <div class="row mt-4">
+                    <div class="col float-right">
+                        <small class="required float-right">* required fields</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="styled">Title<span class="required">*</span></label>
+                            <select name="title" class="form-control" required>
+                                <option value="Mr">Mr</option>
+                                <option value="Ms">Ms</option>
+                                <option value="Mrs">Mrs</option>
+                                <option value="Dr">Dr</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">First Name<span class="required">*</span></label>
+                            <input name="first_name" type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">Last Name<span class="required">*</span></label>
+                            <input name="last_name" type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">Relationship<span class="required">*</span></label>
+                            <input name="relationship" type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">Phone no.<span class="required">*</span></label>
+                            <input name="phone_no" type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="styled">Email</label>
+                            <input name="email" type="email" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <input name="child_id" type="hidden" value="<?= $result->id; ?>">
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button id="add-contact" type="button" class="btn btn-success">Add</button>
             </div>
         </div>
     </div>

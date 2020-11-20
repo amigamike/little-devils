@@ -5,6 +5,30 @@ var sources = [
     'parent-data-2',
 ];
 
+function addContact() {    
+    var validator = $("#contactModal form").validate();
+    if (!validator.form()) {
+        missingRequired();
+        return;
+    }
+
+    var data = {};
+    data.first_name = $('#contactModal input[name=first_name]').val();
+    data.last_name = $('#contactModal input[name=last_name]').val();
+    data.type = 'contact';
+    data.phone_no = $('#contactModal input[name=phone_no]').val();
+    data.email = $('#contactModal input[name=email]').val();
+    data.title = $('#contactModal select[name=title]').val();
+    data.relationship = $('#contactModal input[name=relationship]').val();
+    data.child_id = $('#contactModal input[name=child_id]').val();
+
+    api.post(
+        '/contacts/' + $('#contactModal input[name=child_id]').val(),
+        data,
+        'contactSaved'
+    );
+}
+
 function addParent() {    
     var validator = $("#parentModal form").validate();
     if (!validator.form()) {
@@ -21,7 +45,7 @@ function addParent() {
     data.city = $('#parentModal input[name=city]').val();
     data.county = $('#parentModal input[name=county]').val();
     data.postcode = $('#parentModal input[name=postcode]').val();
-    data.type = $('#parentModal input[name=type]').val();
+    data.type = 'parent';
     data.phone_no = $('#parentModal input[name=phone_no]').val();
     data.email = $('#parentModal input[name=email]').val();
     data.title = $('#parentModal select[name=title]').val();
@@ -247,6 +271,48 @@ function calPercent(total, value) {
     return ((value/total) * 100).toFixed(2);
 }
 
+function contactSaved(data) {
+    var html = '';
+    html += '<tr id="contact-' + data.id +'">';
+    html += '<td>';
+    html += data.relationship;
+    html += '</td>';
+    html += '<td>';
+    html += data.full_name;
+    html += '</td>';
+    html += '<td>';
+    html += data.phone_no;
+    if (data.email) {
+        html += '</br>';
+        html += '<a href="mailto:' + data.email + '" target="_blank">';
+        html += data.email;
+        html += '</a>';
+    }
+    html += '</td>';
+    html += '<td class="text-right">';
+    html += '<button class="delete-contact btn btn-danger" title="Delete the contact" type="button" data-id="' + data.id +'">'
+    html += '<i class="fas fa-trash"></i>';
+    html += '</button>';
+    html += '</td>';
+    html += '</tr>';
+    $('#contacts-list tbody').append(html);
+
+    $('.delete-contact').unbind('click');
+    $('.delete-contact').bind('click', function () {
+        deleteContact(this);
+    });
+
+    $('#contactModal button[data-dismiss=modal]').click();
+
+    $.toast({
+        heading: 'Contact added',
+        text: data.message,
+        icon: 'success',
+        loader: true,
+        position: 'bottom-right'
+    });
+}
+
 function dateMonth(date) {
     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     date = new Date(date);
@@ -332,7 +398,7 @@ function parentSaved(data) {
     }
     html += '</td>';
     html += '<td class="text-right">';
-    html += '<button class="btn btn-danger" title="Delete the parent" type="button" data-id="' + data.id +'">'
+    html += '<button class="delete-parent btn btn-danger" title="Delete the parent" type="button" data-id="' + data.id +'">'
     html += '<i class="fas fa-trash"></i>';
     html += '</button>';
     html += '</td>';
@@ -345,6 +411,14 @@ function parentSaved(data) {
     });
 
     $('#parentModal button[data-dismiss=modal]').click();
+
+    $.toast({
+        heading: 'Parent added',
+        text: data.message,
+        icon: 'success',
+        loader: true,
+        position: 'bottom-right'
+    });
 }
 
 function payInvoice(entry) {
@@ -404,17 +478,6 @@ function removeParent(data) {
     });
 }
 
-function renderContact(data) {
-    var html = '<tr id="contact-' + data.id + '"><td>' + dateUk(data.created_at) + '</td>';
-    html += '<td>' + data.title + ' ' + data.first_name + ' ' + data.last_name + '</td>';
-    html += '<td>' + data.phone_no + '</td>';
-    html += '<td>' + data.relationship + '</td>';
-    html += '<td class="text-center">';
-    html += '<button data-id="' + data.id + '" type="button" class="btn btn-danger btn-sm btn-delete-contact"><i class="fa fa-trash"></i></button>';
-    html += '</td></tr>';
-    return html;
-}
-
 function renderInvoice(data) {
     var html = '<tr id="invoice-' + data.id + '"><td>' + dateUk(data.created_at) + '</td>';
     html += '<td>' + data.full_name + '</td>';
@@ -438,38 +501,6 @@ function renderLog(data) {
     html += '<button data-id="' + data.id + '" type="button" class="btn btn-danger btn-sm btn-delete-log"><i class="fa fa-trash"></i></button>';
     html += '</td></tr>';
     return html;
-}
-
-function renderParent(data) {
-    var html = '<tr id="parent-' + data.id + '"><td>' + dateUk(data.relationship) + '</td>';
-    html += '<td>' + data.full_name + '</td>';
-    html += '<td>' + data.phone_no + '<br/>';
-    html += '<a href="mailto:' + data.email + '" target="_blank">' + data.email + '</a></td>';
-    html += '<td class="text-right">';
-    html += '<button data-id="' + data.id + '" type="button" class="btn btn-danger btn-sm btn-delete-log"><i class="fa fa-trash"></i></button>';
-    html += '</td></tr>';
-    return html;
-}
-
-function saveContact(data) {
-    $('#contact input[name=first_name]').val('');
-    $('#contact input[name=last_name]').val('');
-    $('#contact input[name=phone_no]').val('');
-    $('#contact input[name=relationship]').val('');
-    $('#contacts').append(renderContact(data));
-
-    $('.btn-delete-contact').unbind('click');
-    $('.btn-delete-contact').bind('click', function () {
-        deleteContact(this);
-    });
-
-    $.toast({
-        heading: 'Contact added',
-        text: data.message,
-        icon: 'success',
-        loader: true,
-        position: 'bottom-right'
-    });
 }
 
 function saveInvoice(data) {
@@ -497,8 +528,8 @@ function saveInvoice(data) {
 }
 
 function saveLog(data) {
-    $('#logs textarea[name=info]').text('');
-    $('#logs tbody').append(renderLog(data));
+    $('#tab-logs textarea[name=info]').text('');
+    $('#tab-logs tbody').append(renderLog(data));
 
     $('.btn-delete-log').unbind('click');
     $('.btn-delete-log').bind('click', function () {
@@ -515,52 +546,6 @@ function saveLog(data) {
 }
 
 $(function() {
-    $('#add-contact').click(function () {
-        var data = {};
-        var missing = false;
-        data.title = $('#contact select[name=title]').val();
-
-        data.first_name = $('#contact input[name=first_name]').val();
-        $('#contact input[name=first_name]').removeClass('error');
-        if (!data.first_name) {
-            $('#contact input[name=first_name]').addClass('error');
-            missing = true;
-        }
-
-        data.last_name = $('#contact input[name=last_name]').val();
-        $('#contact input[name=last_name]').removeClass('error');
-        if (!data.last_name) {
-            $('#contact input[name=last_name]').addClass('error');
-            missing = true;
-        }
-
-        data.phone_no = $('#contact input[name=phone_no]').val();
-        $('#contact input[name=phone_no]').removeClass('error');
-        if (!data.phone_no) {
-            $('#contact input[name=phone_no]').addClass('error');
-            missing = true;
-        }
-
-        data.relationship = $('#contact input[name=relationship]').val();
-        $('#contact input[name=relationship]').removeClass('error');
-        if (!data.relationship) {
-            $('#contact input[name=relationship]').addClass('error');
-            missing = true;
-        }
-
-        if (missing) {
-            missingRequired();
-            return;
-        }
-
-        api.post(
-            '/contacts/' + $('#child-data input[name=id]').val(),
-            data,
-            'saveContact',
-            'apiFailed'
-        );
-    });
-
     $('#add-invoice').click(function () {
         var data = {};
         var missing = false;
@@ -591,14 +576,14 @@ $(function() {
 
     $('#add-log').click(function () {
         var data = {};
-        data.type = $('#logs select[name=type]').val();
-        data.person_id = $('#child-data input[name=id]').val();
+        data.type = $('#tab-logs select[name=type]').val();
+        data.person_id = $('#tab-child input[name=id]').val();
 
-        data.info = $('#logs textarea[name=info]').val();
-        $('#logs textarea[name=info]').removeClass('error');
+        data.info = $('#tab-logs textarea[name=info]').val();
+        $('#tab-logs textarea[name=info]').removeClass('error');
         if (!data.info) {
             missingRequired();
-            $('#logs textarea[name=info]').addClass('error');
+            $('#tab-logs textarea[name=info]').addClass('error');
             return;
         }
 
@@ -608,6 +593,18 @@ $(function() {
             'saveLog',
             'apiFailed'
         );
+    });
+
+    $('#add-contact').click(function () {
+        addContact();
+    });
+
+    $('.delete-contact').bind('click', function () {
+        deleteContact(this);
+    });
+
+    $('.delete-log').bind('click', function () {
+        deleteLog(this);
     });
 
     $('#add-parent').click(function () {
