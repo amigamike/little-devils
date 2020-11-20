@@ -39,6 +39,8 @@ class People extends Model
     public $postcode = '';
     public $phone_no = '';
     public $email = '';
+    public $biter = 0;
+    public $toilet_trained = 0;
     public $status = 'present';
 
     /**

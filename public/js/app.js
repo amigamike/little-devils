@@ -576,7 +576,7 @@ $(function() {
 
     $('#add-log').click(function () {
         var data = {};
-        data.type = $('#tab-logs select[name=type]').val();
+        data.type = $('#tab-logs select[name=log-type]').val();
         data.person_id = $('#tab-child input[name=id]').val();
 
         data.info = $('#tab-logs textarea[name=info]').val();
@@ -636,48 +636,30 @@ $(function() {
         }
 
         $('#form-data').submit();
+    });
 
-        /*
-        $('#form-save').hide();
-        saveCount = 0;
+    $('#save-biter').click(function() {
+        var validator = $("#form-data").validate();
+        if (!validator.form()) {
+            missingRequired();
+            return;
+        }
 
-        $.each(sources, function(i, source) {
-            var data = {};
-            data.id = $('#' + source + ' input[name=id]').val();
-            data.first_name = $('#' + source + ' input[name=first_name]').val();
-            data.last_name = $('#' + source + ' input[name=last_name]').val();
-            data.dob = $('#' + source + ' input[name=dob]').val();
-            data.address_line_1 = $('#' + source + ' input[name=address_line_1]').val();
-            data.address_line_2 = $('#' + source + ' input[name=address_line_2]').val();
-            data.city = $('#' + source + ' input[name=city]').val();
-            data.county = $('#' + source + ' input[name=county]').val();
-            data.postcode = $('#' + source + ' input[name=postcode]').val();
-            data.type = $('#' + source + ' input[name=type]').val();
-            
-            if (data.type == 'parent') {
-                data.phone_no = $('#' + source + ' input[name=phone_no]').val();
-                data.email = $('#' + source + ' input[name=email]').val();
-                data.title = $('#' + source + ' select[name=title]').val();
-                data.relationship = $('#' + source + ' input[name=relationship]').val();
-                data.child_id = $('#' + source + ' input[name=child_id]').val();
-            } else {
-                data.room_id = $('#' + source + ' select[name=room]').val();
-            }
+        $('#form-data input[name=biter]').val($('#biterModal input[name=biter]:checked').val());
 
-            var action = 'add';
+        $('#form-data').submit();
+    });
 
-            if (data.id) {
-                action = $('#' + source + ' input[name=id]').val();
-            }
+    $('#save-toilet').click(function() {
+        var validator = $("#form-data").validate();
+        if (!validator.form()) {
+            missingRequired();
+            return;
+        }
 
-            api.post(
-                '/people/' + action,
-                data,
-                'saveData',
-                'apiFailed'
-            );
-        });
-        */
+        $('#form-data input[name=toilet_trained]').val($('#toiletModal input[name=toilet_trained]:checked').val());
+
+        $('#form-data').submit();
     });
 
     $('#select-child').change(

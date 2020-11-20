@@ -479,7 +479,14 @@ class PeopleController
                 if ($key == 'first_name' || $key == 'last_name') {
                     $data->$key = ucwords($params[$key]);
                 } elseif ($key == 'dob') {
-                    $data->$key = null;
+                    if (empty($params[$key])) {
+                        $data->$key = null;
+                    } else {
+                        $dates = explode('/', $params[$key]);
+                        $data->$key = $dates[2] . '-' . $dates[1] . '-' . $dates[0];
+                    }
+                } elseif ($key == 'biter' || $key == 'toilet_trained') {
+                    $data->$key = intval($params[$key]);
                 } else {
                     $data->$key = $params[$key];
                 }

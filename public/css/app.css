@@ -63,6 +63,10 @@ h1 {
     min-height: 100vh !important;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 .required {
     color: #f80000;
     padding-left: 2px;
